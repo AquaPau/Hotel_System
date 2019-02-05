@@ -27,6 +27,8 @@ dependencies {
     compile group: 'org.springframework', name: 'spring-web', version: '5.1.4.RELEASE'
     // https://mvnrepository.com/artifact/org.springframework/spring-webmvc
     compile group: 'org.springframework', name: 'spring-webmvc', version: '5.1.4.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework/spring-jdbc
+    compile group: 'org.springframework', name: 'spring-jdbc', version: '5.1.4.RELEASE'
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.1.Final'
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager
