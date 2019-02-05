@@ -35,6 +35,8 @@ dependencies {
     compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.1.Final'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
+    // https://mvnrepository.com/artifact/postgresql/postgresql
+    compile group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
 
 
 }
