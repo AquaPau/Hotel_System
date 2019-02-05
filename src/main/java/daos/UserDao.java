@@ -3,15 +3,25 @@ package daos;
 import model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserDao {
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     public UserDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public int getUserCount() {
-        int count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM hotel.Users", Integer.class);
-        return count;
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM hotel.Users", Integer.class);
+    }
+
+    public List<User> getUserList() {
+        List<User> userList = new ArrayList<>();
+
+
+
+        return userList;
     }
 }

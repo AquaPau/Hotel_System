@@ -13,7 +13,7 @@ CREATE TYPE hotel.paymentStatus AS ENUM ('PAID', 'BILLSENT', 'NOBILL');
 
 CREATE TABLE IF NOT EXISTS hotel.Users
 (
-  userID     UUID PRIMARY KEY,
+  userID     BIGSERIAL PRIMARY KEY ,
   login      VARCHAR(50)  NOT NULL UNIQUE,
   password   VARCHAR(20)  NOT NULL,
   permission hotel.permission default 'USER',
