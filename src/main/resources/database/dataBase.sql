@@ -1,19 +1,18 @@
-DROP DATABASE IF EXISTS Hotel;
-CREATE DATABASE Hotel;
+SELECT exists(SELECT datname FROM pg_catalog.pg_database where datname='Hotel');
 CREATE SCHEMA IF NOT EXISTS hotel;
-DROP TYPE IF EXISTS hotel.permission;
+DROP TYPE IF EXISTS hotel.permission CASCADE;
 CREATE TYPE hotel.permission AS ENUM ('ADMIN', 'USER');
-DROP TYPE IF EXISTS hotel.classID;
-CREATE TYPE hotel.classID AS ENUM ('ECONOM', 'STANDARD', 'FAMILY', 'LUXE');
-DROP TYPE IF EXISTS hotel.capacity;
-CREATE TYPE hotel.capacity AS ENUM ('1', '2', '3', '4');
-DROP TYPE IF EXISTS hotel.paymentStatus;
+DROP TYPE IF EXISTS hotel.classID CASCADE ;
+CREATE TYPE hotel.classID AS ENUM ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX');
+DROP TYPE IF EXISTS hotel.capacity CASCADE ;
+CREATE TYPE hotel.capacity AS ENUM ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD');
+DROP TYPE IF EXISTS hotel.paymentStatus CASCADE ;
 CREATE TYPE hotel.paymentStatus AS ENUM ('PAID', 'BILLSENT', 'NOBILL');
 
 
 CREATE TABLE IF NOT EXISTS hotel.Users
 (
-  userID     UUID PRIMARY KEY,
+  userID     BIGSERIAL PRIMARY KEY ,
   login      VARCHAR(50)  NOT NULL UNIQUE,
   password   VARCHAR(20)  NOT NULL,
   permission hotel.permission default 'USER',
@@ -23,17 +22,18 @@ CREATE TABLE IF NOT EXISTS hotel.Users
 
 CREATE TABLE IF NOT EXISTS hotel.Rooms
 (
-  roomNumber SMALLINT PRIMARY KEY,
+  roomID     SMALLSERIAL PRIMARY KEY,
+  roomNumber SMALLINT NOT NULL UNIQUE,
   classID    hotel.classID  default 'STANDARD',
-  capacity   hotel.capacity default '1',
+  capacity   hotel.capacity default 'SINGLE',
   price      MONEY NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS hotel.Requests
 (
-  requestID     UUID PRIMARY KEY,
-  userID        UUID        NOT NULL REFERENCES hotel.Users (userID),
-  capacity      hotel.capacity    default '1',
+  requestID     BIGSERIAL PRIMARY KEY,
+  userID        BIGINT REFERENCES hotel.Users (userID),
+  capacity      hotel.capacity    default 'SINGLE',
   classID       hotel.classID     default 'STANDARD',
   checkIn       TIMESTAMPTZ NOT NULL,
   checkOut      TIMESTAMPTZ NOT NULL,
@@ -42,14 +42,15 @@ CREATE TABLE IF NOT EXISTS hotel.Requests
 
 CREATE TABLE IF NOT EXISTS hotel.ReservedRooms
 (
-  roomNumber SMALLINT PRIMARY KEY REFERENCES hotel.Rooms (roomNumber),
-  requestID UUID REFERENCES hotel.Requests
+  reservedRoomID SMALLSERIAL PRIMARY KEY ,
+  roomNumber SMALLINT REFERENCES hotel.Rooms (roomNumber),
+  requestID BIGINT REFERENCES hotel.Requests (requestID)
 );
 
-DROP USER IF EXISTS ADMIN;
-CREATE USER ADMIN WITH PASSWORD 'ADMIN';
-GRANT ALL PRIVILEGES ON DATABASE Hotel TO ADMIN;
 
-INSERT INTO hotel.Users (login,password,permission,firstName,lastName) values ('user1','1234',userID,'Petr','Ivanov');
+
+
+
+
 
 
