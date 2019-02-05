@@ -1,12 +1,13 @@
+DROP DATABASE IF EXISTS Hotel;
 CREATE DATABASE Hotel;
 CREATE SCHEMA IF NOT EXISTS hotel;
-DROP TYPE IF EXISTS hotel.permission CASCADE ;
+DROP TYPE IF EXISTS hotel.permission;
 CREATE TYPE hotel.permission AS ENUM ('ADMIN', 'USER');
-DROP TYPE IF EXISTS hotel.classID CASCADE ;
+DROP TYPE IF EXISTS hotel.classID;
 CREATE TYPE hotel.classID AS ENUM ('ECONOM', 'STANDARD', 'FAMILY', 'LUXE');
-DROP TYPE IF EXISTS hotel.capacity CASCADE ;
+DROP TYPE IF EXISTS hotel.capacity;
 CREATE TYPE hotel.capacity AS ENUM ('1', '2', '3', '4');
-DROP TYPE IF EXISTS hotel.paymentStatus CASCADE ;
+DROP TYPE IF EXISTS hotel.paymentStatus;
 CREATE TYPE hotel.paymentStatus AS ENUM ('PAID', 'BILLSENT', 'NOBILL');
 
 
@@ -45,6 +46,10 @@ CREATE TABLE IF NOT EXISTS hotel.ReservedRooms
   requestID UUID REFERENCES hotel.Requests
 );
 
+DROP USER IF EXISTS ADMIN;
 CREATE USER ADMIN WITH PASSWORD 'ADMIN';
 GRANT ALL PRIVILEGES ON DATABASE Hotel TO ADMIN;
+
+INSERT INTO hotel.Users values (1,'user1','1234',userID,'Petr','Ivanov');
+INSERT INTO hotel.Users values (2,'user2','4321',userID,'Ivan','Pertov');
 
