@@ -6,8 +6,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Your awesome hotel system!");
-        ApplicationContext context = new ClassPathXmlApplicationContext();
-        UserDao userDao= (UserDao) context.getBean("userDao");
+        ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring-config.xml");
+        UserDao userDao = (UserDao) context.getBean("userDao");
         System.out.println(userDao.getUserCount());
+        userDao.getUserList().forEach(System.out::println);
     }
 }
