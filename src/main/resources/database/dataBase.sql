@@ -12,7 +12,7 @@ CREATE TYPE hotel.paymentStatus AS ENUM ('PAID', 'BILLSENT', 'NOBILL');
 
 CREATE TABLE IF NOT EXISTS hotel.Users
 (
-  userID     UUID PRIMARY KEY,
+  userID     BIGSERIAL PRIMARY KEY ,
   login      VARCHAR(50)  NOT NULL UNIQUE,
   password   VARCHAR(20)  NOT NULL,
   permission hotel.permission default 'USER',
@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS hotel.Users
 
 CREATE TABLE IF NOT EXISTS hotel.Rooms
 (
-  roomNumber SMALLINT PRIMARY KEY,
+  roomID     SMALLSERIAL PRIMARY KEY,
+  roomNumber SMALLINT NOT NULL UNIQUE,
   classID    hotel.classID  default 'STANDARD',
   capacity   hotel.capacity default 'SINGLE',
   price      MONEY NOT NULL
@@ -30,8 +31,8 @@ CREATE TABLE IF NOT EXISTS hotel.Rooms
 
 CREATE TABLE IF NOT EXISTS hotel.Requests
 (
-  requestID     UUID PRIMARY KEY,
-  userID        UUID        NOT NULL REFERENCES hotel.Users (userID),
+  requestID     BIGSERIAL PRIMARY KEY,
+  userID        BIGINT REFERENCES hotel.Users (userID),
   capacity      hotel.capacity    default 'SINGLE',
   classID       hotel.classID     default 'STANDARD',
   checkIn       TIMESTAMPTZ NOT NULL,
@@ -41,20 +42,14 @@ CREATE TABLE IF NOT EXISTS hotel.Requests
 
 CREATE TABLE IF NOT EXISTS hotel.ReservedRooms
 (
-  roomNumber SMALLINT PRIMARY KEY REFERENCES hotel.Rooms (roomNumber),
-  requestID UUID REFERENCES hotel.Requests
+  reservedRoomID SMALLSERIAL PRIMARY KEY ,
+  roomNumber SMALLINT REFERENCES hotel.Rooms (roomNumber),
+  requestID BIGINT REFERENCES hotel.Requests (requestID)
 );
 
-DO $$
-  BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'admin') THEN
-      CREATE ROLE admin LOGIN PASSWORD 'admin';
-    END IF;
-  END
-  $$;
 
-GRANT ALL PRIVILEGES ON DATABASE Hotel TO ADMIN;
 
-INSERT INTO hotel.Users values (1,'user1','1234',userID,'Petr','Ivanov');
-INSERT INTO hotel.Users values (2,'user2','4321',userID,'Ivan','Pertov');
+
+
+
 
