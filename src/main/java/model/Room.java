@@ -1,9 +1,12 @@
 package model;
 
 import enums.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+@Data
 public class Room {
 
     private int roomNumber;
@@ -11,35 +14,4 @@ public class Room {
     private Capacity capacity;
     private BigDecimal price;
 
-    public int getRoomNumber() {
-        return roomNumber;
-    }
-
-    public void setRoomNumber(int roomNumber) {
-        this.roomNumber = roomNumber;
-    }
-
-    public ClassID getClassID() {
-        return classID;
-    }
-
-    public void setClassID(ClassID classID) {
-        this.classID = classID;
-    }
-
-    public Capacity getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Capacity capacity) {
-        this.capacity = capacity;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
 }

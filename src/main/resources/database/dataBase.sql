@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS Hotel;
 CREATE DATABASE Hotel;
 CREATE SCHEMA IF NOT EXISTS hotel;
 DROP TYPE IF EXISTS hotel.permission;
@@ -33,7 +34,7 @@ CREATE TABLE IF NOT EXISTS hotel.Requests
   requestID     UUID PRIMARY KEY,
   userID        UUID        NOT NULL REFERENCES hotel.Users (userID),
   capacity      hotel.capacity    default '1',
-  classID       hotel.classID     default 'STANDARD' REFERENCES hotel.Rooms (classID),
+  classID       hotel.classID     default 'STANDARD',
   checkIn       TIMESTAMPTZ NOT NULL,
   checkOut      TIMESTAMPTZ NOT NULL,
   paymentStatus hotel.paymentStatus default 'NOBILL'
@@ -45,6 +46,7 @@ CREATE TABLE IF NOT EXISTS hotel.ReservedRooms
   requestID UUID REFERENCES hotel.Requests
 );
 
+DROP USER IF EXISTS ADMIN;
 CREATE USER ADMIN WITH PASSWORD 'ADMIN';
 GRANT ALL PRIVILEGES ON DATABASE Hotel TO ADMIN;
 
