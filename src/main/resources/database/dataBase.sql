@@ -55,3 +55,6 @@ DO $$
 
 GRANT ALL PRIVILEGES ON DATABASE Hotel TO ADMIN;
 
+INSERT INTO hotel.Users values (1,'user1','1234',userID,'Petr','Ivanov');
+INSERT INTO hotel.Users values (2,'user2','4321',userID,'Ivan','Pertov');
+
