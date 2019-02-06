@@ -37,7 +37,7 @@ public class RoomDao implements Dao {
             room.setRoomNumber(rs.getInt(2));
             room.setClassID(ClassID.valueOf(rs.getString(3)));
             room.setCapacity(Capacity.valueOf(rs.getString(4)));
-            room.setPrice(rs.getAmount());
+            room.setPrice(rs.getBigDecimal(5));
             return room;
         });
     }
