@@ -10,6 +10,14 @@
     <bean id="room" class="model.Room" scope="prototype">
     </bean>
 
+    <bean id="userDao" class="daos.UserDao">
+        <constructor-arg ref="jdbcTemplate"/>
+    </bean>
+
+    <bean id="RoomDao" class="daos.RoomDao">
+        <constructor-arg ref="jdbcTemplate"/>
+    </bean>
+
 
 
 </beans>
