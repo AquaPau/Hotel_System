@@ -30,7 +30,7 @@ public class RoomDao implements Dao {
         return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM hotel.Rooms", Integer.class);
     }
 
-    public List<Room> getRoomsList() {
+    public List<Room> getRoomList() {
         return jdbcTemplate.query("SELECT * FROM hotel.Rooms", (rs, rowNum) -> {
             Room room = new Room();
             room.setRoomID(rs.getInt(1));

@@ -1,4 +1,7 @@
 package daos;
 
-public interface Dao {
+import java.util.List;
+
+public interface Dao<T> {
+
 }
