@@ -1,19 +1,45 @@
 package daos;
 
+import enums.ClassID;
 import model.Room;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class RoomDao {
+import java.math.BigDecimal;
+import java.util.List;
+import enums.*;
 
-    JdbcTemplate jdbctemplate;
+public class RoomDao implements Dao {
 
-    public RoomDao(JdbcTemplate template) {
-        this.jdbctemplate = template;
+    JdbcTemplate jdbcTemplate;
+
+    public RoomDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public void addRoom(Room room) {
-        jdbctemplate.execute("INSERT INTO hotel.rooms (logihotel.Users (roomnumber, classid, capacity, price) , password, firstName, lastName) values ('user1','1234','Petr','Ivanov');n, password, firstName, lastName) values ('user1','1234','Petr','Ivanov');");
-        //INSERT INTO
+        int roomNumber = room.getRoomNumber();
+        String classID = room.getClassID().name();
+        String cap = room.getCapacity().name();
+        String price = room.getPrice().toString();
+        String query = String.format("INSERT INTO (roomnumber, classid, " +
+                "capacity, price) hotel.rooms VALUES (%d,'%s','%s', %s)", roomNumber, classID, cap, price);
+        jdbcTemplate.execute(query);
+    }
+
+    public int getRoomCount() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM hotel.Rooms", Integer.class);
+    }
+
+    public List<Room> getRoomsList() {
+        return jdbcTemplate.query("SELECT * FROM hotel.Rooms", (rs, rowNum) -> {
+            Room room = new Room();
+            room.setRoomID(rs.getInt(1));
+            room.setRoomNumber(rs.getInt(2));
+            room.setClassID(ClassID.valueOf(rs.getString(3)));
+            room.setCapacity(Capacity.valueOf(rs.getString(4)));
+            room.setPrice(rs.getBigDecimal(5));
+            return room;
+        });
     }
 
 }

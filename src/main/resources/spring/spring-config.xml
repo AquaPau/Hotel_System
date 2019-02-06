@@ -14,6 +14,10 @@
         <constructor-arg ref="jdbcTemplate"/>
     </bean>
 
+    <bean id="RoomDao" class="daos.RoomDao">
+        <constructor-arg ref="jdbcTemplate"/>
+    </bean>
+
 
 
 </beans>

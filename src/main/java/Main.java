@@ -10,5 +10,6 @@ public class Main {
         UserDao userDao = (UserDao) context.getBean("userDao");
         System.out.println(userDao.getUserCount());
         userDao.getUserList().forEach(System.out::println);
+
     }
 }

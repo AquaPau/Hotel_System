@@ -23,7 +23,6 @@ public class UserDao implements Dao {
             user.setId(rs.getLong(1));
             user.setLogin(rs.getString(2));
             user.setPermission(Permission.valueOf(rs.getString(4)));
-            user.setLogin(rs.getString(2));
             user.setFirstName(rs.getString(5));
             user.setLastName(rs.getString(6));
             return user;
