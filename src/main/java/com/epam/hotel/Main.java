@@ -10,7 +10,7 @@ public class Main {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring-config.xml");
         UserDaoTemplateImpl userDao = (UserDaoTemplateImpl) context.getBean("userDao");
         System.out.println(userDao.getUserCount());
-     //   userDao.getUserList().forEach(System.out::println);
+        userDao.getAll().forEach(System.out::println);
 
     }
 }
