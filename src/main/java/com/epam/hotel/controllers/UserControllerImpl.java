@@ -1,19 +1,15 @@
 package com.epam.hotel.controllers;
 
 import com.epam.hotel.services.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Controller
-public class UserControllerImpl {
+@org.springframework.stereotype.Controller
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class UserControllerImpl implements Controller {
     private final UserService userService;
-
-    @Autowired
-    public UserControllerImpl(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping("/")
     public String index(Model model) {

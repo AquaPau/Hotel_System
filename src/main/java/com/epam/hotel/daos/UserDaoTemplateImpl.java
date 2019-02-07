@@ -24,7 +24,7 @@ public class UserDaoTemplateImpl implements UserDao {
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(long id) {
         return false;
     }
 
@@ -47,7 +47,7 @@ public class UserDaoTemplateImpl implements UserDao {
     }
 
     @Override
-    public User getById(int id) {
+    public User getById(long id) {
         return null;
     }
 }
