@@ -12,15 +12,17 @@
     <bean id="request" class="com.epam.hotel.model.Request" scope="prototype">
     </bean>
 
-
     <bean id="userDao" class="com.epam.hotel.daos.UserDaoTemplateImpl">
         <constructor-arg ref="jdbcTemplate"/>
     </bean>
 
-    <bean id="RoomDao" class="com.epam.hotel.daos.RoomDaoTemplateImpl">
-        <constructor-arg ref="jdbcTemplate"/>
+    <bean id="userService" class="com.epam.hotel.services.UserServiceImpl">
+        <constructor-arg ref="userDao"/>
     </bean>
 
+    <bean id="roomDao" class="com.epam.hotel.daos.RoomDaoTemplateImpl">
+        <constructor-arg ref="jdbcTemplate"/>
+    </bean>
 
 
 </beans>

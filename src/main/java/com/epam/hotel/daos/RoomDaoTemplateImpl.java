@@ -9,7 +9,7 @@ import com.epam.hotel.enums.*;
 
 public class RoomDaoTemplateImpl implements RoomDao {
 
-    JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
