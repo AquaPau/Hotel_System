@@ -15,19 +15,16 @@ public class UserDaoJdbcImpl implements UserDao {
     private String username;
     private String password;
 
+    final String INSERT_QUERY = "INSERT INTO hotel.users (login, password, permission,firstname, lastname) values (?, ?, CAST(? as hotel.permission), ?, ?)";
+    final String DELETE_QUERY = "DELETE FROM hotel.users WHERE userid = ?";
+    final String UPDATE_QUERY = "UPDATE hotel.users SET login = ?, password = ?, permission = CAST(? as hotel.permission),firstname=?,lastname=? WHERE userid = ?";
+    final String SELECT_ONE_QUERY = "SELECT * FROM hotel.users WHERE userid = ?";
+    final String SELECT_ALL_QUERY = "SELECT * FROM hotel.users";
+
     @Override
     public User create(User entity) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String createSQL = "INSERT INTO hotel.users (login, password, permission,firstname, lastname) values (?, ?, CAST(? as hotel.permission), ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(createSQL);
-            statement.setString(1, entity.getLogin());
-            statement.setString(2, String.valueOf(entity.getPassword()));
-            if (entity.getPermission() == null) {
-                entity.setPermission(Permission.USER);
-            }
-            statement.setString(3, entity.getPermission().toString());
-            statement.setString(4, entity.getFirstName());
-            statement.setString(5, entity.getLastName());
+            PreparedStatement statement = initStatement(entity, connection, INSERT_QUERY);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,8 +35,7 @@ public class UserDaoJdbcImpl implements UserDao {
     @Override
     public boolean delete(long id) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String deleteSQL = "DELETE FROM hotel.users WHERE userid = ?";
-            PreparedStatement statement = connection.prepareStatement(deleteSQL);
+            PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
             statement.setLong(1, id);
             statement.executeUpdate();
             return true;
@@ -52,18 +48,7 @@ public class UserDaoJdbcImpl implements UserDao {
     @Override
     public boolean update(User entity) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String updateSQL = "UPDATE hotel.users "
-                    + "SET login = ?, password = ?, permission = CAST(? as hotel.permission),firstname=?,lastname=?"
-                    + "WHERE userid = ?";
-            PreparedStatement statement = connection.prepareStatement(updateSQL);
-            statement.setString(1, entity.getLogin());
-            statement.setString(2, String.valueOf(entity.getPassword()));
-            if (entity.getPermission() == null) {
-                entity.setPermission(Permission.USER);
-            }
-            statement.setString(3, entity.getPermission().toString());
-            statement.setString(4, entity.getFirstName());
-            statement.setString(5, entity.getLastName());
+            PreparedStatement statement = initStatement(entity, connection, UPDATE_QUERY);
             statement.setLong(6, entity.getId());
             statement.executeUpdate();
             return true;
@@ -77,8 +62,8 @@ public class UserDaoJdbcImpl implements UserDao {
     public List<User> getAll() {
         List<User> userList = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "SELECT * FROM hotel.users";
-            PreparedStatement statement = connection.prepareStatement(query);
+
+            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_QUERY);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = getUser(resultSet);
@@ -90,6 +75,33 @@ public class UserDaoJdbcImpl implements UserDao {
         return userList;
     }
 
+    @Override
+    public User getById(long id) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            PreparedStatement statement = connection.prepareStatement(SELECT_ONE_QUERY);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return getUser(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private PreparedStatement initStatement(User entity, Connection connection, String query) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, entity.getLogin());
+        statement.setString(2, String.valueOf(entity.getPassword()));
+        if (entity.getPermission() == null) {
+            entity.setPermission(Permission.USER);
+        }
+        statement.setString(3, entity.getPermission().toString());
+        statement.setString(4, entity.getFirstName());
+        statement.setString(5, entity.getLastName());
+        return statement;
+    }
+
     private User getUser(ResultSet resultSet) throws SQLException {
         User user = new User();
         user.setId(resultSet.getLong(1));
@@ -99,21 +111,6 @@ public class UserDaoJdbcImpl implements UserDao {
         user.setFirstName(resultSet.getString(5));
         user.setLastName(resultSet.getString(6));
         return user;
-    }
-
-    @Override
-    public User getById(long id) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "SELECT * FROM hotel.users WHERE userid = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            return getUser(resultSet);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 }

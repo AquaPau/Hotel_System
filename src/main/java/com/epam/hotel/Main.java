@@ -13,12 +13,7 @@ public class Main {
         System.out.println("Your awesome hotel system!");
         ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring-config.xml");
         UserDao userDao = (UserDao) context.getBean("userDaoJdbc");
-
-        User user = new User(1, "user555", new char[]{'q', 'w'}, Permission.USER, "test", "asd");
-        userDao.update(user);
-
         userDao.getAll().forEach(System.out::println);
-
 
     }
 }
