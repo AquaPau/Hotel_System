@@ -1,12 +1,9 @@
-package model;
+package com.epam.hotel.model;
 
-import enums.*;
+import com.epam.hotel.enums.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.time.ZonedDateTime;
 
-import java.time.LocalDate;
-import java.util.UUID;
+import java.time.ZonedDateTime;
 
 @Data
 public class Request {

@@ -1,15 +1,15 @@
-package daos;
+package com.epam.hotel.daos;
 
-import enums.Permission;
-import model.User;
+import com.epam.hotel.enums.Permission;
+import com.epam.hotel.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
-public class UserDao implements Dao {
+public class UserDaoTemplateImpl implements UserDao {
     private JdbcTemplate jdbcTemplate;
 
-    public UserDao(JdbcTemplate jdbcTemplate) {
+    public UserDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -17,7 +17,24 @@ public class UserDao implements Dao {
         return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM hotel.Users", Integer.class);
     }
 
-    public List<User> getUserList() {
+
+    @Override
+    public User create(User entity) {
+        return null;
+    }
+
+    @Override
+    public boolean delete(int id) {
+        return false;
+    }
+
+    @Override
+    public boolean update(User entity) {
+        return false;
+    }
+
+    @Override
+    public List<User> getAll() {
         return jdbcTemplate.query("SELECT * FROM hotel.Users", (rs, rowNum) -> {
             User user = new User();
             user.setId(rs.getLong(1));
@@ -27,5 +44,10 @@ public class UserDao implements Dao {
             user.setLastName(rs.getString(6));
             return user;
         });
+    }
+
+    @Override
+    public User getById(int id) {
+        return null;
     }
 }

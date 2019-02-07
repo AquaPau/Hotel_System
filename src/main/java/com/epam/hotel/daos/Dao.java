@@ -1,4 +1,4 @@
-package daos;
+package com.epam.hotel.daos;
 
 import java.util.List;
 
