@@ -5,19 +5,19 @@
 
     <import resource="datebase-config.xml"/>
 
-    <bean id="user" class="model.User" scope="prototype">
+    <bean id="user" class="com.epam.hotel.model.User" scope="prototype">
     </bean>
-    <bean id="room" class="model.Room" scope="prototype">
+    <bean id="room" class="com.epam.hotel.model.Room" scope="prototype">
     </bean>
-    <bean id="request" class="model.Request" scope="prototype">
+    <bean id="request" class="com.epam.hotel.model.Request" scope="prototype">
     </bean>
 
 
-    <bean id="userDao" class="daos.UserDao">
+    <bean id="userDao" class="com.epam.hotel.daos.UserDaoTemplateImpl">
         <constructor-arg ref="jdbcTemplate"/>
     </bean>
 
-    <bean id="RoomDao" class="daos.RoomDao">
+    <bean id="RoomDao" class="com.epam.hotel.daos.RoomDaoTemplateImpl">
         <constructor-arg ref="jdbcTemplate"/>
     </bean>
 

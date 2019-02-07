@@ -1,18 +1,17 @@
-package daos;
+package com.epam.hotel.daos;
 
-import enums.ClassID;
-import model.Room;
+import com.epam.hotel.enums.ClassID;
+import com.epam.hotel.model.Room;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.math.BigDecimal;
 import java.util.List;
-import enums.*;
+import com.epam.hotel.enums.*;
 
-public class RoomDao implements Dao {
+public class RoomDaoTemplateImpl implements RoomDao {
 
     JdbcTemplate jdbcTemplate;
 
-    public RoomDao(JdbcTemplate jdbcTemplate) {
+    public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -42,4 +41,29 @@ public class RoomDao implements Dao {
         });
     }
 
+
+    @Override
+    public Room create(Room entity) {
+        return null;
+    }
+
+    @Override
+    public boolean delete(int id) {
+        return false;
+    }
+
+    @Override
+    public boolean update(Room entity) {
+        return false;
+    }
+
+    @Override
+    public List<Room> getAll() {
+        return null;
+    }
+
+    @Override
+    public Room getById(int id) {
+        return null;
+    }
 }

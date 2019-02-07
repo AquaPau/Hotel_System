@@ -1,6 +1,6 @@
-package model;
+package com.epam.hotel.model;
 
-import enums.Permission;
+import com.epam.hotel.enums.Permission;
 import lombok.Data;
 
 

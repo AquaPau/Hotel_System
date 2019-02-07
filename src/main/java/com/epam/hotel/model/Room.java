@@ -1,8 +1,7 @@
-package model;
+package com.epam.hotel.model;
 
-import enums.*;
+import com.epam.hotel.enums.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
