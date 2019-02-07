@@ -14,17 +14,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User entity) {
-        return null;
+        return userDao.create(entity);
     }
 
     @Override
-    public boolean delete(int id) {
-        return false;
+    public boolean delete(long id) {
+        return userDao.delete(id);
     }
 
     @Override
     public boolean update(User entity) {
-        return false;
+        return userDao.update(entity);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(int id) {
-        return null;
+    public User getById(long id) {
+        return userDao.getById(id);
     }
 }
