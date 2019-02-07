@@ -15,11 +15,11 @@ public class UserDaoJdbcImpl implements UserDao {
     private String username;
     private String password;
 
-    final String INSERT_QUERY = "INSERT INTO hotel.users (login, password, permission,firstname, lastname) values (?, ?, CAST(? as hotel.permission), ?, ?)";
-    final String DELETE_QUERY = "DELETE FROM hotel.users WHERE userid = ?";
-    final String UPDATE_QUERY = "UPDATE hotel.users SET login = ?, password = ?, permission = CAST(? as hotel.permission),firstname=?,lastname=? WHERE userid = ?";
-    final String SELECT_ONE_QUERY = "SELECT * FROM hotel.users WHERE userid = ?";
-    final String SELECT_ALL_QUERY = "SELECT * FROM hotel.users";
+    private final String INSERT_QUERY = "INSERT INTO hotel.users (login, password, permission,firstname, lastname) values (?, ?, CAST(? as hotel.permission), ?, ?)";
+    private final String DELETE_QUERY = "DELETE FROM hotel.users WHERE userid = ?";
+    private final String UPDATE_QUERY = "UPDATE hotel.users SET login = ?, password = ?, permission = CAST(? as hotel.permission),firstname=?,lastname=? WHERE userid = ?";
+    private final String SELECT_ONE_QUERY = "SELECT * FROM hotel.users WHERE userid = ?";
+    private final String SELECT_ALL_QUERY = "SELECT * FROM hotel.users";
 
     @Override
     public User create(User entity) {
@@ -93,9 +93,6 @@ public class UserDaoJdbcImpl implements UserDao {
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, entity.getLogin());
         statement.setString(2, String.valueOf(entity.getPassword()));
-        if (entity.getPermission() == null) {
-            entity.setPermission(Permission.USER);
-        }
         statement.setString(3, entity.getPermission().toString());
         statement.setString(4, entity.getFirstName());
         statement.setString(5, entity.getLastName());

@@ -23,7 +23,7 @@
     </bean>
 
     <bean id="userService" class="com.epam.hotel.services.UserServiceImpl">
-        <constructor-arg ref="userDaoJdbc"/>
+        <constructor-arg ref="userDaoTemplate"/>
     </bean>
 
     <bean id="roomDao" class="com.epam.hotel.daos.RoomDaoTemplateImpl">
