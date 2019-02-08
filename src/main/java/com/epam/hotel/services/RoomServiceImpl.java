@@ -2,6 +2,8 @@ package com.epam.hotel.services;
 
 import com.epam.hotel.daos.RoomDao;
 import com.epam.hotel.daos.UserDao;
+import com.epam.hotel.enums.Capacity;
+import com.epam.hotel.enums.ClassID;
 import com.epam.hotel.model.Room;
 
 import java.util.List;
@@ -12,8 +14,21 @@ public class RoomServiceImpl implements RoomService {
     public RoomServiceImpl(RoomDao roomDao) {
         this.roomDao = roomDao;
     }
+
+    public void roomValidation(Room room) {
+
+        if (room.getPrice() == null || room.getRoomNumber() == 0) {
+            throw new IllegalArgumentException("Room is not valid: fill the required fields");
+        } else if (room.getCapacity() == null) {
+            room.setCapacity(Capacity.SINGLE);
+        } else if (room.getClassID() == null) {
+            room.setClassID(ClassID.STANDARD);
+        }
+    }
+
     @Override
     public Room create(Room room) {
+        roomValidation(room);
         return roomDao.create(room);
     }
 
@@ -24,6 +39,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public boolean update(Room room) {
+        roomValidation(room);
         return roomDao.update(room);
     }
 
