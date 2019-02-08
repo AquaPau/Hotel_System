@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @Data
 public class Room {
 
-    private int roomID;
+    private long roomID;
     private int roomNumber;
     private ClassID classID;
     private Capacity capacity;

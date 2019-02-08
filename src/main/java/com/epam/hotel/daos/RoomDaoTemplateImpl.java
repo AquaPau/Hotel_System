@@ -16,7 +16,7 @@ public class RoomDaoTemplateImpl implements RoomDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private Integer checkIfExists(int id) {
+    private Integer checkIfExists(long id) {
         String check = "SELECT COUNT(*) FROM hotel.rooms WHERE roomid = ?";
         Integer count = jdbcTemplate.queryForObject(check, new Object[]{id}, Integer.class);
         return count;
@@ -64,7 +64,7 @@ public class RoomDaoTemplateImpl implements RoomDao {
 
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(long id) {
         boolean isDeleted = false;
         if (this.checkIfExists(id) > 0) {
             String sql = "DELETE FROM hotel.rooms WHERE roomid = ?";
@@ -89,7 +89,7 @@ public class RoomDaoTemplateImpl implements RoomDao {
     }
 
     @Override
-    public Room getById(int id) {
+    public Room getById(long id) {
         Room room = null;
         if (this.checkIfExists(id) > 0) {
             String sql = "SELECT * FROM hotel.rooms WHERE roomid = ?";

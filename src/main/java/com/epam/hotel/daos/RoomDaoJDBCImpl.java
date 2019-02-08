@@ -44,7 +44,7 @@ public class RoomDaoJDBCImpl implements RoomDao {
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(long id) {
         return false;
     }
 
@@ -59,7 +59,7 @@ public class RoomDaoJDBCImpl implements RoomDao {
     }
 
     @Override
-    public Room getById(int id) {
+    public Room getById(long id) {
         return null;
     }
 
