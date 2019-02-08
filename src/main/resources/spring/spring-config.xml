@@ -26,9 +26,18 @@
         <constructor-arg ref="userDaoTemplate"/>
     </bean>
 
-    <bean id="roomDao" class="com.epam.hotel.daos.RoomDaoTemplateImpl">
+    <bean id="roomDaoTemplate" class="com.epam.hotel.daos.RoomDaoTemplateImpl">
         <constructor-arg ref="jdbcTemplate"/>
     </bean>
+
+    <bean id="roomDaoJDBC" class="com.epam.hotel.daos.RoomDaoJDBCImpl">
+    </bean>
+
+    <bean id="roomService" class="com.epam.hotel.services.RoomServiceImpl">
+        <constructor-arg ref="roomDaoTemplate"/>
+    </bean>
+
+
 
 
 </beans>
