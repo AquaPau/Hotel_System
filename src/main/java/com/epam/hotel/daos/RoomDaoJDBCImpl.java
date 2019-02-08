@@ -15,6 +15,9 @@ public class RoomDaoJDBCImpl implements RoomDao {
     private static final String SQL_UPDATE_ROOM =
             "UPDATE hotel.rooms SET roomnumber = ?, classid = CAST(? AS hotel.classid)," +
                     " capacity = CAST(? AS hotel.capacity), price = ?";
+    private static final String SQL_SELECT_ONE = "SELECT * FROM hotel.rooms WHERE userid = ?";
+    private static final String SQL_SELECT_ALL = "SELECT * FROM hotel.rooms";
+    private static final String SQL_DELETE_ROOM = "DELETE FROM hotel.rooms WHERE userid = ?";
 
     @Override
     public Room create(Room room) {

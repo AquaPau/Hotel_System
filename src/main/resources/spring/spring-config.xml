@@ -33,6 +33,10 @@
     <bean id="roomDaoJDBC" class="com.epam.hotel.daos.RoomDaoJDBCImpl">
     </bean>
 
+    <bean id="roomService" class="com.epam.hotel.services.RoomServiceImpl">
+        <constructor-arg ref="roomDaoTemplate"/>
+    </bean>
+
 
 
 
