@@ -11,8 +11,8 @@ import com.epam.hotel.enums.*;
 public class RoomDaoTemplateImpl implements RoomDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private final String SQL_CHECK_IF_EXISTS_BY_ID = "SELECT COUNT(roomid, roomnumber, classid, capacity, price) FROM hotel.rooms WHERE roomid = ?";
-    private final String SQL_CHECK_IF_EXISTS_BY_ROOM_NUMBER = "SELECT COUNT(roomid, roomnumber, classid, capacity, price) FROM hotel.rooms WHERE roomnumber = ?";
+    private final String SQL_CHECK_IF_EXISTS_BY_ID = "SELECT COUNT(*) FROM hotel.rooms WHERE roomid = ?";
+    private final String SQL_CHECK_IF_EXISTS_BY_ROOM_NUMBER = "SELECT COUNT(*) FROM hotel.rooms WHERE roomnumber = ?";
     private final String SQL_GET_ALL_ROOMS = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.Rooms";
     private final String SQL_UPDATE_ROOM = "UPDATE hotel.rooms SET roomnumber = ?, " +
             "classid = CAST(? AS hotel.classid), capacity = CAST(? AS hotel.capacity), price = ? WHERE roomid = ?";
