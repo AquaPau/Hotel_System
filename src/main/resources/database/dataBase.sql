@@ -47,6 +47,11 @@ CREATE TABLE IF NOT EXISTS hotel.ReservedRooms
   requestID      BIGINT REFERENCES hotel.Requests (requestID)
 );
 
+INSERT INTO hotel.Rooms (roomnumber, price) VALUES (3, 500);
+
+INSERT INTO hotel.Rooms (roomnumber, price) VALUES (4, 400);
+
+SELECT * FROM hotel.Rooms
 
 
 

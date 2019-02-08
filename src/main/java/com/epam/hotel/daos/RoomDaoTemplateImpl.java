@@ -5,32 +5,72 @@ import com.epam.hotel.model.Room;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
+
 import com.epam.hotel.enums.*;
 
 public class RoomDaoTemplateImpl implements RoomDao {
 
     private final JdbcTemplate jdbcTemplate;
+    private final String SQL_CHECK_IF_EXISTS_BY_ID = "SELECT COUNT(*) FROM hotel.rooms WHERE roomid = ?";
+    private final String SQL_CHECK_IF_EXISTS_BY_ROOM_NUMBER = "SELECT COUNT(*) FROM hotel.rooms WHERE roomnumber = ?";
+    private final String SQL_GET_ALL_ROOMS = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.Rooms";
+    private final String SQL_UPDATE_ROOM = "UPDATE hotel.rooms SET roomnumber = ?, " +
+            "classid = CAST(? AS hotel.classid), capacity = CAST(? AS hotel.capacity), price = ? WHERE roomid = ?";
+    private final String SQL_CREATE_NEW_ROOM = "INSERT INTO hotel.rooms (roomnumber, classid, " +
+            "capacity, price) VALUES (?, CAST(? AS hotel.classid), CAST(? AS hotel.capacity), ?)";
+    private final String SQL_DELETE_ROOM = "DELETE FROM hotel.rooms WHERE roomid = ?";
+    private final String SQL_GET_BY_ID = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.rooms WHERE roomid = ?";
+    private final String SQL_GET_BY_ROOM_NUMBER = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.rooms WHERE roomnumber = ?";
 
     public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void addRoom(Room room) {
-        int roomNumber = room.getRoomNumber();
-        String classID = room.getClassID().name();
-        String cap = room.getCapacity().name();
-        String price = room.getPrice().toString();
-        String query = String.format("INSERT INTO (roomnumber, classid, " +
-                "capacity, price) hotel.rooms VALUES (%d,'%s','%s', %s)", roomNumber, classID, cap, price);
-        jdbcTemplate.execute(query);
+    private Integer checkIfExists(long id) {
+        return jdbcTemplate.queryForObject(SQL_CHECK_IF_EXISTS_BY_ID, new Object[]{id}, Integer.class);
     }
 
-    public int getRoomCount() {
-        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM hotel.Rooms", Integer.class);
+    private Integer checkIfNumberExists(int roomNumber) {
+        return jdbcTemplate.queryForObject(SQL_CHECK_IF_EXISTS_BY_ROOM_NUMBER,new Object[]{roomNumber}, Integer.class);
     }
 
-    public List<Room> getRoomList() {
-        return jdbcTemplate.query("SELECT * FROM hotel.Rooms", (rs, rowNum) -> {
+    @Override
+    public Room create(Room room) {
+        jdbcTemplate.update(SQL_CREATE_NEW_ROOM, room.getRoomNumber(), room.getClassID(),
+                room.getCapacity(), room.getPrice());
+        Room newroom = null;
+        if (this.checkIfNumberExists(room.getRoomNumber()) > 0) {
+            newroom = this.getByRoomNumber(room.getRoomNumber());
+        }
+        return newroom;
+    }
+
+    @Override
+    public boolean update(Room room) {
+        boolean isUpdated = false;
+        if (this.checkIfExists(room.getRoomID()) > 0) {
+            jdbcTemplate.update(SQL_UPDATE_ROOM, room.getRoomNumber(), room.getClassID(),
+                    room.getCapacity(), room.getPrice(), room.getRoomID());
+            isUpdated = true;
+        }
+        return isUpdated;
+    }
+
+
+    @Override
+    public boolean delete(long id) {
+        boolean isDeleted = false;
+        if (this.checkIfExists(id) > 0) {
+            jdbcTemplate.update(SQL_DELETE_ROOM, id);
+            isDeleted = true;
+        }
+        return isDeleted;
+    }
+
+
+    @Override
+    public List<Room> getAll() {
+        return jdbcTemplate.query(SQL_GET_ALL_ROOMS, (rs, rowNum) -> {
             Room room = new Room();
             room.setRoomID(rs.getInt(1));
             room.setRoomNumber(rs.getInt(2));
@@ -41,29 +81,24 @@ public class RoomDaoTemplateImpl implements RoomDao {
         });
     }
 
-
-    @Override
-    public Room create(Room entity) {
-        return null;
-    }
-
-    @Override
-    public boolean delete(long id) {
-        return false;
-    }
-
-    @Override
-    public boolean update(Room entity) {
-        return false;
-    }
-
-    @Override
-    public List<Room> getAll() {
-        return null;
-    }
-
     @Override
     public Room getById(long id) {
-        return null;
+        Room room = null;
+        if (this.checkIfExists(id) > 0) {
+            room = jdbcTemplate.queryForObject(
+                    SQL_GET_BY_ID, new Object[]{ id }, Room.class);
+        }
+        return room;
     }
+
+    @Override
+    public Room getByRoomNumber(int roomNumber) {
+        Room room = null;
+        if (this.checkIfNumberExists(roomNumber) > 0) {
+            room = jdbcTemplate.queryForObject(
+                    SQL_GET_BY_ROOM_NUMBER, new Object[] { roomNumber }, Room.class);
+        }
+        return room;
+    }
+
 }
