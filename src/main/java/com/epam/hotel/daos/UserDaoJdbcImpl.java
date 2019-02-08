@@ -15,11 +15,11 @@ public class UserDaoJdbcImpl implements UserDao {
     private String username;
     private String password;
 
-    private final String INSERT_QUERY = "INSERT INTO hotel.users (login, password, permission,firstname, lastname) values (?, ?, CAST(? as hotel.permission), ?, ?)";
-    private final String DELETE_QUERY = "DELETE FROM hotel.users WHERE userid = ?";
-    private final String UPDATE_QUERY = "UPDATE hotel.users SET login = ?, password = ?, permission = CAST(? as hotel.permission),firstname=?,lastname=? WHERE userid = ?";
-    private final String SELECT_ONE_QUERY = "SELECT * FROM hotel.users WHERE userid = ?";
-    private final String SELECT_ALL_QUERY = "SELECT * FROM hotel.users";
+    private static final String INSERT_QUERY = "INSERT INTO hotel.users (login, password, permission,firstname, lastname) values (?, ?, CAST(? as hotel.permission), ?, ?)";
+    private static final String DELETE_QUERY = "DELETE FROM hotel.users WHERE userid = ?";
+    private static final String UPDATE_QUERY = "UPDATE hotel.users SET login = ?, password = ?, permission = CAST(? as hotel.permission),firstname=?,lastname=? WHERE userid = ?";
+    private static final String SELECT_ONE_QUERY = "SELECT * FROM hotel.users WHERE userid = ?";
+    private static final String SELECT_ALL_QUERY = "SELECT * FROM hotel.users";
 
     @Override
     public User create(User entity) {
