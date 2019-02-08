@@ -23,11 +23,17 @@
     </bean>
 
     <bean id="userService" class="com.epam.hotel.services.UserServiceImpl">
-        <constructor-arg ref="userDaoTemplate"/>
+        <constructor-arg ref="userDaoJdbc"/>
     </bean>
 
     <bean id="roomDaoTemplate" class="com.epam.hotel.daos.RoomDaoTemplateImpl">
         <constructor-arg ref="jdbcTemplate"/>
+    </bean>
+    
+    <bean id="requestDaoJdbc" class="com.epam.hotel.daos.RequestDaoJDBC">
+        <property name="url" value="${database.url}"/>
+        <property name="username" value="${database.username}"/>
+        <property name="password" value="${database.password}"/>
     </bean>
 
     <bean id="roomDaoJDBC" class="com.epam.hotel.daos.RoomDaoJDBCImpl">
@@ -36,8 +42,5 @@
     <bean id="roomService" class="com.epam.hotel.services.RoomServiceImpl">
         <constructor-arg ref="roomDaoTemplate"/>
     </bean>
-
-
-
 
 </beans>
