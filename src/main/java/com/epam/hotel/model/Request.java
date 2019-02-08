@@ -3,7 +3,7 @@ package com.epam.hotel.model;
 import com.epam.hotel.enums.*;
 import lombok.Data;
 
-import java.time.ZonedDateTime;
+import java.sql.Timestamp;
 
 @Data
 public class Request {
@@ -13,7 +13,7 @@ public class Request {
     private Capacity capacity;
     private ClassID classID;
     private PaymentStatus paymentStatus;
-    private ZonedDateTime checkIn;
-    private ZonedDateTime checkOut;
+    private Timestamp checkIn;
+    private Timestamp checkOut;
 
 }
