@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <meta charset="UTF-8">
 <head>
     <title>Hotel System</title>
@@ -17,6 +19,16 @@
             <div class="card-header">
                 <h3 class="text-center">Welcome to hotel!</h3>
             </div>
+            <p>HELLO</p>
+           <!-- <sec:authorize access="!isAuthenticated()">
+                <p><a class="btn btn-lg btn-success" href="/login" role="button">Sing up</a></p>
+            </sec:authorize>
+            <sec:authorize access="isAuthenticated()">
+                <p>Ваш логин:
+                    <sec:authentication property="principal.username"/>
+                </p>
+                <p><a class="btn btn-lg btn-danger" href="/logout" role="button">Log out</a></p>
+            </sec:authorize>-->
             <div class="card-body">
 
             </div>

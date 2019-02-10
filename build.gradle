@@ -45,6 +45,16 @@ dependencies {
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.197'
     // https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring4
     compile group: 'org.thymeleaf', name: 'thymeleaf-spring4', version: '3.0.11.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
+    compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.1.3.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-web
+    compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.1.3.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-taglibs
+    compile group: 'org.springframework.security', name: 'spring-security-taglibs', version: '5.1.3.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-config
+    compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.1.3.RELEASE'
+    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
 }
 
 intellij {

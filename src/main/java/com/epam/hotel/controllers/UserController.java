@@ -1,8 +1,8 @@
 package com.epam.hotel.controllers;
 
 import com.epam.hotel.model.User;
+import com.epam.hotel.services.SecurityService;
 import com.epam.hotel.services.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,9 +11,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {
-    private final UserService userService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private SecurityService securityService;
 
     @GetMapping({"/", "index"})
     public String getIndex(Model model) {
@@ -22,21 +26,21 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String getUsers(Model model) {
-        model.addAttribute("user", new User());
+    public String getLoginForm() {
         return "login";
     }
 
     @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
+    public String registration(Model model) {
         model.addAttribute("user", new User());
         return "register";
     }
 
     @PostMapping("/register")
-    public String saveOrUpdate(@ModelAttribute User user) {
+    public String saveOrUpdate(@ModelAttribute("user") User user) {
         userService.create(user);
-        return "redirect:index";
+        securityService.autoLogin(user.getLogin(), user.getPassword());
+        return "redirect:/index";
     }
 
 
