@@ -22,7 +22,6 @@
                     <p class="text-center">Get started with your free account</p>
                 </div>
                 <form th:object="${user}" th:action="@{/register}" method="post">
-                    <input type="hidden" th:field="*{id}"/>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>

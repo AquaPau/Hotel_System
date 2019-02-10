@@ -6,9 +6,7 @@ import com.epam.hotel.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class UserController {
@@ -25,10 +23,16 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping("/login")
+    @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
     public String getLoginForm() {
         return "login";
     }
+
+    @GetMapping("/admin")
+    public String admin() {
+        return "admin";
+    }
+
 
     @GetMapping("/register")
     public String registration(Model model) {

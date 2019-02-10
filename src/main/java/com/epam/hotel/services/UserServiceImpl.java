@@ -19,8 +19,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User entity) {
         userValidation(entity);
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        entity.setPassword(encoder.encode(entity.getPassword()));
+        PasswordEncoder delegatingPasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        entity.setPassword(delegatingPasswordEncoder.encode(entity.getPassword()));
         return userDao.create(entity);
     }
 

@@ -4,21 +4,22 @@
          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <http auto-config="true">
-        <intercept-url pattern="/" access="hasAnyRole('USER','ADMIN')"/>
-        <intercept-url pattern="/index" access="hasAnyRole('USER','ADMIN')"/>
+    <http auto-config="true"
+        disable-url-rewriting="true"
+        use-expressions="true">
 
-        <form-login login-page="/login" authentication-failure-url="/login?error"
-                    username-parameter="usernamez" password-parameter="passwordz"
-                    login-processing-url="/login"/>
+        <intercept-url pattern="/" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
+        <intercept-url pattern="/index" access="hasAnyRole('USER','ADMIN')"/>
+        <intercept-url pattern="/admin" access="hasAnyRole('ADMIN')"/>
+
+      <!--  <form-login login-page="/loginss" authentication-failure-url="/login?error"
+                    username-parameter="username" password-parameter="password"/>-->
 
         <logout
                 logout-url="/logout"
                 logout-success-url="/logout?logout"
                 invalidate-session="true"/>
-
-        <csrf disabled="true"/>
-    </http>
+       </http>
 
     <authentication-manager alias="authenticationManager">
         <authentication-provider user-service-ref="userDetailsService">
