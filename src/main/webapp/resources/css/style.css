@@ -1,12 +1,13 @@
-/* Made with love by Mutiullah Samim*/
-@import url('https://fonts.googleapis.com/css?family=Numans');
-
 html, body {
     background-image: url('../images/bg.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     height: 100%;
     font-family: 'Numans', sans-serif;
+}
+
+.white{
+    color: white  !important;
 }
 
 .container {
@@ -18,8 +19,8 @@ html, body {
     height: auto;
     margin-top: auto;
     margin-bottom: auto;
-    width: 400px;
-    background-color: rgba(0, 0, 0, 0.5) !important;
+    width: auto;
+    background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
 .social_icon span {

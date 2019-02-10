@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <meta charset="UTF-8">
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -19,20 +19,20 @@
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div class="card-header">
-                <h3 class="text-center">Welcome to hotel!</h3>
-            </div>
-            <p>HELLO</p>
-           <!-- <sec:authorize access="!isAuthenticated()">
-                <p><a class="btn btn-lg btn-success" href="/login" role="button">Sing up</a></p>
-            </sec:authorize>
-            <sec:authorize access="isAuthenticated()">
-                <p>Ваш логин:
-                    <sec:authentication property="principal.username"/>
-                </p>
-                <p><a class="btn btn-lg btn-danger" href="/logout" role="button">Log out</a></p>
-            </sec:authorize>-->
-            <div class="card-body">
 
+                <h3 class="text-center">Welcome to hotel system, <span th:text="${userLogin}"></span>!</h3>
+                <div sec:authorize="hasRole('ROLE_USER') || hasRole('ADMIN')">
+                    <p class="text-center white">This content is shown to all users.</p>
+                </div>
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <p class="text-center white">This content is only shown to admins.</p>
+                </div>
+                <form name="logoutForm" th:action="@{/logout}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <input type="submit" class="btn btn-warning float-right" value="Sign Out"/>
+                </form>
+            </div>
+            <div class="card-body">
             </div>
             <div class="card-footer">
             </div>

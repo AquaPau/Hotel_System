@@ -4,22 +4,12 @@
          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <http auto-config="true"
-        disable-url-rewriting="true"
-        use-expressions="true">
-
-        <intercept-url pattern="/" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
-        <intercept-url pattern="/index" access="hasAnyRole('USER','ADMIN')"/>
-        <intercept-url pattern="/admin" access="hasAnyRole('ADMIN')"/>
-
-      <!--  <form-login login-page="/loginss" authentication-failure-url="/login?error"
-                    username-parameter="username" password-parameter="password"/>-->
-
-        <logout
-                logout-url="/logout"
-                logout-success-url="/logout?logout"
-                invalidate-session="true"/>
-       </http>
+    <http auto-config="true" disable-url-rewriting="true" use-expressions="true">
+        <intercept-url pattern="/" access="hasAnyRole('USER','ADMIN')"/>
+        <intercept-url pattern="/admin" access="hasRole('ADMIN')"/>
+        <form-login login-page='/login' username-parameter="username" password-parameter="password"/>
+        <logout logout-url="/logout" logout-success-url="/login" invalidate-session="true"/>
+    </http>
 
     <authentication-manager alias="authenticationManager">
         <authentication-provider user-service-ref="userDetailsService">
@@ -34,7 +24,6 @@
     <b:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
         <b:constructor-arg name="strength" value="11"/>
     </b:bean>
-
 
 </b:beans>
 
