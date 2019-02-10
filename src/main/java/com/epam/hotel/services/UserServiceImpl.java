@@ -4,7 +4,6 @@ import com.epam.hotel.daos.UserDao;
 import com.epam.hotel.enums.Permission;
 import com.epam.hotel.model.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
@@ -19,8 +18,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User entity) {
         userValidation(entity);
-        PasswordEncoder delegatingPasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        entity.setPassword(delegatingPasswordEncoder.encode(entity.getPassword()));
+        PasswordEncoder encoder = new BCryptPasswordEncoder(11);
+        entity.setPassword(encoder.encode(entity.getPassword()));
         return userDao.create(entity);
     }
 
@@ -52,7 +51,6 @@ public class UserServiceImpl implements UserService {
         if (user.getPermission() == null) {
             user.setPermission(Permission.USER);
         }
-
     }
 
     @Override

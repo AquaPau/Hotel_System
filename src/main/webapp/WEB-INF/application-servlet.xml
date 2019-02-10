@@ -9,7 +9,7 @@
     <context:component-scan base-package="com.epam.hotel"/>
 
     <bean id="templateResolver"
-          class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
+          class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
         <property name="prefix" value="/WEB-INF/templates/"/>
         <property name="suffix" value=".html"/>
         <property name="templateMode" value="HTML"/>
@@ -17,12 +17,17 @@
     </bean>
 
     <bean id="templateEngine"
-          class="org.thymeleaf.spring4.SpringTemplateEngine">
+          class="org.thymeleaf.spring5.SpringTemplateEngine">
         <property name="templateResolver" ref="templateResolver"/>
         <property name="enableSpringELCompiler" value="true"/>
+        <property name="additionalDialects">
+            <set>
+                <bean class="org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect"/>
+            </set>
+        </property>
     </bean>
 
-    <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+    <bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
         <property name="templateEngine" ref="templateEngine"/>
     </bean>
 </beans>
