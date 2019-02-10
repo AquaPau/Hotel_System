@@ -20,14 +20,14 @@ public class RequestDaoTemplateImpl implements RequestDao {
     private static final String GET_REQUEST_BY_ID = "SELECT * FROM hotel.requests WHERE requestid = ?";
     private static final String GET_ALL_REQUESTS = "SELECT * FROM hotel.requests";
     private static final String CREATE_NEW_REQUEST = "INSERT INTO hotel.requests (userid, capacity, classid, " +
-            "checkin, checkout, paymentstatus) VALUES (?, ?::hotel.capacity, ?::hotel.classid, ?, ?, ?::hotel.paymentstatus)";
+            "checkin, checkout, paymentstatus) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_REQUEST = "UPDATE hotel.requests SET userid = ?, " +
-            "capacity = ?::hotel.capacity, classid = ?::hotel.classid, " +
-            "checkin = ?, checkout = ?, paymentstatus = ?::hotel.paymentstatus WHERE requestid = ?";
+            "capacity = ?, classid = ?, " +
+            "checkin = ?, checkout = ?, paymentstatus = ? WHERE requestid = ?";
     private static final String DELETE_REQUEST = "DELETE FROM hotel.requests WHERE requestid = ?";
-    private static final String GET_REQUESTS_BY_USERID = "SELECT * FROM hotel.requests WHERE userid = ?";
+    private static final String GET_REQUESTS_BY_USERID = "SELECT * FROM hotel.requests WHERE userid = %d";
     private static final String GET_REQUESTS_BY_PAYMENTSTATUS = "SELECT * FROM hotel.requests WHERE " +
-            "paymentstatus = ?::hotel.paymentstatus";
+            "paymentStatus = %s";
 
 
     public RequestDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
@@ -36,12 +36,14 @@ public class RequestDaoTemplateImpl implements RequestDao {
 
     @Override
     public List<Request> getUserRequests(long id) {
-        return jdbcTemplate.query(GET_REQUESTS_BY_USERID, new RequestRowMapper());
+        String query = String.format(GET_REQUESTS_BY_USERID, id);
+            return jdbcTemplate.query(query, new RequestRowMapper());
     }
 
     @Override
     public List<Request> getPaymentStatus(PaymentStatus paymentStatus) {
-        return jdbcTemplate.query(GET_REQUESTS_BY_PAYMENTSTATUS, new RequestRowMapper());
+        String query = String.format(GET_REQUESTS_BY_PAYMENTSTATUS, paymentStatus.toString());
+        return jdbcTemplate.query(query, new RequestRowMapper());
     }
 
     @Override
@@ -49,7 +51,7 @@ public class RequestDaoTemplateImpl implements RequestDao {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_NEW_REQUEST, new String[]{"requestid"});
-            preparedStatement.setLong(1,request.getUserID());
+            preparedStatement.setLong(1, request.getUserID());
             preparedStatement.setString(2, request.getCapacity().toString());
             preparedStatement.setString(3, request.getClassID().toString());
             preparedStatement.setTimestamp(4, request.getCheckIn());
@@ -64,16 +66,14 @@ public class RequestDaoTemplateImpl implements RequestDao {
 
     @Override
     public boolean delete(long id) {
-        boolean isDeleted = jdbcTemplate.update(DELETE_REQUEST, id) > 0;
-        return isDeleted;
+        return jdbcTemplate.update(DELETE_REQUEST, id) > 0;
     }
 
     @Override
     public boolean update(Request request) {
-        boolean isUpdated = jdbcTemplate.update(UPDATE_REQUEST, request.getUserID(), request.getCapacity().toString(),
-                    request.getClassID().toString(), request.getCheckIn(), request.getCheckOut(),
-                    request.getPaymentStatus().toString()) > 0;
-        return isUpdated;
+        return jdbcTemplate.update(UPDATE_REQUEST, request.getUserID(), request.getCapacity().toString(),
+                request.getClassID().toString(), request.getCheckIn(), request.getCheckOut(),
+                request.getPaymentStatus().toString(), request.getRequestID()) > 0;
     }
 
     @Override
@@ -83,7 +83,9 @@ public class RequestDaoTemplateImpl implements RequestDao {
 
     @Override
     public Request getById(long id) {
-        return jdbcTemplate.queryForObject(GET_REQUEST_BY_ID, new Object[]{id}, new RequestRowMapper());
+        Request result = jdbcTemplate.queryForObject(GET_REQUEST_BY_ID, new Object[]{id}, new RequestRowMapper());
+        if (result != null) return result;
+        else return null;
     }
 
     class RequestRowMapper implements RowMapper<Request> {

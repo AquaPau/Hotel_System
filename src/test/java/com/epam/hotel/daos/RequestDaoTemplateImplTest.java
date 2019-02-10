@@ -1,51 +1,141 @@
 package com.epam.hotel.daos;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.epam.hotel.enums.Capacity;
+import com.epam.hotel.enums.ClassID;
+import com.epam.hotel.enums.PaymentStatus;
+import com.epam.hotel.enums.Permission;
+import com.epam.hotel.model.Request;
+
+import com.epam.hotel.model.User;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
-class RequestDaoTemplateImplTest {
+
+public class RequestDaoTemplateImplTest {
     private RequestDao requestDao;
+    private UserDao userDao;
     private JdbcTemplate jdbcTemplate;
 
 
-    @BeforeEach
-    void setUp() throws SQLException {
+    @Before
+    public void setUp() throws SQLException {
+        ApplicationContext context = new ClassPathXmlApplicationContext("spring-test.xml");
+        jdbcTemplate = context.getBean("testJdbcTemplate", JdbcTemplate.class);
+        requestDao = new RequestDaoTemplateImpl(jdbcTemplate);
+        ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(),
+                new ClassPathResource("test-database-create.sql"));
 
     }
 
-    @AfterEach
-    void tearDown() throws SQLException {
+    @After
+    public void tearDown() throws SQLException {
+        ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(),
+                new ClassPathResource("test-database-drop.sql"));
+    }
+
+    private Request createTestRequest() {
+        Request request = new Request();
+        long userID = 1;
+        request.setUserID(userID);
+        request.setCapacity(Capacity.SINGLE);
+        request.setClassID(ClassID.STANDARD);
+        request.setPaymentStatus(PaymentStatus.NOBILL);
+        request.setCheckIn(Timestamp.valueOf(LocalDateTime.of(2018, 1, 1, 1, 0,
+                0, 0)));
+        request.setCheckOut(Timestamp.valueOf(LocalDateTime.of(2018, 1, 2, 1, 0,
+                0, 0)));
+        return request;
+    }
+
+
+    @Test
+    public void create() {
+        Request testRequest = createTestRequest();
+        testRequest = requestDao.create(testRequest);
+        assertEquals(testRequest.getRequestID(), 1);
+    }
+
+
+    @Test
+    public void update1() {
+        Request testRequest = createTestRequest();
+        testRequest = requestDao.create(testRequest);
+        testRequest.setPaymentStatus(PaymentStatus.BILLSENT);
+
+        boolean isUpdated = requestDao.update(testRequest);
+        assertTrue(isUpdated);
+
     }
 
     @Test
-    void getUserRequests() {
+    public void update2() {
+        Request testRequest = createTestRequest();
+        testRequest = requestDao.create(testRequest);
+        long createdId = testRequest.getRequestID();
+        testRequest.setPaymentStatus(PaymentStatus.BILLSENT);
+        requestDao.update(testRequest);
+        Request receivedRequest = requestDao.getById(createdId);
+        assertEquals(testRequest, receivedRequest);
     }
 
-    @Test
-    void getPaymentStatus() {
-    }
 
     @Test
-    void create() {
+    public void getById1() {
+        Request testRequest = createTestRequest();
+        testRequest = requestDao.create(testRequest);
+        long createdId = testRequest.getRequestID();
+        Request receivedRequest = requestDao.getById(createdId);
+        assertEquals(testRequest, receivedRequest);
+
     }
 
-    @Test
-    void delete() {
-    }
 
     @Test
-    void update() {
+    public void delete1() {
+        Request testRequest = createTestRequest();
+        testRequest = requestDao.create(testRequest);
+        long createdId = testRequest.getRequestID();
+        boolean isDeleted = requestDao.delete(createdId);
+        assertTrue(isDeleted);
     }
 
-    @Test
-    void getAll() {
-    }
 
     @Test
-    void getById() {
+    public void getAll() {
+        Request testRequest1 = createTestRequest();
+        testRequest1 = requestDao.create(testRequest1);
+        Request testRequest2 = createTestRequest();
+        testRequest2.setPaymentStatus(PaymentStatus.BILLSENT);
+        testRequest2 = requestDao.create(testRequest2);
+        List<Request> testScope = Arrays.asList(testRequest1, testRequest2);
+        List<Request> receivedScope = requestDao.getAll();
+        assertEquals(testScope, receivedScope);
     }
+
+
+    @Test
+    public void getUserRequests() {
+        Request testRequest = createTestRequest();
+        testRequest = requestDao.create(testRequest);
+        List<Request> testScope = Arrays.asList((testRequest));
+        List<Request> receivedScope = requestDao.getUserRequests(1);
+        assertEquals(testScope, receivedScope);
+    }
+
 }
