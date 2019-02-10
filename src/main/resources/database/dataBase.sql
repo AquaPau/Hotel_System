@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS hotel.Rooms
 CREATE TABLE IF NOT EXISTS hotel.Requests
 (
   requestID     BIGSERIAL PRIMARY KEY,
-  userID        BIGINT REFERENCES hotel.Users (userID),
+  userID        BIGINTб
   capacity      VARCHAR(10) DEFAULT 'SINGLE' CHECK (capacity IN ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD')),
   classID       VARCHAR(10) DEFAULT 'STANDARD' CHECK (classID IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')),
   checkIn       TIMESTAMP NOT NULL,

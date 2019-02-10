@@ -28,7 +28,11 @@
         <constructor-arg ref="jdbcTemplate"/>
     </bean>
 
-    <bean id="requestDaoJdbc" class="com.epam.hotel.daos.RequestDaoJDBC">
+    <bean id="requestDaoTemplate" class="com.epam.hotel.daos.RequestDaoTemplateImpl">
+        <constructor-arg ref="jdbcTemplate"/>
+    </bean>
+
+    <bean id="requestDaoJdbc" class="com.epam.hotel.daos.RequestDaoJDBCImpl">
         <property name="url" value="${database.url}"/>
         <property name="username" value="${database.username}"/>
         <property name="password" value="${database.password}"/>
