@@ -4,10 +4,10 @@ CREATE TABLE hotel.Users
 (
   userID     IDENTITY PRIMARY KEY,
   login      VARCHAR(50)  NOT NULL UNIQUE,
-  password   VARCHAR(20)  NOT NULL,
-  permission VARCHAR(5) DEFAULT 'USER' CHECK (permission IN ('USER', 'ADMIN')),
+  password   VARCHAR(100)  NOT NULL,
+  permission VARCHAR(5) DEFAULT 'USER' CHECK (permission in ('USER', 'ADMIN')),
   firstName  VARCHAR(50)  NOT NULL,
-  lastName   VARCHAR(100) NOT NULL
+  lastName   VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE hotel.Rooms
@@ -22,7 +22,7 @@ CREATE TABLE hotel.Rooms
 CREATE TABLE hotel.Requests
 (
   requestID     IDENTITY PRIMARY KEY,
-  userID        BIGINT REFERENCES hotel.Users (userID),
+  userID        BIGINT NOT NULL,
   capacity      VARCHAR(10) DEFAULT 'SINGLE' CHECK (capacity IN ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD'))  ,
   classID       VARCHAR(10) DEFAULT 'STANDARD' CHECK (classID IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')) ,
   checkIn       TIMESTAMP NOT NULL,

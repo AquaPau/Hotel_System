@@ -3,12 +3,10 @@ package com.epam.hotel.daos;
 import com.epam.hotel.enums.Permission;
 import com.epam.hotel.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,11 +19,16 @@ public class UserDaoTemplateImpl implements UserDao {
     private static final String INSERT_QUERY = "INSERT INTO hotel.users (login, password, permission,firstname, lastname) values (?, ?, ?, ?, ?)";
     private static final String DELETE_QUERY = "DELETE FROM hotel.users WHERE userid = ?";
     private static final String UPDATE_QUERY = "UPDATE hotel.users SET login = ?, password = ?, permission = ?, firstname=?,lastname=? WHERE userid = ?";
-    private static final String SELECT_ONE_QUERY = "SELECT userid, login, password, permission,firstname, lastname FROM hotel.users WHERE userid = ?";
+    private static final String SELECT_BY_ID_QUERY = "SELECT userid, login, password, permission,firstname, lastname FROM hotel.users WHERE userid = ?";
+    private static final String SELECT_BY_LOGIN_QUERY = "SELECT userid, login, password, permission,firstname, lastname FROM hotel.users WHERE login = ?";
     private static final String SELECT_ALL_QUERY = "SELECT userid, login, password, permission,firstname, lastname FROM hotel.users";
 
     public UserDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public User getByLogin(String login) {
+        return jdbcTemplate.queryForObject(SELECT_BY_LOGIN_QUERY, new Object[]{login}, new UserRowMapper());
     }
 
     @Override
@@ -35,7 +38,7 @@ public class UserDaoTemplateImpl implements UserDao {
                 connection -> {
                     PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, new String[]{"userid"});
                     statement.setString(1, entity.getLogin());
-                    statement.setString(2, String.valueOf(entity.getPassword()));
+                    statement.setString(2, entity.getPassword());
                     statement.setString(3, entity.getPermission().toString());
                     statement.setString(4, entity.getFirstName());
                     statement.setString(5, entity.getLastName());
@@ -64,7 +67,7 @@ public class UserDaoTemplateImpl implements UserDao {
 
     @Override
     public User getById(long id) {
-        return jdbcTemplate.queryForObject(SELECT_ONE_QUERY, new Object[]{id}, new UserRowMapper());
+        return jdbcTemplate.queryForObject(SELECT_BY_ID_QUERY, new Object[]{id}, new UserRowMapper());
     }
 
     class UserRowMapper implements RowMapper<User> {
@@ -73,7 +76,7 @@ public class UserDaoTemplateImpl implements UserDao {
             User user = new User();
             user.setId(rs.getLong("userid"));
             user.setLogin(rs.getString("login"));
-            user.setPassword(rs.getString("password").toCharArray());
+            user.setPassword(rs.getString("password"));
             user.setPermission(Permission.valueOf(rs.getString("permission")));
             user.setFirstName(rs.getString("firstname"));
             user.setLastName(rs.getString("lastname"));

@@ -12,26 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class RequestDaoJDBC implements RequestDao {
+public class RequestDaoJDBCImpl implements RequestDao {
     private String url;
     private String username;
     private String password;
 
-
-    private final String GET_REQUEST_BY_ID = "SELECT requestid, userid, capacity, classid, checkin," +
-            "checkout, paymentstatus FROM hotel.requests WHERE requestid = ?";
-    private final String GET_ALL_REQUESTS = "SELECT requestid, userid, capacity, classid, checkin," +
-            "checkout, paymentstatus FROM hotel.requests";
-    private final String CREATE_NEW_REQUEST = "INSERT INTO hotel.requests (requestid, userid, capacity, classid, " +
-            "checkin, checkout, paymentstatus) VALUES (?, ?, ?::hotel.capacity, ?::hotel.classid, ?, ?, ?::hotel.paymentstatus)";
+    private final String GET_REQUEST_BY_ID = "SELECT * FROM hotel.requests WHERE requestid = ?";
+    private final String GET_ALL_REQUESTS = "SELECT * FROM hotel.requests";
+    private final String CREATE_NEW_REQUEST = "INSERT INTO hotel.requests (userid, capacity, classid, " +
+            "checkin, checkout, paymentstatus) VALUES (?, ?, ?, ?, ?, ?)";
     private final String UPDATE_REQUEST = "UPDATE hotel.requests SET userid = ?, " +
-            "capacity = ?::hotel.capacity, classid = ?::hotel.classid, " +
-            "checkin = ?, checkout = ?, paymentstatus = ?::hotel.paymentstatus WHERE requestid = ?";
+            "capacity = ?, classid = ?, " +
+            "checkin = ?, checkout = ?, paymentstatus = ? WHERE requestid = ?";
     private final String DELETE_REQUEST = "DELETE FROM hotel.requests WHERE requestid = ?";
     private final String GET_REQUESTS_BY_USERID = "SELECT * FROM hotel.requests WHERE userid = ?";
-    private final String GET_REQUESTS_BY_PAYMENTSTATUS = "SELECT equestid, userid, capacity, classid, " +
-            "checkin, checkout, paymentstatus FROM hotel.requests WHERE " +
-            "paymentstatus = ?::hotel.paymentstatus";
+    private final String GET_REQUESTS_BY_PAYMENTSTATUS = "SELECT * FROM hotel.requests WHERE " +
+            "paymentstatus = ?";
 
     private void extractRequestBody(ResultSet rs, Request request) throws SQLException {
         request.setRequestID(rs.getLong("requestid"));
@@ -43,16 +39,16 @@ public class RequestDaoJDBC implements RequestDao {
         request.setPaymentStatus(PaymentStatus.valueOf(rs.getString("paymentstatus")));
     }
 
-    private void initRequestBody(PreparedStatement preparedStatement, Request request)
+    private PreparedStatement initRequestBody(Connection connection, Request request, String query)
             throws SQLException {
-        preparedStatement.setLong(1, request.getRequestID());
-        preparedStatement.setLong(2, request.getUserID());
-        preparedStatement.setString(3, request.getCapacity().toString());
-        preparedStatement.setString(4, request.getClassID().toString());
-        preparedStatement.setTimestamp(5, request.getCheckIn());
-        preparedStatement.setTimestamp(6, request.getCheckOut());
-        preparedStatement.setString(7, request.getPaymentStatus().toString());
-
+        PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setLong(1, request.getUserID());
+        preparedStatement.setString(2, request.getCapacity().toString());
+        preparedStatement.setString(3, request.getClassID().toString());
+        preparedStatement.setTimestamp(4, request.getCheckIn());
+        preparedStatement.setTimestamp(5, request.getCheckOut());
+        preparedStatement.setString(6, request.getPaymentStatus().toString());
+        return preparedStatement;
     }
 
     @Override
@@ -66,7 +62,7 @@ public class RequestDaoJDBC implements RequestDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 
     private List<Request> getRequestsList(List<Request> requestList, ResultSet rs) throws SQLException {
@@ -89,33 +85,23 @@ public class RequestDaoJDBC implements RequestDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
-    public Request create(Request entity) {
+    public Request create(Request request) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            PreparedStatement preparedStatement = connection.prepareStatement(CREATE_NEW_REQUEST,
-                    Statement.RETURN_GENERATED_KEYS);
-            if (getById(entity.getRequestID()) != null) throw new SQLException("Creating request failed." +
-                    "Request already exists");
-            initRequestBody(preparedStatement, entity);
-            int resultOfCreate = preparedStatement.executeUpdate();
-            if (resultOfCreate == 0) {
-                throw new SQLException("Creating request failed, no rows affected");
-            }
+            PreparedStatement preparedStatement = initRequestBody(connection, request, CREATE_NEW_REQUEST);
+            int numberRowsUpdated = preparedStatement.executeUpdate();
+            if (numberRowsUpdated == 0) throw new SQLException("Creating request failed, no rows affected.");
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    entity.setRequestID(generatedKeys.getLong(1));
-                }
-                else {
-                    throw new SQLException("Creating request failed, no ID obtained.");
-                }
+                if (generatedKeys.next()) request.setRequestID(generatedKeys.getLong(1));
+                else throw new SQLException("Creating request failed, no ID obtained.");
             }
-            return entity;
         } catch (SQLException e) {
+
         }
-        return null;
+        return request;
     }
 
 
@@ -133,16 +119,10 @@ public class RequestDaoJDBC implements RequestDao {
     }
 
     @Override
-    public boolean update(Request entity) {
+    public boolean update(Request request) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_REQUEST);
-            preparedStatement.setLong(7, entity.getRequestID());
-            preparedStatement.setLong(1, entity.getUserID());
-            preparedStatement.setString(2, entity.getCapacity().toString());
-            preparedStatement.setString(3, entity.getClassID().toString());
-            preparedStatement.setTimestamp(4, entity.getCheckIn());
-            preparedStatement.setTimestamp(5, entity.getCheckOut());
-            preparedStatement.setString(6, entity.getPaymentStatus().toString());
+            PreparedStatement preparedStatement = initRequestBody(connection, request, UPDATE_REQUEST);
+            preparedStatement.setLong(7, request.getRequestID());
             return (preparedStatement.executeUpdate() > 0);
         } catch (SQLException e) {
         }
@@ -158,7 +138,7 @@ public class RequestDaoJDBC implements RequestDao {
             return getRequestsList(requestList, rs);
         } catch (SQLException e) {
         }
-        return null;
+        return new ArrayList<>();
     }
 
 
@@ -174,7 +154,7 @@ public class RequestDaoJDBC implements RequestDao {
             return request;
         } catch (SQLException e) {
         }
-        return null;
+        return new Request();
     }
 
 
