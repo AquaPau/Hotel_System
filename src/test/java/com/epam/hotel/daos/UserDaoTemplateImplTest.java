@@ -2,9 +2,7 @@ package com.epam.hotel.daos;
 
 import com.epam.hotel.enums.Permission;
 import com.epam.hotel.model.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
@@ -19,14 +17,18 @@ import static org.junit.Assert.assertTrue;
 
 public class UserDaoTemplateImplTest {
 
-    private UserDao userDao;
-    private JdbcTemplate jdbcTemplate;
+    private static UserDao userDao;
+    private static JdbcTemplate jdbcTemplate;
 
-    @Before
-    public void setUp() throws SQLException {
+    @BeforeClass
+    public static void setUpClass() {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring-test.xml");
         jdbcTemplate = context.getBean("testJdbcTemplate", JdbcTemplate.class);
         userDao = new UserDaoTemplateImpl(jdbcTemplate);
+    }
+
+    @Before
+    public void setUp() throws SQLException {
         ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(), new ClassPathResource("test-database-create.sql"));
     }
 
@@ -63,14 +65,12 @@ public class UserDaoTemplateImplTest {
     public void update() {
         User user = createTestUser();
         userDao.create(user);
-
         user.setLogin("testUpdate");
         user.setPassword("testUpdate");
         user.setFirstName("testUpdate");
         user.setLastName("testUpdate");
         user.setPermission(Permission.ADMIN);
         userDao.update(user);
-
         User updatedUser = userDao.getById(1);
         assertEquals(user.toString(), updatedUser.toString());
     }
@@ -96,6 +96,7 @@ public class UserDaoTemplateImplTest {
     @Test
     public void getByLogin() {
         User user = createTestUser();
+        userDao.create(user);
         User receivedUser = userDao.getByLogin("test");
         assertEquals(user.toString(), receivedUser.toString());
     }
