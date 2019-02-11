@@ -26,6 +26,10 @@ public class RoomServiceImpl implements RoomService {
         }
     }
 
+    public void calculateRoomPrice() {
+
+    }
+
     @Override
     public Room create(Room room) {
         roomValidation(room);

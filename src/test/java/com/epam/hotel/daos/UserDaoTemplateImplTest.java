@@ -30,6 +30,12 @@ public class UserDaoTemplateImplTest {
     @Before
     public void setUp() throws SQLException {
         ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(), new ClassPathResource("test-database-create.sql"));
+        ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(), new ClassPathResource("test-database-drop.sql"));
+    }
+
+    @Before
+    public void set() throws SQLException {
+        ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(), new ClassPathResource("test-database-create.sql"));
     }
 
     @After

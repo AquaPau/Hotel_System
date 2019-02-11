@@ -37,3 +37,10 @@ CREATE TABLE IF NOT EXISTS hotel.ReservedRooms
   roomNumber     SMALLINT REFERENCES hotel.Rooms (roomNumber),
   requestID      BIGINT REFERENCES hotel.Requests (requestID)
 );
+
+
+
+
+
+
+

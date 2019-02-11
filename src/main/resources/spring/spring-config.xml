@@ -39,6 +39,9 @@
     </bean>
 
     <bean id="roomDaoJDBC" class="com.epam.hotel.daos.RoomDaoJDBCImpl">
+        <property name="url" value="${database.url}"/>
+        <property name="username" value="${database.username}"/>
+        <property name="password" value="${database.password}"/>
     </bean>
 
     <bean id="roomService" class="com.epam.hotel.services.RoomServiceImpl">
