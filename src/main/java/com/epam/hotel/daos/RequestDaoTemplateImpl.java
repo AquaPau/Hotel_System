@@ -4,6 +4,7 @@ import com.epam.hotel.enums.Capacity;
 import com.epam.hotel.enums.ClassID;
 import com.epam.hotel.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 public class RequestDaoTemplateImpl implements RequestDao {
     private final JdbcTemplate jdbcTemplate;
     private static final String GET_REQUEST_BY_ID = "SELECT * FROM hotel.requests WHERE requestid = ?";
@@ -37,12 +39,14 @@ public class RequestDaoTemplateImpl implements RequestDao {
     @Override
     public List<Request> getUserRequests(long id) {
         String query = String.format(GET_REQUESTS_BY_USERID, id);
-            return jdbcTemplate.query(query, new RequestRowMapper());
+        log.info("Retrieved list of all requests by user id");
+        return jdbcTemplate.query(query, new RequestRowMapper());
     }
 
     @Override
     public List<Request> getPaymentStatus(PaymentStatus paymentStatus) {
         String query = String.format(GET_REQUESTS_BY_PAYMENTSTATUS, paymentStatus.toString());
+        log.info("Retrieved list of all requests by payment status");
         return jdbcTemplate.query(query, new RequestRowMapper());
     }
 
@@ -60,17 +64,20 @@ public class RequestDaoTemplateImpl implements RequestDao {
             return preparedStatement;
         }, keyHolder);
         request.setRequestID(Objects.requireNonNull(keyHolder.getKey()).longValue());
+        log.info("Created request with id="+request.getRequestID());
         return request;
 
     }
 
     @Override
     public boolean delete(long id) {
+        log.info("Deleted request with id="+id);
         return jdbcTemplate.update(DELETE_REQUEST, id) > 0;
     }
 
     @Override
     public boolean update(Request request) {
+        log.info("Updated request with id="+request.getRequestID());
         return jdbcTemplate.update(UPDATE_REQUEST, request.getUserID(), request.getCapacity().toString(),
                 request.getClassID().toString(), request.getCheckIn(), request.getCheckOut(),
                 request.getPaymentStatus().toString(), request.getRequestID()) > 0;
@@ -78,13 +85,17 @@ public class RequestDaoTemplateImpl implements RequestDao {
 
     @Override
     public List<Request> getAll() {
+        log.info("Retrieved list of all requests");
         return jdbcTemplate.query(GET_ALL_REQUESTS, new RequestRowMapper());
     }
 
     @Override
     public Request getById(long id) {
         Request result = jdbcTemplate.queryForObject(GET_REQUEST_BY_ID, new Object[]{id}, new RequestRowMapper());
-        if (result != null) return result;
+        if (result != null) {
+            log.info("Accessed request with id="+id);
+            return result;
+        }
         else return null;
     }
 
