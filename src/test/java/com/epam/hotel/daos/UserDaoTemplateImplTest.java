@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -19,14 +20,20 @@ import java.util.List;
 
 public class UserDaoTemplateImplTest {
 
-    private UserDao userDao;
-    private JdbcTemplate jdbcTemplate;
+    private static UserDao userDao;
+    private static JdbcTemplate jdbcTemplate;
 
-    @Before
-    public void setUp() throws SQLException {
+    @BeforeClass
+    public static void setUp() throws SQLException {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring-test.xml");
         jdbcTemplate = context.getBean("testJdbcTemplate", JdbcTemplate.class);
         userDao = new UserDaoTemplateImpl(jdbcTemplate);
+        ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(), new ClassPathResource("test-database-create.sql"));
+        ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(), new ClassPathResource("test-database-drop.sql"));
+    }
+
+    @Before
+    public void set() throws SQLException {
         ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(), new ClassPathResource("test-database-create.sql"));
     }
 
