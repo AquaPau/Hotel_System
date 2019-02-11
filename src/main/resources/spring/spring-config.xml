@@ -3,8 +3,6 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="datebase-config.xml"/>
-
     <bean id="user" class="com.epam.hotel.model.User" scope="prototype">
     </bean>
     <bean id="room" class="com.epam.hotel.model.Room" scope="prototype">
@@ -23,7 +21,7 @@
     </bean>
 
     <bean id="userService" class="com.epam.hotel.services.UserServiceImpl">
-        <constructor-arg ref="userDaoJdbc"/>
+        <constructor-arg ref="userDaoTemplate"/>
     </bean>
 
     <bean id="roomDaoTemplate" class="com.epam.hotel.daos.RoomDaoTemplateImpl">

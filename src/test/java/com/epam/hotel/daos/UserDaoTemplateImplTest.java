@@ -2,9 +2,6 @@ package com.epam.hotel.daos;
 
 import com.epam.hotel.enums.Permission;
 import com.epam.hotel.model.User;
-
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +13,9 @@ import org.springframework.jdbc.datasource.init.ScriptUtils;
 
 import java.sql.SQLException;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class UserDaoTemplateImplTest {
 
@@ -38,7 +38,7 @@ public class UserDaoTemplateImplTest {
     private User createTestUser() {
         User user = new User();
         user.setLogin("test");
-        user.setPassword("test".toCharArray());
+        user.setPassword("test");
         user.setPermission(Permission.USER);
         user.setFirstName("test");
         user.setLastName("test");
@@ -65,7 +65,7 @@ public class UserDaoTemplateImplTest {
         userDao.create(user);
 
         user.setLogin("testUpdate");
-        user.setPassword("testUpdate".toCharArray());
+        user.setPassword("testUpdate");
         user.setFirstName("testUpdate");
         user.setLastName("testUpdate");
         user.setPermission(Permission.ADMIN);
@@ -93,4 +93,10 @@ public class UserDaoTemplateImplTest {
         assertEquals(user.toString(), receivedUser.toString());
     }
 
+    @Test
+    public void getByLogin() {
+        User user = createTestUser();
+        User receivedUser = userDao.getByLogin("test");
+        assertEquals(user.toString(), receivedUser.toString());
+    }
 }

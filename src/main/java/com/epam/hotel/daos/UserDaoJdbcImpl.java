@@ -113,11 +113,15 @@ public class UserDaoJdbcImpl implements UserDao {
         User user = new User();
         user.setId(resultSet.getLong(1));
         user.setLogin(resultSet.getString(2));
-        user.setPassword(resultSet.getString(3).toCharArray());
+        user.setPassword(resultSet.getString(3));
         user.setPermission(Permission.valueOf(resultSet.getString(4)));
         user.setFirstName(resultSet.getString(5));
         user.setLastName(resultSet.getString(6));
         return user;
     }
 
+    @Override
+    public User getByLogin(String login) {
+        return null;
+    }
 }

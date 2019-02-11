@@ -1,0 +1,29 @@
+<b:beans xmlns="http://www.springframework.org/schema/security"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <http auto-config="true" disable-url-rewriting="true" use-expressions="true">
+        <intercept-url pattern="/" access="hasAnyRole('USER','ADMIN')"/>
+        <intercept-url pattern="/admin" access="hasRole('ADMIN')"/>
+        <form-login login-page='/login' username-parameter="username" password-parameter="password"/>
+        <logout logout-url="/logout" logout-success-url="/login" invalidate-session="true"/>
+    </http>
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider user-service-ref="userDetailsService">
+            <password-encoder ref="encoder"/>
+        </authentication-provider>
+    </authentication-manager>
+
+    <b:bean id="userDetailsService" class="com.epam.hotel.services.UserDetailsServiceImpl">
+        <b:property name="userService" ref="userService"/>
+    </b:bean>
+
+    <b:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <b:constructor-arg name="strength" value="11"/>
+    </b:bean>
+
+</b:beans>
+

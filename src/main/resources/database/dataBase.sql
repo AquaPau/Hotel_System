@@ -5,10 +5,10 @@ CREATE TABLE IF NOT EXISTS hotel.Users
 (
   userID     BIGSERIAL PRIMARY KEY,
   login      VARCHAR(50)  NOT NULL UNIQUE,
-  password   VARCHAR(20)  NOT NULL,
+  password   VARCHAR(100)  NOT NULL,
   permission VARCHAR(5) DEFAULT 'USER' CHECK (permission in ('USER', 'ADMIN')),
   firstName  VARCHAR(50)  NOT NULL,
-  lastName   VARCHAR(100) NOT NULL
+  lastName   VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS hotel.Rooms
