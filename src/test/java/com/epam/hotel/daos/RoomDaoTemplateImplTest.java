@@ -42,8 +42,8 @@ public class RoomDaoTemplateImplTest {
     @Test
     public void create() {
         Room testRoom = createTestRoom();
-        Room createdRoom = roomDao.create(testRoom);
-        assertEquals(createdRoom.getRoomNumber(), testRoom.getRoomNumber());
+        roomDao.create(testRoom);
+        assertEquals(testRoom.getRoomNumber(), 1);
     }
 
     @Test

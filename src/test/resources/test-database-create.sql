@@ -1,6 +1,5 @@
 CREATE SCHEMA hotel;
 
-
 CREATE TABLE hotel.Users
 (
   userID     IDENTITY PRIMARY KEY,
