@@ -5,6 +5,7 @@ import com.epam.hotel.enums.ClassID;
 import com.epam.hotel.model.Room;
 import org.junit.Before;
 import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -19,14 +20,20 @@ import static org.junit.Assert.*;
 
 public class RoomDaoTemplateImplTest {
 
-    private RoomDao roomDao;
-    private JdbcTemplate template;
+    private static RoomDao roomDao;
+    private static JdbcTemplate template;
 
-    @Before
-    public void setUp() throws SQLException {
+    @BeforeClass
+    public static void setUp() throws SQLException {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring-test.xml");
         template = context.getBean("testJdbcTemplate", JdbcTemplate.class);
         roomDao = new RoomDaoTemplateImpl(template);
+        ScriptUtils.executeSqlScript(template.getDataSource().getConnection(), new ClassPathResource("test-database-create.sql"));
+        ScriptUtils.executeSqlScript(template.getDataSource().getConnection(), new ClassPathResource("test-database-drop.sql"));
+    }
+
+    @Before
+    public void set() throws SQLException {
         ScriptUtils.executeSqlScript(template.getDataSource().getConnection(), new ClassPathResource("test-database-create.sql"));
     }
 
