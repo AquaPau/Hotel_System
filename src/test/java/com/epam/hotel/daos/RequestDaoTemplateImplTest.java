@@ -27,15 +27,18 @@ import java.util.List;
 
 public class RequestDaoTemplateImplTest {
     private static RequestDao requestDao;
-    private UserDao userDao;
     private static JdbcTemplate jdbcTemplate;
 
 
     @BeforeClass
-    public static void setUp() {
+    public static void setUp() throws SQLException {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring-test.xml");
         jdbcTemplate = context.getBean("testJdbcTemplate", JdbcTemplate.class);
         requestDao = new RequestDaoTemplateImpl(jdbcTemplate);
+        ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(),
+                new ClassPathResource("test-database-create.sql"));
+        ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(),
+                new ClassPathResource("test-database-drop.sql"));
     }
 
     @Before
@@ -53,8 +56,7 @@ public class RequestDaoTemplateImplTest {
 
     private Request createTestRequest() {
         Request request = new Request();
-        long userID = 1;
-        request.setUserID(userID);
+        request.setUserID(1L);
         request.setCapacity(Capacity.SINGLE);
         request.setClassID(ClassID.STANDARD);
         request.setPaymentStatus(PaymentStatus.NOBILL);
