@@ -15,17 +15,29 @@ public class UserDaoJdbcImpl implements UserDao {
     private String username;
     private String password;
 
-    private static final String INSERT_QUERY = "INSERT INTO hotel.users (login, password, permission,firstname, lastname) values (?, ?, CAST(? as hotel.permission), ?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO hotel.users (login, password, permission,firstname, lastname) values (?, ?, ?, ?, ?)";
     private static final String DELETE_QUERY = "DELETE FROM hotel.users WHERE userid = ?";
-    private static final String UPDATE_QUERY = "UPDATE hotel.users SET login = ?, password = ?, permission = CAST(? as hotel.permission),firstname=?,lastname=? WHERE userid = ?";
-    private static final String SELECT_ONE_QUERY = "SELECT * FROM hotel.users WHERE userid = ?";
-    private static final String SELECT_ALL_QUERY = "SELECT * FROM hotel.users";
+    private static final String UPDATE_QUERY = "UPDATE hotel.users SET login = ?, password = ?, permission = ?, firstname=?,lastname=? WHERE userid = ?";
+    private static final String SELECT_ONE_QUERY = "SELECT userid, login, password, permission,firstname, lastname FROM hotel.users WHERE userid = ?";
+    private static final String SELECT_ALL_QUERY = "SELECT userid, login, password, permission,firstname, lastname FROM hotel.users";
 
     @Override
     public User create(User entity) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             PreparedStatement statement = initStatement(entity, connection, INSERT_QUERY);
-            statement.executeUpdate();
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Creating user failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    entity.setId(generatedKeys.getLong(1));
+                } else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -37,8 +49,7 @@ public class UserDaoJdbcImpl implements UserDao {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
             statement.setLong(1, id);
-            statement.executeUpdate();
-            return true;
+            return statement.executeUpdate() != 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -50,8 +61,7 @@ public class UserDaoJdbcImpl implements UserDao {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             PreparedStatement statement = initStatement(entity, connection, UPDATE_QUERY);
             statement.setLong(6, entity.getId());
-            statement.executeUpdate();
-            return true;
+            return statement.executeUpdate() != 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -90,7 +100,7 @@ public class UserDaoJdbcImpl implements UserDao {
     }
 
     private PreparedStatement initStatement(User entity, Connection connection, String query) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(query);
+        PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         statement.setString(1, entity.getLogin());
         statement.setString(2, String.valueOf(entity.getPassword()));
         statement.setString(3, entity.getPermission().toString());
