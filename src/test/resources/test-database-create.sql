@@ -23,7 +23,7 @@ CREATE TABLE hotel.Rooms
 CREATE TABLE hotel.Requests
 (
   requestID     IDENTITY PRIMARY KEY,
-  userID        BIGINT REFERENCES hotel.Users (userID),
+  userID        BIGINT NOT NULL,
   capacity      VARCHAR(10) DEFAULT 'SINGLE' CHECK (capacity IN ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD'))  ,
   classID       VARCHAR(10) DEFAULT 'STANDARD' CHECK (classID IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')) ,
   checkIn       TIMESTAMP NOT NULL,
