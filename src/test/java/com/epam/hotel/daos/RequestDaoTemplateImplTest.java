@@ -7,9 +7,7 @@ import com.epam.hotel.enums.Permission;
 import com.epam.hotel.model.Request;
 
 import com.epam.hotel.model.User;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import static org.junit.Assert.*;
 
@@ -28,16 +26,20 @@ import java.util.List;
 
 
 public class RequestDaoTemplateImplTest {
-    private RequestDao requestDao;
+    private static RequestDao requestDao;
     private UserDao userDao;
-    private JdbcTemplate jdbcTemplate;
+    private static JdbcTemplate jdbcTemplate;
 
 
-    @Before
-    public void setUp() throws SQLException {
+    @BeforeClass
+    public static void setUp() {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring-test.xml");
         jdbcTemplate = context.getBean("testJdbcTemplate", JdbcTemplate.class);
         requestDao = new RequestDaoTemplateImpl(jdbcTemplate);
+    }
+
+    @Before
+    public void set() throws SQLException {
         ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(),
                 new ClassPathResource("test-database-create.sql"));
 
@@ -67,7 +69,7 @@ public class RequestDaoTemplateImplTest {
     @Test
     public void create() {
         Request testRequest = createTestRequest();
-        testRequest = requestDao.create(testRequest);
+        requestDao.create(testRequest);
         assertEquals(testRequest.getRequestID(), 1);
     }
 
@@ -75,7 +77,7 @@ public class RequestDaoTemplateImplTest {
     @Test
     public void update1() {
         Request testRequest = createTestRequest();
-        testRequest = requestDao.create(testRequest);
+        requestDao.create(testRequest);
         testRequest.setPaymentStatus(PaymentStatus.BILLSENT);
 
         boolean isUpdated = requestDao.update(testRequest);
@@ -86,7 +88,7 @@ public class RequestDaoTemplateImplTest {
     @Test
     public void update2() {
         Request testRequest = createTestRequest();
-        testRequest = requestDao.create(testRequest);
+        requestDao.create(testRequest);
         long createdId = testRequest.getRequestID();
         testRequest.setPaymentStatus(PaymentStatus.BILLSENT);
         requestDao.update(testRequest);
@@ -119,10 +121,10 @@ public class RequestDaoTemplateImplTest {
     @Test
     public void getAll() {
         Request testRequest1 = createTestRequest();
-        testRequest1 = requestDao.create(testRequest1);
+        requestDao.create(testRequest1);
         Request testRequest2 = createTestRequest();
         testRequest2.setPaymentStatus(PaymentStatus.BILLSENT);
-        testRequest2 = requestDao.create(testRequest2);
+        requestDao.create(testRequest2);
         List<Request> testScope = Arrays.asList(testRequest1, testRequest2);
         List<Request> receivedScope = requestDao.getAll();
         assertEquals(testScope, receivedScope);
