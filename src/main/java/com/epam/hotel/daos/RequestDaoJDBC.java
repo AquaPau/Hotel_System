@@ -99,7 +99,6 @@ public class RequestDaoJDBC implements RequestDao {
             preparedStatement.executeUpdate();
             return entity;
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return null;
     }
@@ -131,7 +130,6 @@ public class RequestDaoJDBC implements RequestDao {
             preparedStatement.setString(6, entity.getPaymentStatus().toString());
             return (preparedStatement.executeUpdate() > 0);
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return false;
     }
@@ -144,7 +142,6 @@ public class RequestDaoJDBC implements RequestDao {
             ResultSet rs = preparedStatement.executeQuery();
             return getRequestsList(requestList, rs);
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return null;
     }
@@ -161,7 +158,6 @@ public class RequestDaoJDBC implements RequestDao {
             extractRequestBody(rs, request);
             return request;
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return null;
     }

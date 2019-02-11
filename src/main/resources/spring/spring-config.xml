@@ -43,5 +43,8 @@
         <constructor-arg ref="roomDaoTemplate"/>
     </bean>
 
+    <bean id="requestService" class="com.epam.hotel.services.RequestServiceImpl">
+        <constructor-arg ref="requestDaoJdbc"/>
+    </bean>
 
 </beans>
