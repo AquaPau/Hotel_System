@@ -8,8 +8,6 @@ import lombok.Data;
 
 
 import java.sql.*;
-;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +17,11 @@ public class RequestDaoJDBC implements RequestDao {
     private String username;
     private String password;
 
-    private final String GET_REQUEST_BY_ID = "SELECT * FROM hotel.requests WHERE requestid = ?";
-    private final String GET_ALL_REQUESTS = "SELECT * FROM hotel.requests";
+
+    private final String GET_REQUEST_BY_ID = "SELECT requestid, userid, capacity, classid, checkin," +
+            "checkout, paymentstatus FROM hotel.requests WHERE requestid = ?";
+    private final String GET_ALL_REQUESTS = "SELECT requestid, userid, capacity, classid, checkin," +
+            "checkout, paymentstatus FROM hotel.requests";
     private final String CREATE_NEW_REQUEST = "INSERT INTO hotel.requests (requestid, userid, capacity, classid, " +
             "checkin, checkout, paymentstatus) VALUES (?, ?, ?::hotel.capacity, ?::hotel.classid, ?, ?, ?::hotel.paymentstatus)";
     private final String UPDATE_REQUEST = "UPDATE hotel.requests SET userid = ?, " +
@@ -28,7 +29,8 @@ public class RequestDaoJDBC implements RequestDao {
             "checkin = ?, checkout = ?, paymentstatus = ?::hotel.paymentstatus WHERE requestid = ?";
     private final String DELETE_REQUEST = "DELETE FROM hotel.requests WHERE requestid = ?";
     private final String GET_REQUESTS_BY_USERID = "SELECT * FROM hotel.requests WHERE userid = ?";
-    private final String GET_REQUESTS_BY_PAYMENTSTATUS = "SELECT * FROM hotel.requests WHERE " +
+    private final String GET_REQUESTS_BY_PAYMENTSTATUS = "SELECT equestid, userid, capacity, classid, " +
+            "checkin, checkout, paymentstatus FROM hotel.requests WHERE " +
             "paymentstatus = ?::hotel.paymentstatus";
 
     private void extractRequestBody(ResultSet rs, Request request) throws SQLException {
@@ -93,10 +95,23 @@ public class RequestDaoJDBC implements RequestDao {
     @Override
     public Request create(Request entity) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            PreparedStatement preparedStatement = connection.prepareStatement(CREATE_NEW_REQUEST);
-            if (getById(entity.getRequestID()) != null) throw new SQLException("Request already exists");
+            PreparedStatement preparedStatement = connection.prepareStatement(CREATE_NEW_REQUEST,
+                    Statement.RETURN_GENERATED_KEYS);
+            if (getById(entity.getRequestID()) != null) throw new SQLException("Creating request failed." +
+                    "Request already exists");
             initRequestBody(preparedStatement, entity);
-            preparedStatement.executeUpdate();
+            int resultOfCreate = preparedStatement.executeUpdate();
+            if (resultOfCreate == 0) {
+                throw new SQLException("Creating request failed, no rows affected");
+            }
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    entity.setRequestID(generatedKeys.getLong(1));
+                }
+                else {
+                    throw new SQLException("Creating request failed, no ID obtained.");
+                }
+            }
             return entity;
         } catch (SQLException e) {
         }
