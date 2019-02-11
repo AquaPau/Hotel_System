@@ -6,6 +6,7 @@
 
     <http auto-config="true" disable-url-rewriting="true" use-expressions="true">
         <intercept-url pattern="/" access="hasAnyRole('USER','ADMIN')"/>
+        <intercept-url pattern="/request/*" access="hasAnyRole('USER','ADMIN')"/>
         <intercept-url pattern="/admin" access="hasRole('ADMIN')"/>
         <form-login login-page='/login' username-parameter="username" password-parameter="password"/>
         <logout logout-url="/logout" logout-success-url="/login" invalidate-session="true"/>

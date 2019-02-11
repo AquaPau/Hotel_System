@@ -19,7 +19,8 @@ public class UserController {
 
     @GetMapping({"/", "/index"})
     public String index(Model model, Principal principal) {
-        model.addAttribute("userLogin", principal.getName());
+        User user = userService.getByLogin(principal.getName());
+        model.addAttribute("user", user);
         return "index";
     }
 
