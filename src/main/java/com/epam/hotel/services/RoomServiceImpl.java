@@ -1,9 +1,8 @@
 package com.epam.hotel.services;
 
 import com.epam.hotel.daos.RoomDao;
-import com.epam.hotel.daos.UserDao;
-import com.epam.hotel.enums.Capacity;
-import com.epam.hotel.enums.ClassID;
+import com.epam.hotel.model.enums.Capacity;
+import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 
 import java.math.BigDecimal;

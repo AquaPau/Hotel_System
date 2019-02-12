@@ -1,6 +1,7 @@
 package com.epam.hotel.controllers;
 
 import com.epam.hotel.model.Request;
+import com.epam.hotel.model.converters.RequestConverter;
 import com.epam.hotel.model.User;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.UserService;
@@ -27,15 +28,13 @@ public class RequestController {
         User user = userService.getByLogin(principal.getName());
         Request request = new Request();
         request.setUserID(user.getId());
-        model.addAttribute("request", request);
+        model.addAttribute("request", RequestConverter.getRequestConverter(request));
         return "request";
     }
 
     @PostMapping("request/new")
-    public String createRequest(@ModelAttribute("request") Request request) {
-        requestService.create(request);
-        return "redirect:index";
+    public String createRequest(@ModelAttribute("request") RequestConverter request) {
+        requestService.create(request.getRequest());
+        return "redirect:/";
     }
-
-
 }

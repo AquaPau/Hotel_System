@@ -1,9 +1,9 @@
 package com.epam.hotel.services;
 
 import com.epam.hotel.daos.RequestDao;
-import com.epam.hotel.enums.Capacity;
-import com.epam.hotel.enums.ClassID;
-import com.epam.hotel.enums.PaymentStatus;
+import com.epam.hotel.model.enums.Capacity;
+import com.epam.hotel.model.enums.ClassID;
+import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
 
 import java.util.List;

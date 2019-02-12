@@ -1,8 +1,8 @@
 package com.epam.hotel.daos;
 
-import com.epam.hotel.enums.Capacity;
-import com.epam.hotel.enums.ClassID;
-import com.epam.hotel.enums.PaymentStatus;
+import com.epam.hotel.model.enums.Capacity;
+import com.epam.hotel.model.enums.ClassID;
+import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;

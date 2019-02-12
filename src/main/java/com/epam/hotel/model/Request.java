@@ -1,6 +1,6 @@
 package com.epam.hotel.model;
 
-import com.epam.hotel.enums.*;
+import com.epam.hotel.model.enums.*;
 import lombok.Data;
 
 import java.sql.Timestamp;

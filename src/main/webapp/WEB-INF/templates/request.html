@@ -23,22 +23,33 @@
                 </div>
                 <form th:object="${request}" th:action="@{/request/new}" method="post">
 
+                    <p class="white">Select capacity:</p>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input name="capacity" class="form-control" placeholder="capacity" type="text"
-                               th:field="*{capacity}">
+                        <select th:field="*{capacity}" class="form-control" id="selCapacity">
+                            <option th:value="SINGLE" th:text="Single"></option>
+                            <option th:value="DOUBLE" th:text="Double"></option>
+                            <option th:value="TRIPLE" th:text="Triple"></option>
+                            <option th:value="QUAD" th:text="Quad"></option>
+                        </select>
                     </div>
 
+                    <p class="white">Select class:</p>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input name="clasid" class="form-control" placeholder="Class" type="text"
-                               th:field="*{classID}">
+                        <select th:field="*{classID}" class="form-control" id="selClass">
+                            <option th:value="ECONOMY" th:text="Economy"></option>
+                            <option th:value="STANDARD" th:text="Standard"></option>
+                            <option th:value="FAMILY" th:text="Family"></option>
+                            <option th:value="LUX" th:text="Lux"></option>
+                        </select>
                     </div>
 
+                    <p class="white">Select check in date:</p>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
@@ -47,6 +58,7 @@
                                th:field="*{checkIn}">
                     </div>
 
+                    <p class="white">Select check out date:</p>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
@@ -57,6 +69,7 @@
 
                     <input hidden class="form-control" type="text" th:field="*{requestID}"/>
                     <input hidden class="form-control" type="text" th:field="*{userID}"/>
+                    <input hidden class="form-control" type="text" th:field="*{paymentStatus}"/>
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block"> Create request</button>
@@ -72,10 +85,6 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
-    $(function () {
-        $(".datepicker").datepicker();
-    });
-</script>
-</body>
-</html>
+<script src="../resources/js/hotel.js"></script>
+< /body>
+< /html>

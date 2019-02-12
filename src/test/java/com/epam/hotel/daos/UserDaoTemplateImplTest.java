@@ -1,6 +1,6 @@
 package com.epam.hotel.daos;
 
-import com.epam.hotel.enums.Permission;
+import com.epam.hotel.model.enums.Permission;
 import com.epam.hotel.model.User;
 import org.junit.*;
 import org.springframework.context.ApplicationContext;
