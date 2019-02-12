@@ -1,6 +1,6 @@
 package com.epam.hotel.daos;
 
-import com.epam.hotel.enums.Permission;
+import com.epam.hotel.model.enums.Permission;
 import com.epam.hotel.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;

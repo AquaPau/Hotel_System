@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<head>
+    <title>Hotel System</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../resources/css/style.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+<body>
+
+
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card">
+            <article class="card card-body mx-auto" style="max-width: 400px;">
+                <div class="card-header">
+                    <h3 class="text-center">Create Request</h3>
+                </div>
+                <form th:object="${request}" th:action="@{/request/new}" method="post">
+
+                    <p class="white">Select capacity:</p>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                        </div>
+                        <select th:field="*{capacity}" class="form-control" id="selCapacity">
+                            <option th:value="SINGLE" th:text="Single"></option>
+                            <option th:value="DOUBLE" th:text="Double"></option>
+                            <option th:value="TRIPLE" th:text="Triple"></option>
+                            <option th:value="QUAD" th:text="Quad"></option>
+                        </select>
+                    </div>
+
+                    <p class="white">Select class:</p>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                        </div>
+                        <select th:field="*{classID}" class="form-control" id="selClass">
+                            <option th:value="ECONOMY" th:text="Economy"></option>
+                            <option th:value="STANDARD" th:text="Standard"></option>
+                            <option th:value="FAMILY" th:text="Family"></option>
+                            <option th:value="LUX" th:text="Lux"></option>
+                        </select>
+                    </div>
+
+                    <p class="white">Select check in date:</p>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                        </div>
+                        <input name="checkin" class="form-control datepicker" placeholder="Check in" type="text"
+                               th:field="*{checkIn}">
+                    </div>
+
+                    <p class="white">Select check out date:</p>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                        </div>
+                        <input name="checkout" class="form-control datepicker" placeholder="Check out" type="text"
+                               th:field="*{checkOut}">
+                    </div>
+
+                    <input hidden class="form-control" type="text" th:field="*{requestID}"/>
+                    <input hidden class="form-control" type="text" th:field="*{userID}"/>
+                    <input hidden class="form-control" type="text" th:field="*{paymentStatus}"/>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block"> Create request</button>
+                    </div>
+
+                </form>
+            </article>
+        </div>
+    </div>
+</div>
+
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="../resources/js/hotel.js"></script>
+< /body>
+< /html>

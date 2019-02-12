@@ -1,6 +1,6 @@
 package com.epam.hotel.daos;
 
-import com.epam.hotel.enums.ClassID;
+import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.epam.hotel.enums.*;
+import com.epam.hotel.model.enums.*;
 import org.springframework.jdbc.core.RowMapper;
 
 @Slf4j

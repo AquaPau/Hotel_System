@@ -1,19 +1,23 @@
 package com.epam.hotel.services;
 
 import com.epam.hotel.daos.RequestDao;
-import com.epam.hotel.enums.Capacity;
-import com.epam.hotel.enums.ClassID;
-import com.epam.hotel.enums.PaymentStatus;
+import com.epam.hotel.dtos.RequestDto;
+import com.epam.hotel.model.enums.Capacity;
+import com.epam.hotel.model.enums.ClassID;
+import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class RequestServiceImpl implements RequestService {
     private final RequestDao requestDao;
 
-    RequestServiceImpl(RequestDao requestDao){
+    RequestServiceImpl(RequestDao requestDao) {
         this.requestDao = requestDao;
     }
+
     @Override
     public Request create(Request entity) {
         requestValidation(entity);
@@ -42,8 +46,15 @@ public class RequestServiceImpl implements RequestService {
     }
 
     private void requestValidation(Request request) {
-        if (request.getUserID() <= 0 || request.getCheckIn() == null || request.getCheckOut() == null) {
-            throw new IllegalArgumentException("Request is not valid: fill the required fields");
+        if (request.getCheckIn() == null) {
+            LocalDateTime ldt = LocalDateTime.now().plusDays(1);
+            Timestamp timestamp = Timestamp.valueOf(ldt);
+            request.setCheckIn(timestamp);
+        }
+        if (request.getCheckOut() == null) {
+            LocalDateTime ldt = LocalDateTime.now().plusWeeks(1).plusDays(1);
+            Timestamp timestamp = Timestamp.valueOf(ldt);
+            request.setCheckOut(timestamp);
         }
         if (request.getCapacity() == null) {
             request.setCapacity(Capacity.SINGLE);
@@ -65,5 +76,17 @@ public class RequestServiceImpl implements RequestService {
     public List<Request> getPaymentStatus(PaymentStatus paymentStatus) {
         return requestDao.getPaymentStatus(paymentStatus);
     }
+
+    public RequestDto getRequestDto(Request request) {
+        requestValidation(request);
+        return new RequestDto(request);
+    }
+
+    @Override
+    public Request getRequestFromDto(RequestDto requestDto) {
+        return requestDto.getRequest();
+    }
+
+
 }
 

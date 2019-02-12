@@ -1,7 +1,7 @@
 package com.epam.hotel.services;
 
 import com.epam.hotel.daos.UserDao;
-import com.epam.hotel.enums.Permission;
+import com.epam.hotel.model.enums.Permission;
 import com.epam.hotel.model.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
