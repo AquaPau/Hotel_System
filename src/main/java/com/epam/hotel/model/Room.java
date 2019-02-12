@@ -14,4 +14,19 @@ public class Room {
     private Capacity capacity;
     private BigDecimal price;
 
+    public Room() {};
+    public Room(int num, ClassID classID, Capacity cap, BigDecimal price) {
+        this.roomNumber = num;
+        this.classID = classID;
+        this.capacity = cap;
+        this.price = price;
+    }
+    public Room(long id, int num, ClassID classID, Capacity cap, BigDecimal price) {
+        this.roomID = id;
+        this.roomNumber = num;
+        this.classID = classID;
+        this.capacity = cap;
+        this.price = price;
+    }
+
 }

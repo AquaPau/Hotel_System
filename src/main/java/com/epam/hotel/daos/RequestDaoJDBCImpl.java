@@ -5,6 +5,7 @@ import com.epam.hotel.enums.ClassID;
 import com.epam.hotel.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 
 import java.sql.*;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Slf4j
 public class RequestDaoJDBCImpl implements RequestDao {
     private String url;
     private String username;
@@ -58,6 +60,7 @@ public class RequestDaoJDBCImpl implements RequestDao {
             PreparedStatement preparedStatement = connection.prepareStatement(GET_REQUESTS_BY_USERID);
             preparedStatement.setLong(1, id);
             ResultSet rs = preparedStatement.executeQuery();
+            log.info("Retrieved list of all requests by user id");
             return getRequestsList(requestList, rs);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,6 +84,7 @@ public class RequestDaoJDBCImpl implements RequestDao {
             PreparedStatement preparedStatement = connection.prepareStatement(GET_REQUESTS_BY_PAYMENTSTATUS);
             preparedStatement.setString(1, paymentStatus.toString());
             ResultSet rs = preparedStatement.executeQuery();
+            log.info("Retrieved list of all requests by payment status");
             return getRequestsList(requestList, rs);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -95,8 +99,10 @@ public class RequestDaoJDBCImpl implements RequestDao {
             int numberRowsUpdated = preparedStatement.executeUpdate();
             if (numberRowsUpdated == 0) throw new SQLException("Creating request failed, no rows affected.");
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) request.setRequestID(generatedKeys.getLong(1));
-                else throw new SQLException("Creating request failed, no ID obtained.");
+                if (generatedKeys.next()) {
+                    request.setRequestID(generatedKeys.getLong(1));
+                    log.info("Created request with id="+request.getRequestID());
+                } else throw new SQLException("Creating request failed, no ID obtained.");
             }
         } catch (SQLException e) {
 
@@ -111,6 +117,7 @@ public class RequestDaoJDBCImpl implements RequestDao {
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_REQUEST);
             if (getById(id) == null) throw new SQLException("Request doesn't exist");
             preparedStatement.setLong(1, id);
+            log.info("Deleted request with id="+id);
             return (preparedStatement.executeUpdate() > 0);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -123,6 +130,7 @@ public class RequestDaoJDBCImpl implements RequestDao {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             PreparedStatement preparedStatement = initRequestBody(connection, request, UPDATE_REQUEST);
             preparedStatement.setLong(7, request.getRequestID());
+            log.info("Updated request with id="+request.getRequestID());
             return (preparedStatement.executeUpdate() > 0);
         } catch (SQLException e) {
         }
@@ -135,6 +143,7 @@ public class RequestDaoJDBCImpl implements RequestDao {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_REQUESTS);
             ResultSet rs = preparedStatement.executeQuery();
+            log.info("Retrieved list of all requests");
             return getRequestsList(requestList, rs);
         } catch (SQLException e) {
         }
@@ -159,3 +168,4 @@ public class RequestDaoJDBCImpl implements RequestDao {
 
 
 }
+

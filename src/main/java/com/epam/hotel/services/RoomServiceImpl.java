@@ -6,6 +6,8 @@ import com.epam.hotel.enums.Capacity;
 import com.epam.hotel.enums.ClassID;
 import com.epam.hotel.model.Room;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.List;
 
 public class RoomServiceImpl implements RoomService {
@@ -24,6 +26,11 @@ public class RoomServiceImpl implements RoomService {
         } else if (room.getClassID() == null) {
             room.setClassID(ClassID.STANDARD);
         }
+    }
+
+    public BigDecimal calculateRoomPrice(BigDecimal baseprice, double classMultiplier, double capMultiplier) {
+        MathContext mc = new MathContext(2);
+        return baseprice.multiply(BigDecimal.valueOf(capMultiplier * classMultiplier), mc);
     }
 
     @Override

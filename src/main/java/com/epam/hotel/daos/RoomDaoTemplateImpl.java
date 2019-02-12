@@ -2,22 +2,25 @@ package com.epam.hotel.daos;
 
 import com.epam.hotel.enums.ClassID;
 import com.epam.hotel.model.Room;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.epam.hotel.enums.*;
+import org.springframework.jdbc.core.RowMapper;
 
+@Slf4j
 public class RoomDaoTemplateImpl implements RoomDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final String SQL_CHECK_IF_EXISTS_BY_ID = "SELECT COUNT(*) FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_CHECK_IF_EXISTS_BY_ROOM_NUMBER = "SELECT COUNT(*) FROM hotel.rooms WHERE roomnumber = ?";
     private final String SQL_GET_ALL_ROOMS = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.Rooms";
-    private final String SQL_UPDATE_ROOM = "UPDATE hotel.rooms SET roomnumber = ?, " +
-            "classid = CAST(? AS hotel.classid), capacity = CAST(? AS hotel.capacity), price = ? WHERE roomid = ?";
-    private final String SQL_CREATE_NEW_ROOM = "INSERT INTO hotel.rooms (roomnumber, classid, " +
-            "capacity, price) VALUES (?, CAST(? AS hotel.classid), CAST(? AS hotel.capacity), ?)";
+    private final String SQL_UPDATE_ROOM = "UPDATE hotel.rooms SET roomnumber = ?, classid = ?, capacity = ?, price = ? WHERE roomid = ?";
+    private final String SQL_CREATE_NEW_ROOM = "INSERT INTO hotel.rooms (roomnumber, classid, capacity, price) VALUES (?, ?, ?, ?)";
     private final String SQL_DELETE_ROOM = "DELETE FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_GET_BY_ID = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_GET_BY_ROOM_NUMBER = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.rooms WHERE roomnumber = ?";
@@ -31,16 +34,17 @@ public class RoomDaoTemplateImpl implements RoomDao {
     }
 
     private Integer checkIfNumberExists(int roomNumber) {
-        return jdbcTemplate.queryForObject(SQL_CHECK_IF_EXISTS_BY_ROOM_NUMBER,new Object[]{roomNumber}, Integer.class);
+        return jdbcTemplate.queryForObject(SQL_CHECK_IF_EXISTS_BY_ROOM_NUMBER, new Object[]{roomNumber}, Integer.class);
     }
 
     @Override
     public Room create(Room room) {
-        jdbcTemplate.update(SQL_CREATE_NEW_ROOM, room.getRoomNumber(), room.getClassID(),
-                room.getCapacity(), room.getPrice());
+        jdbcTemplate.update(SQL_CREATE_NEW_ROOM, room.getRoomNumber(), room.getClassID().toString(),
+                room.getCapacity().toString(), room.getPrice());
         Room newroom = null;
         if (this.checkIfNumberExists(room.getRoomNumber()) > 0) {
             newroom = this.getByRoomNumber(room.getRoomNumber());
+            log.info("Added new room with id=" + newroom.getRoomID());
         }
         return newroom;
     }
@@ -49,9 +53,10 @@ public class RoomDaoTemplateImpl implements RoomDao {
     public boolean update(Room room) {
         boolean isUpdated = false;
         if (this.checkIfExists(room.getRoomID()) > 0) {
-            jdbcTemplate.update(SQL_UPDATE_ROOM, room.getRoomNumber(), room.getClassID(),
-                    room.getCapacity(), room.getPrice(), room.getRoomID());
+            jdbcTemplate.update(SQL_UPDATE_ROOM, room.getRoomNumber(), room.getClassID().name(),
+                    room.getCapacity().name(), room.getPrice(), room.getRoomID());
             isUpdated = true;
+            log.info("Updated room with id=" + room.getRoomID());
         }
         return isUpdated;
     }
@@ -63,6 +68,7 @@ public class RoomDaoTemplateImpl implements RoomDao {
         if (this.checkIfExists(id) > 0) {
             jdbcTemplate.update(SQL_DELETE_ROOM, id);
             isDeleted = true;
+            log.info("Deleted room with id=" + id);
         }
         return isDeleted;
     }
@@ -70,6 +76,7 @@ public class RoomDaoTemplateImpl implements RoomDao {
 
     @Override
     public List<Room> getAll() {
+        log.info("Retrieved list of all rooms");
         return jdbcTemplate.query(SQL_GET_ALL_ROOMS, (rs, rowNum) -> {
             Room room = new Room();
             room.setRoomID(rs.getInt(1));
@@ -85,8 +92,8 @@ public class RoomDaoTemplateImpl implements RoomDao {
     public Room getById(long id) {
         Room room = null;
         if (this.checkIfExists(id) > 0) {
-            room = jdbcTemplate.queryForObject(
-                    SQL_GET_BY_ID, new Object[]{ id }, Room.class);
+            room = jdbcTemplate.queryForObject(SQL_GET_BY_ID, new Object[]{ id }, new RoomRowMapper());
+            log.info("Accessed room with id="+id);
         }
         return room;
     }
@@ -95,10 +102,23 @@ public class RoomDaoTemplateImpl implements RoomDao {
     public Room getByRoomNumber(int roomNumber) {
         Room room = null;
         if (this.checkIfNumberExists(roomNumber) > 0) {
-            room = jdbcTemplate.queryForObject(
-                    SQL_GET_BY_ROOM_NUMBER, new Object[] { roomNumber }, Room.class);
+            room = jdbcTemplate.queryForObject(SQL_GET_BY_ROOM_NUMBER, new Object[] { roomNumber }, new RoomRowMapper());
+            log.info("Accessed room with id="+room.getRoomID());
         }
         return room;
+    }
+
+    class RoomRowMapper implements RowMapper<Room> {
+        @Override
+        public Room mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Room room = new Room();
+            room.setRoomID(rs.getLong("roomid"));
+            room.setRoomNumber(rs.getInt("roomnumber"));
+            room.setClassID(ClassID.valueOf(rs.getString("classid")));
+            room.setCapacity(Capacity.valueOf(rs.getString("capacity")));
+            room.setPrice(rs.getBigDecimal("price"));
+            return room;
+        }
     }
 
 }
