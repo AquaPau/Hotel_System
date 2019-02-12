@@ -10,6 +10,7 @@ import com.epam.hotel.model.Request;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RequestServiceImpl implements RequestService {
     private final RequestDao requestDao;
@@ -85,6 +86,12 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public Request getRequestFromDto(RequestDto requestDto) {
         return requestDto.getRequest();
+    }
+
+    @Override
+    public List<RequestDto> getUserRequestsDto(long id) {
+        List<Request> userRequests = getUserRequests(id);
+        return userRequests.stream().map(RequestDto::new).collect(Collectors.toList());
     }
 
 

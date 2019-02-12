@@ -14,4 +14,6 @@ public interface RequestService extends Service<Request> {
     RequestDto getRequestDto(Request request);
 
     Request getRequestFromDto(RequestDto requestDto);
+
+    List<RequestDto> getUserRequestsDto(long id);
 }
