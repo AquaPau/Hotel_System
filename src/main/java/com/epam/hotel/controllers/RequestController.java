@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
@@ -29,13 +30,36 @@ public class RequestController {
         request.setUserID(user.getId());
         RequestDto requestDto = requestService.getRequestDto(request);
         model.addAttribute("request", requestDto);
+        model.addAttribute("headerName", "Create request");
+        model.addAttribute("buttonName", "Create");
         return "request";
     }
 
-    @PostMapping("request/new")
+    @PostMapping("request/save")
     public String createRequest(@ModelAttribute("request") RequestDto requestDto) {
         Request request = requestService.getRequestFromDto(requestDto);
-        requestService.create(request);
+        if (request.getRequestID() == 0) {
+            requestService.create(request);
+        } else {
+            requestService.update(request);
+        }
         return "redirect:/";
     }
+
+    @GetMapping("request/edit/{id}")
+    public String editRequest(@PathVariable String id, Model model) {
+        Request request = requestService.getById(new Long(id));
+        RequestDto requestDto = requestService.getRequestDto(request);
+        model.addAttribute("request", requestDto);
+        model.addAttribute("headerName", "Edit request");
+        model.addAttribute("buttonName", "Save");
+        return "request";
+    }
+
+    @GetMapping("request/delete/{id}")
+    public String deleteRequest(@PathVariable String id) {
+        requestService.delete(new Long(id));
+        return "redirect:/";
+    }
+
 }

@@ -22,12 +22,9 @@ public class RequestDto {
     public RequestDto(Request request) {
         this.requestID = request.getRequestID();
         this.userID = request.getUserID();
-        String capacity = request.getCapacity().name().substring(0, 1) + request.getCapacity().name().substring(1).toLowerCase();
-        String classId = request.getClassID().name().substring(0, 1) + request.getClassID().name().substring(1).toLowerCase();
-        String paymentStatus = request.getPaymentStatus().name().substring(0, 1) + request.getPaymentStatus().name().substring(1).toLowerCase();
-        this.capacity = capacity;
-        this.classID = classId;
-        this.paymentStatus = paymentStatus;
+        this.capacity = request.getCapacity().name();
+        this.classID = request.getClassID().name();
+        this.paymentStatus = request.getPaymentStatus().name();
         this.checkIn = DateFormatter.convertDateToString(request.getCheckIn());
         this.checkOut = DateFormatter.convertDateToString(request.getCheckOut());
     }
@@ -36,9 +33,9 @@ public class RequestDto {
         Request request = new Request();
         request.setRequestID(this.getRequestID());
         request.setUserID(this.getUserID());
-        request.setCapacity(Capacity.valueOf(this.capacity.toUpperCase()));
-        request.setClassID(ClassID.valueOf(this.classID.toUpperCase()));
-        request.setPaymentStatus(PaymentStatus.valueOf(this.paymentStatus.toUpperCase()));
+        request.setCapacity(Capacity.valueOf(this.capacity));
+        request.setClassID(ClassID.valueOf(this.classID));
+        request.setPaymentStatus(PaymentStatus.valueOf(this.paymentStatus));
         request.setCheckIn(DateFormatter.convertStringToDate(this.checkIn));
         request.setCheckOut(DateFormatter.convertStringToDate(this.checkOut));
         return request;

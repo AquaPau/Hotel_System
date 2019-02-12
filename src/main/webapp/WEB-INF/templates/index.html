@@ -22,7 +22,43 @@
                 <h3 class="text-center">Welcome to hotel system, <span th:text="${user.firstName}"></span>!</h3>
             </div>
             <div class="card-body">
-                <a th:href="@{/request/new}" class="btn btn-success float-left">New request</a>
+
+                <table class="table table-bordered white">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Capacity</th>
+                        <th scope="col">Class</th>
+                        <th scope="col">Check in</th>
+                        <th scope="col">Check out</th>
+                        <th scope="col">Payment status</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="request : ${requestList}">
+                        <tr>
+                            <th th:text="${request.requestID}" scope="row">1</th>
+                            <td th:text="${request.capacity}"></td>
+                            <td th:text="${request.classID}"></td>
+                            <td th:text="${request.checkIn}"></td>
+                            <td th:text="${request.checkOut}"></td>
+                            <td th:text="${request.paymentStatus}"></td>
+                            <td>
+                                <a th:href="@{'/request/edit/'+${request.requestID}}" class="btn btn-info float-left">Edit</a>
+                            </td>
+                            <td>
+                                <a th:href="@{'/request/delete/'+${request.requestID}}"
+                                   class="btn btn-danger float-left">Delete</a>
+                            </td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+                <div>
+                </div>
+                <a th:href="@{/request/new}" class="btn btn-success float-right">New request</a>
             </div>
             <div class="card-footer">
                 <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}" class="btn btn-info float-left">Admin
@@ -37,7 +73,6 @@
 </div>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
 
 
 </body>
