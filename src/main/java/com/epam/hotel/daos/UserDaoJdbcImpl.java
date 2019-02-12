@@ -4,13 +4,13 @@ import com.epam.hotel.enums.Permission;
 import com.epam.hotel.model.User;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.annotation.Aspect;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Slf4j
 public class UserDaoJdbcImpl implements UserDao {
 
     private String url;
@@ -36,7 +36,6 @@ public class UserDaoJdbcImpl implements UserDao {
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     entity.setId(generatedKeys.getLong(1));
-                    log.info("Added user with id="+entity.getId());
                 } else {
                     throw new SQLException("Creating user failed, no ID obtained.");
                 }
@@ -52,7 +51,6 @@ public class UserDaoJdbcImpl implements UserDao {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);
             statement.setLong(1, id);
-            log.info("Deleted user with id="+id);
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,7 +63,6 @@ public class UserDaoJdbcImpl implements UserDao {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             PreparedStatement statement = initStatement(entity, connection, UPDATE_QUERY);
             statement.setLong(6, entity.getId());
-            log.info("Updated user with id="+entity.getId());
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,7 +84,6 @@ public class UserDaoJdbcImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        log.info("Retrieved list of all users");
         return userList;
     }
 
@@ -98,7 +94,6 @@ public class UserDaoJdbcImpl implements UserDao {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            log.info("Accessed user with id="+id);
             return getUser(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
