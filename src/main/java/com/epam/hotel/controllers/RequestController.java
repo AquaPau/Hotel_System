@@ -1,7 +1,7 @@
 package com.epam.hotel.controllers;
 
+import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.model.Request;
-import com.epam.hotel.model.converters.RequestConverter;
 import com.epam.hotel.model.User;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.UserService;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.security.Principal;
 
 @Controller
-@RequiredArgsConstructor(onConstructor_={@Autowired})
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class RequestController {
 
     private final UserService userService;
@@ -27,13 +27,15 @@ public class RequestController {
         User user = userService.getByLogin(principal.getName());
         Request request = new Request();
         request.setUserID(user.getId());
-        model.addAttribute("request", RequestConverter.getRequestConverter(request));
+        RequestDto requestDto = requestService.getRequestDto(request);
+        model.addAttribute("request", requestDto);
         return "request";
     }
 
     @PostMapping("request/new")
-    public String createRequest(@ModelAttribute("request") RequestConverter request) {
-        requestService.create(request.getRequest());
+    public String createRequest(@ModelAttribute("request") RequestDto requestDto) {
+        Request request = requestService.getRequestFromDto(requestDto);
+        requestService.create(request);
         return "redirect:/";
     }
 }
