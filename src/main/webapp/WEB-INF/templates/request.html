@@ -15,15 +15,16 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-            <article class="card card-body mx-auto" style="max-width: 400px;">
-                <div class="card-header">
+            <article class="card-body mx-auto" style="max-width: 400px;">
+                <div>
                     <h3 class="text-center" th:text="${headerName}"></h3>
                 </div>
-                <form onsubmit="return calendarValidate()" th:object="${request}" th:action="@{/request/save}" method="post">
+                <form th:object="${request}" th:action="@{/request/save}" method="post">
+
                     <p class="white">Select capacity:</p>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                            <span class="input-group-text"> <i class="fa fa-bed"></i> </span>
                         </div>
                         <select th:field="*{capacity}" class="form-control" id="selCapacity">
                             <option th:each="classIdValue : ${T(com.epam.hotel.model.enums.Capacity).values()}"
@@ -36,10 +37,10 @@
                     <p class="white">Select class:</p>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                            <span class="input-group-text"> <i class="fa fa-piggy-bank"></i> </span>
                         </div>
 
-                        <select th:field="*{classID}" class="form-control" id="selClass">
+                        <select  th:field="*{classID}" class="form-control" id="selClass">
                             <option th:each="classIdValue : ${T(com.epam.hotel.model.enums.ClassID).values()}"
                                     th:value="${classIdValue.name()}"
                                     th:text="${classIdValue.name()}">
@@ -50,20 +51,18 @@
                     <p class="white">Select check in date:</p>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                            <span class="input-group-text"> <i class="fa fa-calendar-alt"></i> </span>
                         </div>
-                        <input id ="checkIn" autocomplete="off" name="checkin" class="form-control datepicker" placeholder="Check in"
-                               type="text"
+                        <input autocomplete="off" name="checkin" class="form-control datepicker" placeholder="Check in" type="text"
                                th:field="*{checkIn}">
                     </div>
 
                     <p class="white">Select check out date:</p>
-                    <div class="form-group input-group">
+                    <div id="checkout" class="form-group input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                            <span class="input-group-text"> <i class="fa fa-calendar-alt"></i> </span>
                         </div>
-                        <input id ="checkOut" autocomplete="off" name="checkout" class="form-control datepicker"
-                               placeholder="Check out" type="text"
+                        <input autocomplete="off" name="checkout" class="form-control datepicker" placeholder="Check out" type="text"
                                th:field="*{checkOut}">
                     </div>
 
