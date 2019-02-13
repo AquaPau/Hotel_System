@@ -9,6 +9,7 @@
         <property name="jdbcUrl" value="${database.url}"/>
         <property name="user" value="${database.username}"/>
         <property name="password" value="${database.password}"/>
+        <property name="initialPoolSize" value="${c3p0.initialPoolSize}"/>
         <property name="maxPoolSize" value="${c3p0.maxPoolSize}"/>
         <property name="minPoolSize" value="${c3p0.minPoolSize}"/>
         <property name="maxStatements" value="${c3p0.maxStatements}"/>
