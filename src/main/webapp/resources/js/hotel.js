@@ -30,24 +30,49 @@ function validateSignInForm() {
 
 function validate(elem, matcher) {
     if (matcher == null) {
-        elem.css({border: '2px solid #ff5a5a'});
+        setFieldError(elem, true);
         return false;
     } else {
-        elem.css({border: '1px solid #ced4da'});
+        setFieldError(elem, false);
         return true;
     }
 }
 
-//ToDo
-function calendarValidate(){
-    var checkin =$('#checkIn').value;
-    alert(checkin);
-   // new Date().format('m-d-Y h:i:s');
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1;
-    var yyyy = today.getFullYear();
+function setFieldError(elem, flag) {
+    if (flag) {
+        elem.css({border: '2px solid #ff5a5a'});
+    } else {
+        elem.css({border: '1px solid #ced4da'});
+    }
+}
 
+function calendarValidate() {
+    var validated = true;
+    var checkIn = getDate('checkIn');
+    var checkOut = getDate('checkOut');
+    var today = new Date();
+    if (checkIn <= today) {
+        setFieldError($('#checkIn'), true);
+        validated = false;
+    } else {
+        setFieldError($('#checkIn'), false);
+    }
+    if (checkOut <= checkIn) {
+        setFieldError($('#checkOut'), true);
+        validated = false;
+    } else {
+        setFieldError($('#checkOut'), false);
+    }
+    return validated;
+}
+
+function getDate(elemId) {
+    var checkin = document.getElementById(elemId).value;
+    var split = checkin.split("/");
+    var month = split[0];
+    var day = split[1];
+    var year = split[2];
+    return new Date("" + year + "-" + month + "-" + day);
 }
 
 $(function () {
