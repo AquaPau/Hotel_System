@@ -14,7 +14,7 @@ import com.epam.hotel.enums.*;
 import org.springframework.jdbc.core.RowMapper;
 
 public class RoomDaoTemplateImpl implements RoomDao {
-
+    
     private final JdbcTemplate jdbcTemplate;
     private final String SQL_CHECK_IF_EXISTS_BY_ID = "SELECT COUNT(*) FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_CHECK_IF_EXISTS_BY_ROOM_NUMBER = "SELECT COUNT(*) FROM hotel.rooms WHERE roomnumber = ?";
