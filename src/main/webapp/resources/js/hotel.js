@@ -12,7 +12,6 @@ function validateSignInForm() {
     var lastNameMatcher = lastName.match(/^[a-zA-Z]{3,20}$/);
     var passwordMatcher = password.match(/^.{6,50}$/);
 
-
     validated = validate($('#login-input'), loginMatcher);
     validated = validate($('#fn-input'), firstNameMatcher) && validated;
     validated = validate($('#ln-input'), lastNameMatcher) && validated;

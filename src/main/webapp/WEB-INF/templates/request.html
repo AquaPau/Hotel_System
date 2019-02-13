@@ -19,7 +19,7 @@
                 <div>
                     <h3 class="text-center" th:text="${headerName}"></h3>
                 </div>
-                <form th:object="${request}" th:action="@{/request/save}" method="post">
+                <form onsubmit="return calendarValidate()" th:object="${request}" th:action="@{/request/save}" method="post">
 
                     <p class="white">Select capacity:</p>
                     <div class="form-group input-group">
@@ -53,7 +53,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-calendar-alt"></i> </span>
                         </div>
-                        <input autocomplete="off" name="checkin" class="form-control datepicker" placeholder="Check in" type="text"
+                        <input id ="checkIn" autocomplete="off" name="checkin" class="form-control datepicker" placeholder="Check in" type="text"
                                th:field="*{checkIn}">
                     </div>
 
@@ -62,7 +62,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-calendar-alt"></i> </span>
                         </div>
-                        <input autocomplete="off" name="checkout" class="form-control datepicker" placeholder="Check out" type="text"
+                        <input id ="checkOut" autocomplete="off" name="checkout" class="form-control datepicker" placeholder="Check out" type="text"
                                th:field="*{checkOut}">
                     </div>
 
