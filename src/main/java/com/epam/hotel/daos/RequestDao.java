@@ -1,6 +1,6 @@
 package com.epam.hotel.daos;
 
-import com.epam.hotel.enums.PaymentStatus;
+import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
 import java.util.List;
 

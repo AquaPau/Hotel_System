@@ -1,7 +1,7 @@
 package com.epam.hotel.daos;
 
-import com.epam.hotel.enums.Capacity;
-import com.epam.hotel.enums.ClassID;
+import com.epam.hotel.model.enums.Capacity;
+import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 import org.junit.Before;
 import org.junit.After;

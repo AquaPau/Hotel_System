@@ -1,12 +1,10 @@
 package com.epam.hotel.daos;
 
-import com.epam.hotel.enums.Capacity;
-import com.epam.hotel.enums.ClassID;
-import com.epam.hotel.enums.PaymentStatus;
-import com.epam.hotel.enums.Permission;
+import com.epam.hotel.model.enums.Capacity;
+import com.epam.hotel.model.enums.ClassID;
+import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
 
-import com.epam.hotel.model.User;
 import org.junit.*;
 
 import static org.junit.Assert.*;

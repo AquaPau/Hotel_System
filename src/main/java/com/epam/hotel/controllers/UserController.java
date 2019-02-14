@@ -1,7 +1,11 @@
 package com.epam.hotel.controllers;
 
+import com.epam.hotel.dtos.RequestDto;
+import com.epam.hotel.model.Request;
 import com.epam.hotel.model.User;
+import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,16 +14,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final RequestService requestService;
 
     @GetMapping({"/", "/index"})
     public String index(Model model, Principal principal) {
-        model.addAttribute("userLogin", principal.getName());
+        User user = userService.getByLogin(principal.getName());
+        List<RequestDto> requestDtoList = requestService.getUserRequestsDto(user.getId());
+        model.addAttribute("user", user);
+        model.addAttribute("requestList", requestDtoList);
         return "index";
     }
 
