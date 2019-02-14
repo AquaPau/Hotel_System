@@ -3,6 +3,8 @@ package com.epam.hotel.daos;
 import com.epam.hotel.model.enums.Permission;
 import com.epam.hotel.model.User;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -14,7 +16,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
-@Slf4j
 public class UserDaoTemplateImpl implements UserDao {
     private final JdbcTemplate jdbcTemplate;
 
@@ -48,32 +49,27 @@ public class UserDaoTemplateImpl implements UserDao {
                 },
                 keyHolder);
         entity.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
-        log.info("Added user with id="+entity.getId());
         return entity;
     }
 
     @Override
     public boolean delete(long id) {
-        log.info("Deleted user with id="+id);
         return jdbcTemplate.update(DELETE_QUERY, id) != 0;
     }
 
     @Override
     public boolean update(User entity) {
-        log.info("Deleted user with id="+entity.getId());
         int rows = jdbcTemplate.update(UPDATE_QUERY, entity.getLogin(), String.valueOf(entity.getPassword()), entity.getPermission().toString(), entity.getFirstName(), entity.getLastName(), entity.getId());
         return rows != 0;
     }
 
     @Override
     public List<User> getAll() {
-        log.info("Retrieved list of all users");
         return jdbcTemplate.query(SELECT_ALL_QUERY, new UserRowMapper());
     }
 
     @Override
     public User getById(long id) {
-        log.info("Accessed user with id="+id);
         return jdbcTemplate.queryForObject(SELECT_BY_ID_QUERY, new Object[]{id}, new UserRowMapper());
     }
 

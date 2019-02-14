@@ -5,13 +5,13 @@ import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.annotation.Aspect;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Slf4j
 public class RoomDaoJDBCImpl implements RoomDao {
 
     private String url;
@@ -53,7 +53,6 @@ public class RoomDaoJDBCImpl implements RoomDao {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             PreparedStatement statement = initStatement(room, connection, SQL_CREATE_NEW_ROOM);
             statement.executeUpdate();
-            log.info("Added new room with id=" + room.getRoomID());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -66,7 +65,6 @@ public class RoomDaoJDBCImpl implements RoomDao {
             PreparedStatement statement = connection.prepareStatement(SQL_DELETE_ROOM);
             statement.setLong(1, id);
             statement.executeUpdate();
-            log.info("Deleted room with id=" + id);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -80,7 +78,6 @@ public class RoomDaoJDBCImpl implements RoomDao {
             PreparedStatement statement = initStatement(room, connection, SQL_UPDATE_ROOM);
             statement.setLong(5, room.getRoomID());
             statement.executeUpdate();
-            log.info("Updated room with id=" + room.getRoomID());
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,7 +99,6 @@ public class RoomDaoJDBCImpl implements RoomDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        log.info("Retrieved list of all rooms");
         return roomList;
     }
 
@@ -113,7 +109,6 @@ public class RoomDaoJDBCImpl implements RoomDao {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            log.info("Accessed room with id="+id);
             return getRoom(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -129,7 +124,6 @@ public class RoomDaoJDBCImpl implements RoomDao {
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             Room room = getRoom(resultSet);
-            log.info("Accessed room with id="+room.getRoomID());
             return room;
         } catch (SQLException e) {
             e.printStackTrace();
