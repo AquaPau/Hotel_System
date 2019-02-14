@@ -15,7 +15,7 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-            <article class="card card-body mx-auto" style="max-width: 400px;">
+            <article class="card-body mx-auto" style="max-width: 400px;">
                 <div class="card-header">
                     <h3 class="text-center" th:text="${headerName}"></h3>
                 </div>
@@ -24,7 +24,7 @@
                     <p class="white">Insert room number:</p>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-key"></i></span>
+                            <span class="input-group-text"><i class="fa fa-key"></i> </span>
                         </div>
                         <input th:field="*{roomNumber}" name="roomnumber" type="number" class="form-control" placeholder="Room number">
                     </div>
@@ -59,7 +59,7 @@
                     <p class="white">Insert price:</p>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-money"></i></span>
+                            <span class="input-group-text"><i class="fa fa-credit-card"></i> </span>
                         </div>
                         <input th:field="*{price}" name="price" type="number" class="form-control" placeholder="Price">
                     </div>
@@ -69,6 +69,9 @@
                         <button type="submit" class="btn btn-primary btn-block" th:text="${buttonName}"></button>
                     </div>
                 </form>
+                <div>
+                </div>
+                <a th:href="@{/roomseditor/}" class="btn btn-dark btn-block">Back to the list of rooms</a>
             </article>
         </div>
     </div>

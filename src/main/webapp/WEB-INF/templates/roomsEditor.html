@@ -15,7 +15,7 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-                <div>
+                <div class="card-header">
                     <h3 class="text-center" th:text="${headerName}"></h3>
                 </div>
                 <div class="card-body">
@@ -28,6 +28,8 @@
                             <th scope="col">Capacity</th>
                             <th scope="col">Class</th>
                             <th scope="col">Price</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -38,14 +40,24 @@
                                 <td th:text="${room.capacity}"></td>
                                 <td th:text="${room.classId}"></td>
                                 <td th:text="${room.price}"></td>
+                                <td>
+                                    <a th:href="@{'/rooms/edit/'+${room.roomId}}" class="btn btn-dark float-left">Edit</a>
+                                </td>
+                                <td>
+                                    <a th:href="@{'/rooms/delete/'+${room.roomId}}"
+                                       class="btn btn-dark float-left">Delete</a>
+                                </td>
                             </tr>
                         </th:block>
                         </tbody>
                     </table>
                     <div>
                     </div>
-                    <a th:href="@{/index/}" class="btn btn-dark float-left">Back to home page</a>
+                    <a th:href="@{/rooms/new}" class="btn btn-dark float-right">New room</a>
+                    <div>
                     </div>
+                    <a th:href="@{/admin/}" class="btn btn-dark float-left">Back to admin page</a>
+                </div>
         </div>
     </div>
 </div>

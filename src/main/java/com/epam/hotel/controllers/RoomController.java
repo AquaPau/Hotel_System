@@ -38,10 +38,10 @@ public class RoomController {
         } else {
             roomService.update(room);
         }
-        return "redirect:/rooms";
+        return "redirect:/roomseditor";
     }
 
-    @GetMapping("room/edit/{id}")
+    @GetMapping("rooms/edit/{id}")
     public String editRoom(@PathVariable String id, Model model) {
         Room room = roomService.getById(new Long(id));
         RoomDto roomDto = roomService.getRoomDto(room);
@@ -51,10 +51,10 @@ public class RoomController {
         return "rooms";
     }
 
-    @GetMapping("room/delete/{id}")
+    @GetMapping("rooms/delete/{id}")
     public String deleteRoom(@PathVariable String id) {
         roomService.delete(new Long(id));
-        return "redirect:/rooms";
+        return "redirect:/roomseditor";
     }
 
     @GetMapping("rooms")
@@ -63,6 +63,14 @@ public class RoomController {
         model.addAttribute("headerName", "List of hotel rooms");
         model.addAttribute("roomsList", roomDtoList);
         return "roomsList";
+    }
+
+    @GetMapping("roomseditor")
+    public String roomsEditor(Model model){
+        List<RoomDto> roomDtoList = roomService.getRoomDtoList();
+        model.addAttribute("headerName", "List of hotel rooms <ADMIN PAGE>");
+        model.addAttribute("roomsList", roomDtoList);
+        return "roomsEditor";
     }
 
 
