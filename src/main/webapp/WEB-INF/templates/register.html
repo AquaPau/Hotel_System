@@ -26,39 +26,50 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input id= "login-input" name="login" class="form-control" placeholder="Login" type="text" th:field="*{login}">
+                        <input id="login-input" name="login" class="form-control" placeholder="Login" type="text"
+                               th:field="*{login}">
                     </div>
+                    <p hidden="" id="login-error" class="error">Login must be at least 5-20 characters long and must contain only
+                        letters digits and underscores.</p>
 
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input id= "fn-input" name="firstname" class="form-control" placeholder="First name" type="text"
+                        <input id="fn-input" name="firstname" class="form-control" placeholder="First name" type="text"
                                th:field="*{firstName}">
                     </div>
+                    <p hidden id="fn-error" class="error">First name must be at least 3-20 characters long and must contain
+                        only letters.</p>
 
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input id= "ln-input" name="lastname" class="form-control" placeholder="Last name" type="text"
+                        <input id="ln-input" name="lastname" class="form-control" placeholder="Last name" type="text"
                                th:field="*{lastName}">
                     </div>
+                    <p hidden id="ln-error" class="error">Last name must be at least 3-20 characters long and must contain only
+                        letters.</p>
 
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                         </div>
-                        <input id= "pw-input" name="password" th:field="*{password}" class="form-control" placeholder="Create password"
+                        <input id="pw-input" name="password" th:field="*{password}" class="form-control"
+                               placeholder="Create password"
                                type="password">
                     </div>
+                    <p hidden id="pw-error" class="error">Password must be at least 6 characters long.</p>
 
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                         </div>
-                        <input id ="confirm-input" name="confirm" class="form-control" placeholder="Repeat password" type="password">
+                        <input id="confirm-input" name="confirm" class="form-control" placeholder="Repeat password"
+                               type="password">
                     </div>
+                    <p hidden id="confirm-error" class="error">The password and confirm password fields do not match.</p>
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block"> Create account</button>
