@@ -19,13 +19,27 @@
                 <div class="card-header">
                     <h3 class="text-center" th:text="${headerName}"></h3>
                 </div>
-                <form th:object="${rooms}" th:action="@{/rooms/save}" method="post">
+                <form th:object="${room}" th:action="@{/rooms/save}" method="post">
+
                     <p class="white">Insert room number:</p>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-key"></i></span>
                         </div>
-                        <input name="roomnumber" type="number" class="form-control" placeholder="Room number">
+                        <input th:field="*{roomNumber}" name="roomnumber" type="number" class="form-control" placeholder="Room number">
+                    </div>
+                    <p class="white">Select class:</p>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-bed"></i> </span>
+                        </div>
+
+                        <select th:field="*{classId}" class="form-control" id="selClass">
+                            <option th:each="classIdValue : ${T(com.epam.hotel.model.enums.ClassID).values()}"
+                                    th:value="${classIdValue.name()}"
+                                    th:text="${classIdValue.name()}">
+                            </option>
+                        </select>
                     </div>
 
                     <p class="white">Select capacity:</p>
@@ -34,33 +48,22 @@
                             <span class="input-group-text"> <i class="fa fa-users"></i> </span>
                         </div>
                         <select th:field="*{capacity}" class="form-control" id="selCapacity">
-                            <option th:each="classIdValue : ${T(com.epam.hotel.model.enums.Capacity).values()}"
-                                    th:value="${classIdValue.name()}"
-                                    th:text="${classIdValue.name()}">
+
+                            <option th:each="capacityValue : ${T(com.epam.hotel.model.enums.Capacity).values()}"
+                                    th:value="${capacityValue.name()}"
+                                    th:text="${capacityValue.name()}">
                             </option>
                         </select>
                     </div>
 
-                    <p class="white">Select class:</p>
-                    <div class="form-group input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="fa fa-bed"></i> </span>
-                        </div>
-
-                        <select th:field="*{classID}" class="form-control" id="selClass">
-                            <option th:each="classIdValue : ${T(com.epam.hotel.model.enums.ClassID).values()}"
-                                    th:value="${classIdValue.name()}"
-                                    th:text="${classIdValue.name()}">
-                            </option>
-                        </select>
-                    </div>
                     <p class="white">Insert price:</p>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-money"></i></span>
                         </div>
-                        <input name="roomnumber" type="number" class="form-control" placeholder="Price">
+                        <input th:field="*{price}" name="price" type="number" class="form-control" placeholder="Price">
                     </div>
+                    <input hidden class="form-control" type="text" th:field="*{roomId}">
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block" th:text="${buttonName}"></button>

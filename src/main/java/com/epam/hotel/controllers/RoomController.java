@@ -28,7 +28,7 @@ public class RoomController {
     }
 
     @PostMapping("rooms/save")
-    public String createRoom(@ModelAttribute("rooms") RoomDto roomDto) {
+    public String createRoom(@ModelAttribute("room") RoomDto roomDto) {
         Room room = roomService.getRoomFromDto(roomDto);
         if (room.getRoomID() == 0) {
             roomService.create(room);
@@ -37,6 +37,8 @@ public class RoomController {
         }
         return "redirect:/";
     }
+
+
 
 
 
