@@ -74,5 +74,11 @@ public class RoomServiceImpl implements RoomService {
         return roomDto.getRoom();
     }
 
+    @Override
+    public List<RoomDto> getRoomDtoList(){
+        List<Room> roomList = getAll();
+        return roomList.stream().map(RoomDto::new).collect(Collectors.toList());
+    }
+
 
 }
