@@ -19,38 +19,30 @@
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div class="card-header">
-                <h3 id="index-header" class="text-center">Administration page</span></h3>
+                <h3 id="index-header" class="text-center">Possible rooms</span></h3>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${requestList.isEmpty()==true}">There are no active requests</p>
-                <table th:if="${requestList.isEmpty()==false}" class="table table-bordered white">
+                <p class="white" th:if="${allfittingroomsList.isEmpty()==true}">There are no fitting rooms</p>
+                <table th:if="${allfittingroomsList.isEmpty()==false}" class="table table-bordered white">
                     <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Capacity</th>
+                        <th scope="col">Room number</th>
                         <th scope="col">Class</th>
-                        <th scope="col">Check in</th>
-                        <th scope="col">Check out</th>
-                        <th scope="col">Payment status</th>
-                        <th scope="col">Find</th>
-                        <th scope="col">Delete</th>
+                        <th scope="col">Capacity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Pick</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <th:block th:each="request : ${requestList}">
+                    <th:block th:each="room : ${allfittingroomsList}">
                         <tr>
-                            <th th:text="${request.requestID}" scope="row">1</th>
-                            <td th:text="${request.capacity}"></td>
-                            <td th:text="${request.classID}"></td>
-                            <td th:text="${request.checkIn}"></td>
-                            <td th:text="${request.checkOut}"></td>
-                            <td th:text="${request.paymentStatus}"></td>
+                            <th th:text="${room.roomNumber}" scope="row">1</th>
+                            <td th:text="${room.classID}"></td>
+                            <td th:text="${room.capacity}"></td>
+                            <td th:text="${room.price}"></td>
                             <td>
-                                <a th:href="@{'/getallrooms/'+${request.requestID}}" class="btn btn-dark float-left">Find</a>
-                            </td>
-                            <td>
-                                <a th:href="@{'/request/delete/'+${request.requestID}}"
-                                   class="btn btn-dark float-left">Delete</a>
+                                <a th:href="@{'/allfittingrooms/pick/'+${room.roomID}}"
+                                   class="btn btn-dark float-left">Pick</a>
                             </td>
                         </tr>
                     </th:block>
@@ -60,7 +52,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a th:href="@{/index}" class="btn btn-info float-left">User menu</a>
+                <a th:href="@{/admin}" class="btn btn-info float-left">Back</a>
             </div>
         </div>
     </div>

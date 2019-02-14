@@ -3,43 +3,38 @@ package com.epam.hotel.dtos;
 import com.epam.hotel.model.Room;
 import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
+import com.epam.hotel.model.enums.PaymentStatus;
+import com.epam.hotel.utils.DateFormatter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
-public class RoomDto implements Comparable<RoomDto> {
-    private long roomId;
+public class RoomDto {
+    private long roomID;
     private int roomNumber;
-    private String classId;
+    private String classID;
     private String capacity;
-    private long price;
+    private String price;
 
-    public RoomDto (Room room){
-        this.roomId = room.getRoomID();
+    public RoomDto(Room room) {
+        this.roomID = room.getRoomID();
         this.roomNumber = room.getRoomNumber();
-        this.classId = room.getClassID().toString();
-        this.capacity = room.getCapacity().toString();
-        this.price = room.getPrice().longValue();
+        this.capacity = room.getCapacity().name();
+        this.classID = room.getClassID().name();
+        this.price = room.getPrice().toString();
     }
 
-    public Room getRoom(){
+    public Room getRoom() {
         Room room = new Room();
-        room.setRoomID(this.getRoomId());
+        room.setRoomID(this.getRoomID());
         room.setRoomNumber(this.getRoomNumber());
-        room.setCapacity(Capacity.valueOf(this.getCapacity()));
-        room.setClassID(ClassID.valueOf(this.getClassId()));
-        room.setPrice(BigDecimal.valueOf(this.getPrice()));
+        room.setCapacity(Capacity.valueOf(this.capacity));
+        room.setClassID(ClassID.valueOf(this.classID));
+        room.setPrice(new BigDecimal(this.price));
         return room;
     }
 
-    @Override
-    public int compareTo(@NotNull RoomDto roomDto) {
-        if (this.roomId == roomDto.getRoomId()) return 0;
-        else if (this.roomId < roomDto.getRoomId()) return -1;
-        return 1;
-    }
 }

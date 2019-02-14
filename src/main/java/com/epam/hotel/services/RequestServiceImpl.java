@@ -94,6 +94,12 @@ public class RequestServiceImpl implements RequestService {
         return userRequests.stream().map(RequestDto::new).collect(Collectors.toList());
     }
 
+    @Override
+    public List<RequestDto> getAllRequestsDto() {
+        List<Request> allRequests = getAll();
+        return allRequests.stream().map(RequestDto::new).collect(Collectors.toList());
+    }
+
 
 }
 

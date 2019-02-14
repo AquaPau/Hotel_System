@@ -2,10 +2,10 @@ package com.epam.hotel.services;
 
 import com.epam.hotel.daos.RoomDao;
 import com.epam.hotel.dtos.RoomDto;
+import com.epam.hotel.model.Request;
 import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.LocalDateTime;
@@ -61,6 +61,22 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Room getByRoomNumber(int roomNumber) {
         return roomDao.getByRoomNumber(roomNumber);
+    }
+
+    @Override
+    public List<RoomDto> getAllRoomsDto() {
+        List<Room> allDtoRooms = getAll();
+        return allDtoRooms.stream().map(RoomDto::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RoomDto> getAllFittingRoomsDto(Request request) {
+        List<RoomDto> allFittingRooms = getAllRoomsDto();
+        String cap = request.getCapacity().name();
+        String classID = request.getClassID().name();
+        return allFittingRooms.stream().
+                filter(room -> room.getCapacity().equals(cap)).
+                filter(room -> room.getClassID().equals(classID)).collect(Collectors.toList());
     }
 
     @Override

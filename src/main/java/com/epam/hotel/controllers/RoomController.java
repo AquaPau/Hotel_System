@@ -1,22 +1,27 @@
 package com.epam.hotel.controllers;
+import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.dtos.RoomDto;
+import com.epam.hotel.model.Request;
 import com.epam.hotel.model.Room;
+import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.RoomService;
+import com.epam.hotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import java.util.List;;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
-
-
 @Controller
-@RequiredArgsConstructor(onConstructor_ = {@Autowired})
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RoomController {
+
+    private final UserService userService;
+    private final RequestService requestService;
     private final RoomService roomService;
 
     @GetMapping("/rooms/new")
@@ -27,7 +32,6 @@ public class RoomController {
         model.addAttribute("headerName", "Create new room");
         model.addAttribute("buttonName", "Create");
         return "rooms";
-
     }
 
     @PostMapping("rooms/save")
@@ -73,8 +77,13 @@ public class RoomController {
         return "roomsEditor";
     }
 
-
-
-
+    @GetMapping("getallrooms/{id}")
+    public String getAllFittingRooms(@PathVariable String id, Model model) {
+        Request request = requestService.getById(new Long(id));
+        RequestDto requestDto = requestService.getRequestDto(request);
+        List<RoomDto> allFittingRoomsList = roomService.getAllFittingRoomsDto(request);
+        model.addAttribute("allfittingroomsList", allFittingRoomsList);
+        return "allfittingrooms";
+    }
 
 }
