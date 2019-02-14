@@ -15,7 +15,7 @@
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div>
-                <h3 id="login-header" class="text-center">Sign In</h3>
+                <h3 id="login-header" class="text-center" th:text="#{message.login-page.header}">Sign In</h3>
             </div>
             <div class="card-body">
                 <form th:action="@{/login}" method="post">
@@ -24,30 +24,36 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
-                        <input id ="un-login-input" name="username" type="text" class="form-control" placeholder="username">
+                        <input id="un-login-input" name="username" type="text" class="form-control"
+                               th:placeholder="#{message.login-page.placeholder.login}">
                     </div>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
-                        <input id ="pw-login-input" name="password" type="password" class="form-control" placeholder="password">
+                        <input id="pw-login-input" name="password" type="password" class="form-control"
+                               th:placeholder="#{message.login-page.placeholder.password}">
                     </div>
-                    <p hidden id="lgn-error" class="error text-center">Invalid login or password.</p>
-                    <!--<div class="row align-items-center remember">
-                        <input type="checkbox">Remember Me
-                    </div>-->
+                    <p hidden th:text="#{message.login-page.error}" id="lgn-error" class="error text-center">error</p>
                     <div class="form-group">
-                        <input type="submit" value="Login" class="btn login_btn">
+                        <input type="submit" th:value="#{message.login-page.button}" class="btn login_btn">
                     </div>
                 </form>
             </div>
             <div class="card-footer">
                 <div class="d-flex justify-content-center links">
-                    Don't have an account?<a id="signup" href="/register">Sign Up</a>
+                    <span th:text="#{message.login-page.signup.text}"></span><a
+                        th:text="#{message.login-page.signup.link}" id="signup" href="/register">Sign Up</a>
+                </div>
+                <div class="text-center">
+                    <span th:text="#{message.change-language}+': '"></span>
+                    <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
+                    <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
