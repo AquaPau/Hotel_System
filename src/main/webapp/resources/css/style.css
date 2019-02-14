@@ -7,6 +7,10 @@ html, body {
     font-family: 'Numans', sans-serif;
 }
 
+.error{
+    color: #ff5a5a !important;
+}
+
 h3 {
     padding: 15px !important;
 }
