@@ -1,4 +1,5 @@
 html, body {
+    color: #d0d0d0 !important;
     background-image: url('../images/bg.jpg');
     background-size: cover;
     background-repeat: no-repeat;
@@ -6,8 +7,74 @@ html, body {
     font-family: 'Numans', sans-serif;
 }
 
-.white{
-    color: white  !important;
+h3 {
+    padding: 15px !important;
+}
+
+#login-header {
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+#index-header {
+    padding-bottom: 0 !important;
+}
+
+#checkout {
+    padding-bottom: 20px;
+}
+
+#signup {
+    color: #FFC312;
+}
+
+.card-body {
+    padding-bottom: 0;
+}
+
+.input-group-text {
+    background-color: #65656563 !important;
+}
+
+.card-header {
+    padding-top: 20px;
+    padding-bottom: 0;
+}
+
+.login_btn {
+    width: 150px !important;
+    margin-left: 355px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.a {
+    background-color: #FFC312 !important;
+}
+
+.input-group {
+    margin-right: auto;
+    margin-left: auto;
+    width: 350px;
+}
+
+.table-bordered th {
+    border: 1px solid #dee2e647
+}
+
+.table-bordered td {
+    border: 1px solid #dee2e647
+}
+
+.table thead th {
+    border: 1px solid #dee2e647
+}
+
+.btn {
+    background-color: #a0a0a063;
+    border-color: #23232305;
 }
 
 .container {
@@ -19,8 +86,9 @@ html, body {
     height: auto;
     margin-top: auto;
     margin-bottom: auto;
-    width: auto;
-    background-color: rgba(0, 0, 0, 0.5) !important;
+    width: 900px;
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    padding-bottom: 20px;
 }
 
 .social_icon span {
@@ -47,7 +115,7 @@ html, body {
 .input-group-prepend span {
     width: 50px;
     background-color: #FFC312;
-    color: black;
+    color: #d0d0d0;
     border: 0 !important;
 }
 

@@ -49,7 +49,7 @@
     </bean>
 
     <bean id="requestService" class="com.epam.hotel.services.RequestServiceImpl">
-        <constructor-arg ref="requestDaoJdbc"/>
+        <constructor-arg ref="requestDaoTemplate"/>
     </bean>
 
 </beans>

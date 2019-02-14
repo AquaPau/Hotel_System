@@ -8,7 +8,7 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
           integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="resources/css/style.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style.css}">
 </head>
 <body>
 
@@ -16,23 +16,24 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-            <article class="card card-body mx-auto" style="max-width: 400px;">
+            <article class="card-body mx-auto" style="max-width: 400px;">
                 <div class="card-header">
                     <h3 class="text-center">Create Account</h3>
                 </div>
-                <form th:object="${user}" th:action="@{/register}" method="post">
+                <form name="sign-in-form" th:object="${user}" th:action="@{/register}"
+                      onsubmit="return validateSignInForm()" method="post">
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input name="" class="form-control" placeholder="Login" type="text" th:field="*{login}">
+                        <input id= "login-input" name="login" class="form-control" placeholder="Login" type="text" th:field="*{login}">
                     </div>
 
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input name="" class="form-control" placeholder="First name" type="text"
+                        <input id= "fn-input" name="firstname" class="form-control" placeholder="First name" type="text"
                                th:field="*{firstName}">
                     </div>
 
@@ -40,23 +41,24 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input name="" class="form-control" placeholder="Last name" type="text" th:field="*{lastName}">
+                        <input id= "ln-input" name="lastname" class="form-control" placeholder="Last name" type="text"
+                               th:field="*{lastName}">
                     </div>
 
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                         </div>
-                        <input th:field="*{password}" class="form-control" placeholder="Create password"
+                        <input id= "pw-input" name="password" th:field="*{password}" class="form-control" placeholder="Create password"
                                type="password">
                     </div>
 
-                    <!-- <div class="form-group input-group">
-                         <div class="input-group-prepend">
-                             <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-                         </div>
-                         <input class="form-control" placeholder="Repeat password" type="password">
-                     </div>-->
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                        </div>
+                        <input id ="confirm-input" name="confirm" class="form-control" placeholder="Repeat password" type="password">
+                    </div>
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block"> Create account</button>
@@ -68,8 +70,8 @@
         </div>
     </div>
 </div>
-
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script th:src="@{/resources/js/hotel.js}"></script>
 </body>
 </html>

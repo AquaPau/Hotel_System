@@ -12,18 +12,18 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
           integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="resources/css/style.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style.css}">
 </head>
 <body>
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div class="card-header">
-                <h3 class="text-center">Welcome to hotel system, <span th:text="${user.firstName}"></span>!</h3>
+                <h3 id="index-header" class="text-center">Welcome to Hotel System, <span th:text="${user.firstName}"></span>!</h3>
             </div>
             <div class="card-body">
-
-                <table class="table table-bordered white">
+                <p class="white" th:if="${requestList.isEmpty()==true}">You have not requests.</p>
+                <table th:if="${requestList.isEmpty()==false}" class="table table-bordered white">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -46,11 +46,11 @@
                             <td th:text="${request.checkOut}"></td>
                             <td th:text="${request.paymentStatus}"></td>
                             <td>
-                                <a th:href="@{'/request/edit/'+${request.requestID}}" class="btn btn-info float-left">Edit</a>
+                                <a th:href="@{'/request/edit/'+${request.requestID}}" class="btn btn-dark float-left">Edit</a>
                             </td>
                             <td>
                                 <a th:href="@{'/request/delete/'+${request.requestID}}"
-                                   class="btn btn-danger float-left">Delete</a>
+                                   class="btn btn-dark float-left">Delete</a>
                             </td>
                         </tr>
                     </th:block>
@@ -58,14 +58,14 @@
                 </table>
                 <div>
                 </div>
-                <a th:href="@{/request/new}" class="btn btn-success float-right">New request</a>
+                <a th:href="@{/request/new}" class="btn btn-dark float-right">New request</a>
             </div>
             <div class="card-footer">
                 <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}" class="btn btn-info float-left">Admin
                     menu</a>
                 <form name="logoutForm" th:action="@{/logout}" method="post">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <input type="submit" class="btn btn-warning float-right" value="Sign Out"/>
+                    <input type="submit" class="btn btn-dark float-right" value="Sign Out"/>
                 </form>
             </div>
         </div>
@@ -73,6 +73,7 @@
 </div>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script th:src="@{resources/js/hotel.js}"></script>
 
 
 </body>
