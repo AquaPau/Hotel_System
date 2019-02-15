@@ -2,11 +2,12 @@ package com.epam.hotel.model;
 
 import com.epam.hotel.model.enums.*;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 
 @Data
-public class Room {
+public class Room implements Comparable <Room> {
 
     private long roomID;
     private int roomNumber;
@@ -29,4 +30,10 @@ public class Room {
         this.price = price;
     }
 
+    @Override
+    public int compareTo(@NotNull Room room) {
+        if (this.roomID == room.getRoomID()) return 0;
+        else if (this.roomID < room.getRoomID()) return -1;
+        return 1;
+    }
 }
