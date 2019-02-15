@@ -13,6 +13,8 @@ html, body {
 
 h3 {
     padding: 15px !important;
+    color: white;
+    font-weight: bold;
 }
 
 #login-header {
