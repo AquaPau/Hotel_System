@@ -11,6 +11,10 @@ html, body {
     color: #ff5a5a !important;
 }
 
+.center-align{
+    text-align:center;
+}
+
 h3 {
     padding: 15px !important;
     color: white;
@@ -49,8 +53,7 @@ h3 {
 
 .login_btn {
     width: 150px !important;
-    margin-left: 355px;
-}
+    }
 
 .form-group {
     margin-bottom: 15px;
