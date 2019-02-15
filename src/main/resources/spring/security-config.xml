@@ -8,6 +8,11 @@
         <intercept-url pattern="/" access="hasAnyRole('USER','ADMIN')"/>
         <intercept-url pattern="/request/*" access="hasAnyRole('USER','ADMIN')"/>
         <intercept-url pattern="/admin" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/roomseditor" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/rooms/new" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/rooms/edit/{id}" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/rooms/delete/{id}" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/rooms" access="hasAnyRole('USER','ADMIN')"/>
         <form-login login-page='/login' username-parameter="username" password-parameter="password"/>
         <logout logout-url="/logout" logout-success-url="/login" invalidate-session="true"/>
     </http>

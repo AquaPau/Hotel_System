@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS hotel.Rooms
   roomNumber SMALLINT NOT NULL UNIQUE,
   classID    VARCHAR(10) DEFAULT 'STANDARD' CHECK (classID IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')),
   capacity   VARCHAR(10) DEFAULT 'SINGLE' CHECK (capacity IN ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD')),
-  price      MONEY    NOT NULL
+  price     DECIMAL    NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS hotel.Requests

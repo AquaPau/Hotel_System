@@ -1,13 +1,17 @@
 package com.epam.hotel.services;
 
 import com.epam.hotel.daos.RoomDao;
+import com.epam.hotel.dtos.RoomDto;
 import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RoomServiceImpl implements RoomService {
     private final RoomDao roomDao;
@@ -17,14 +21,9 @@ public class RoomServiceImpl implements RoomService {
     }
 
     public void roomValidation(Room room) {
-
-        if (room.getPrice() == null || room.getRoomNumber() == 0) {
-            throw new IllegalArgumentException("Room is not valid: fill the required fields");
-        } else if (room.getCapacity() == null) {
-            room.setCapacity(Capacity.SINGLE);
-        } else if (room.getClassID() == null) {
-            room.setClassID(ClassID.STANDARD);
-        }
+        if (room.getCapacity() == null) room.setCapacity(Capacity.SINGLE);
+        if (room.getClassID() == null) room.setClassID(ClassID.STANDARD);
+        if (room.getPrice() == null) room.setPrice(new BigDecimal(0));
     }
 
     public BigDecimal calculateRoomPrice(BigDecimal baseprice, double classMultiplier, double capMultiplier) {
@@ -63,4 +62,23 @@ public class RoomServiceImpl implements RoomService {
     public Room getByRoomNumber(int roomNumber) {
         return roomDao.getByRoomNumber(roomNumber);
     }
+
+    @Override
+    public RoomDto getRoomDto(Room room) {
+        roomValidation(room);
+        return new RoomDto(room);
+    }
+
+    @Override
+    public Room getRoomFromDto(RoomDto roomDto) {
+        return roomDto.getRoom();
+    }
+
+    @Override
+    public List<RoomDto> getRoomDtoList(){
+        List<Room> roomList = getAll();
+        return roomList.stream().map(RoomDto::new).sorted().collect(Collectors.toList());
+    }
+
+
 }
