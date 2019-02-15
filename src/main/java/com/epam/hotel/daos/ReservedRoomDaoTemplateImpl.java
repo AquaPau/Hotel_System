@@ -31,8 +31,8 @@ public class ReservedRoomDaoTemplateImpl implements ReservedRoomDao {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_RESERVATION, new String[]{"reservedroomid"});
-            preparedStatement.setInt(1, reservedRoom.getRoomNumber());
-            preparedStatement.setLong(2, reservedRoom.getRequestId());
+            preparedStatement.setInt(1, reservedRoom.getRoomnumber());
+            preparedStatement.setLong(2, reservedRoom.getRequestID());
             return preparedStatement;
         }, keyHolder);
         reservedRoom.setReservedRoomID(Objects.requireNonNull(keyHolder.getKey()).longValue());
@@ -47,7 +47,7 @@ public class ReservedRoomDaoTemplateImpl implements ReservedRoomDao {
 
     @Override
     public boolean update(ReservedRoom reservedRoom) {
-        return jdbcTemplate.update(UPDATE_RESERVATION, reservedRoom.getRoomNumber(), reservedRoom.getRequestId(), reservedRoom.getReservedRoomID()) > 0;
+        return jdbcTemplate.update(UPDATE_RESERVATION, reservedRoom.getRoomnumber(), reservedRoom.getRequestID(), reservedRoom.getReservedRoomID()) > 0;
     }
 
     @Override
@@ -66,8 +66,8 @@ public class ReservedRoomDaoTemplateImpl implements ReservedRoomDao {
         public ReservedRoom mapRow(ResultSet rs, int rowNum) throws SQLException {
             ReservedRoom reservedRoom = new ReservedRoom();
             reservedRoom.setReservedRoomID(rs.getLong("reservedroomid"));
-            reservedRoom.setRoomNumber(rs.getInt("roomnumber"));
-            reservedRoom.setRequestId(rs.getLong("requestid"));
+            reservedRoom.setRoomnumber(rs.getInt("roomnumber"));
+            reservedRoom.setRequestID(rs.getLong("requestid"));
             return reservedRoom;
         }
     }
