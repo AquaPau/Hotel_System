@@ -30,7 +30,7 @@
                         <th scope="col">Class</th>
                         <th scope="col">Capacity</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Pick</th>
+                        <th scope="col">Pick Room</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -41,8 +41,16 @@
                             <td th:text="${room.capacity}"></td>
                             <td th:text="${room.price}"></td>
                             <td>
-                                <a th:href="@{'/allfittingrooms/pick/'+${room.roomID}}"
-                                   class="btn btn-dark float-left">Pick</a>
+                                <form th:action="@{/allfittingrooms/pick/}" th:object="${reservedRoom}" method="post">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary btn-block"> Submit</button>
+                                    </div>
+
+                                    <input hidden th:field="*{requestID}"/>
+                                    <input hidden id="roomnumber" name="roomnumber" th:value="${room.roomNumber}">
+
+                                </form>
+
                             </td>
                         </tr>
                     </th:block>

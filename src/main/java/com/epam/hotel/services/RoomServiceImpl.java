@@ -92,16 +92,17 @@ public class RoomServiceImpl implements RoomService {
     }
 
     private boolean compareRequestsByTime(Request req1, Request req2) {
-        if (req1.getCheckOut().getTime() > req2.getCheckIn().getTime() && req1.getCheckOut().getTime() < req1.getCheckOut().getTime()) {
+        if (req1.getCheckOut().getTime() >= req2.getCheckIn().getTime() && req1.getCheckOut().getTime() <= req1.getCheckOut().getTime()) {
             return true;
-        } else if (req1.getCheckIn().getTime() > req2.getCheckIn().getTime() && req1.getCheckIn().getTime() < req1.getCheckOut().getTime()) {
+        } else if (req1.getCheckIn().getTime() >= req2.getCheckIn().getTime() && req1.getCheckIn().getTime() <= req1.getCheckOut().getTime()) {
             return true;
         }
         return false;
     }
 
-    public void addToReservedRooms(Request request, Room room) {
-        roomDao.addToReservedRooms(request, room);
+    @Override
+    public void addToReservedRooms(Long requestID, int roomNumber) {
+        roomDao.addToReservedRooms(requestID, roomNumber);
     }
 
 

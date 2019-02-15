@@ -25,7 +25,9 @@ public class RoomDaoTemplateImpl implements RoomDao {
     private final String SQL_DELETE_ROOM = "DELETE FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_GET_BY_ID = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_GET_BY_ROOM_NUMBER = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.rooms WHERE roomnumber = ?";
-    private final String SQL_ADD_TO_RESERVED_ROOMS = "INSERT INTO hotel.reservedrooms (roomnumber, requestid) VALUES (?, ?)";
+    private final String SQL_ADD_TO_RESERVED_ROOMS = "INSERT INTO hotel.reservedrooms (roomnumber, requestid) VALUES ((SELECT hotel.rooms.roomnumber" +
+            "  FROM hotel.rooms WHERE hotel.rooms.roomnumber = ?), (SELECT hotel.requests.requestid" +
+            "  FROM hotel.requests WHERE hotel.requests.requestid = ?))";
     private final String SQL_GET_ALL_RESERVED_ROOMS = "SELECT roomnumber FROM hotel.reservedrooms";
     private final String SQL_GET_REQUESTS_BY_ROOM_NUMBER = "SELECT hotel.requests.requestid," +
             "  hotel.requests.userid, hotel.requests.capacity, hotel.requests.classid, hotel.requests.checkin," +
@@ -110,8 +112,8 @@ public class RoomDaoTemplateImpl implements RoomDao {
     }
 
     @Override
-    public void addToReservedRooms(Request request, Room room) {
-        jdbcTemplate.update(SQL_ADD_TO_RESERVED_ROOMS, room.getRoomNumber(), request.getRequestID());
+    public boolean addToReservedRooms(Long requestID, int roomNumber) {
+        return jdbcTemplate.update(SQL_ADD_TO_RESERVED_ROOMS, roomNumber, requestID) > 0;
     }
 
     public Set<Integer> getAllReservedRooms() {
@@ -143,8 +145,8 @@ public class RoomDaoTemplateImpl implements RoomDao {
             Request request = new Request();
             request.setRequestID(rs.getLong("requestid"));
             request.setUserID(rs.getLong("userid"));
-            request.setClassID(ClassID.valueOf(rs.getString("classid")));
             request.setCapacity(Capacity.valueOf(rs.getString("capacity")));
+            request.setClassID(ClassID.valueOf(rs.getString("classid")));
             request.setCheckIn(rs.getTimestamp("checkin"));
             request.setCheckOut(rs.getTimestamp("checkout"));
             request.setPaymentStatus(PaymentStatus.valueOf(rs.getString("paymentstatus")));

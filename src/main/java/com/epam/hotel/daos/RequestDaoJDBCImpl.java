@@ -91,6 +91,11 @@ public class RequestDaoJDBCImpl implements RequestDao {
     }
 
     @Override
+    public boolean updatePaymentStatus(long id, PaymentStatus status) {
+        return true;
+    }
+
+    @Override
     public Request create(Request request) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             PreparedStatement preparedStatement = initRequestBody(connection, request, CREATE_NEW_REQUEST);

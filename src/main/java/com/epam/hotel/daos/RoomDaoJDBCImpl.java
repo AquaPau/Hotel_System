@@ -131,7 +131,8 @@ public class RoomDaoJDBCImpl implements RoomDao {
     }
 
     @Override
-    public void addToReservedRooms(Request request, Room room) {
+    public boolean addToReservedRooms(Long requestID, int roomNumber) {
+        return true;
     }
 
     @Override

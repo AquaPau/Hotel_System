@@ -10,7 +10,7 @@ public interface RoomDao extends Dao<Room> {
 
     public Room getByRoomNumber(int roomNumber);
 
-    public void addToReservedRooms(Request request, Room room);
+    public boolean addToReservedRooms(Long requestID, int roomNumber);
 
     public Set<Integer> getAllReservedRooms();
 

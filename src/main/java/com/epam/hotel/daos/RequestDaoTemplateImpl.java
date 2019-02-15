@@ -30,6 +30,7 @@ public class RequestDaoTemplateImpl implements RequestDao {
     private static final String GET_REQUESTS_BY_USERID = "SELECT * FROM hotel.requests WHERE userid = %d";
     private static final String GET_REQUESTS_BY_PAYMENTSTATUS = "SELECT * FROM hotel.requests WHERE " +
             "paymentStatus = %s";
+    private static final String UPDATE_BILLING_STATUS = "UPDATE hotel.requests SET paymentstatus = ? WHERE requestid = ?";
 
 
     public RequestDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
@@ -46,6 +47,11 @@ public class RequestDaoTemplateImpl implements RequestDao {
     public List<Request> getPaymentStatus(PaymentStatus paymentStatus) {
         String query = String.format(GET_REQUESTS_BY_PAYMENTSTATUS, paymentStatus.toString());
         return jdbcTemplate.query(query, new RequestRowMapper());
+    }
+
+    @Override
+    public boolean updatePaymentStatus(long id, PaymentStatus status) {
+        return jdbcTemplate.update(UPDATE_BILLING_STATUS, status.name(), id) > 0;
     }
 
     @Override

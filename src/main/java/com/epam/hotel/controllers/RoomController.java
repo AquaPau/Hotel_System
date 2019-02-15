@@ -2,7 +2,9 @@ package com.epam.hotel.controllers;
 import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.dtos.RoomDto;
 import com.epam.hotel.model.Request;
+import com.epam.hotel.model.ReservedRoom;
 import com.epam.hotel.model.Room;
+import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.RoomService;
 import com.epam.hotel.services.UserService;
@@ -11,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import java.util.List;;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -82,8 +84,19 @@ public class RoomController {
         Request request = requestService.getById(new Long(id));
         RequestDto requestDto = requestService.getRequestDto(request);
         List<RoomDto> allFittingRoomsList = roomService.getAllFittingRoomsDto(request);
+        ReservedRoom reservedRoom = new ReservedRoom();
+        reservedRoom.setRequestID(new Long(id));
         model.addAttribute("allfittingroomsList", allFittingRoomsList);
+        model.addAttribute("requestID", id);
+        model.addAttribute("reservedRoom",reservedRoom);
         return "allfittingrooms";
+    }
+
+    @PostMapping("allfittingrooms/pick/")
+    public String submitRoomRequest(@ModelAttribute ReservedRoom reservedRoom, Model model) {
+        roomService.addToReservedRooms(reservedRoom.getRequestID(), reservedRoom.getRoomnumber());
+        requestService.updatePaymentStatus(reservedRoom.getRequestID(), PaymentStatus.BILLSENT);
+        return "submitform";
     }
 
 }
