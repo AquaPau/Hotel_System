@@ -1,6 +1,7 @@
 package com.epam.hotel.services;
 
 import com.epam.hotel.daos.RoomDao;
+import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.dtos.RoomDto;
 import com.epam.hotel.model.Request;
 import com.epam.hotel.model.enums.Capacity;
@@ -8,19 +9,23 @@ import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class RoomServiceImpl implements RoomService {
+
     private final RoomDao roomDao;
 
     public RoomServiceImpl(RoomDao roomDao) {
         this.roomDao = roomDao;
     }
 
-    public void roomValidation(Room room) {
+    private void roomValidation(Room room) {
         if (room.getCapacity() == null) room.setCapacity(Capacity.SINGLE);
         if (room.getClassID() == null) room.setClassID(ClassID.STANDARD);
         if (room.getPrice() == null) room.setPrice(new BigDecimal(0));
@@ -49,9 +54,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getAll() {
-        return roomDao.getAll();
-    }
+    public List<Room> getAll() { return roomDao.getAll(); }
 
     @Override
     public Room getById(long id) {
@@ -74,10 +77,33 @@ public class RoomServiceImpl implements RoomService {
         List<RoomDto> allFittingRooms = getAllRoomsDto();
         String cap = request.getCapacity().name();
         String classID = request.getClassID().name();
-        return allFittingRooms.stream().
+        List<RoomDto> fittingRooms = allFittingRooms.stream().
                 filter(room -> room.getCapacity().equals(cap)).
                 filter(room -> room.getClassID().equals(classID)).collect(Collectors.toList());
+        List<RoomDto> bookedRooms = new ArrayList<>();
+        for (RoomDto room : fittingRooms) {
+            Integer roomNumber = room.getRoomNumber();
+            List<Request> getAllRequestsByRoomNumber = roomDao.getRequestsByRoomNumber(roomNumber);
+            for (Request e : getAllRequestsByRoomNumber) {
+                if (compareRequestsByTime(request, e)) bookedRooms.add(room);
+            }
+        }
+        return fittingRooms.stream().filter(room -> !bookedRooms.contains(room)).collect(Collectors.toList());
     }
+
+    private boolean compareRequestsByTime(Request req1, Request req2) {
+        if (req1.getCheckOut().getTime() > req2.getCheckIn().getTime() && req1.getCheckOut().getTime() < req1.getCheckOut().getTime()) {
+            return true;
+        } else if (req1.getCheckIn().getTime() > req2.getCheckIn().getTime() && req1.getCheckIn().getTime() < req1.getCheckOut().getTime()) {
+            return true;
+        }
+        return false;
+    }
+
+    public void addToReservedRooms(Request request, Room room) {
+        roomDao.addToReservedRooms(request, room);
+    }
+
 
     @Override
     public RoomDto getRoomDto(Room room) {

@@ -1,15 +1,14 @@
 package com.epam.hotel.daos;
 
+import com.epam.hotel.model.Request;
 import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.Aspect;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class RoomDaoJDBCImpl implements RoomDao {
@@ -27,7 +26,7 @@ public class RoomDaoJDBCImpl implements RoomDao {
 
     private PreparedStatement initStatement(Room room, Connection connection, String query) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, room.getRoomNumber()+"");
+        statement.setString(1, room.getRoomNumber() + "");
         statement.setString(2, room.getClassID().name());
         statement.setString(3, room.getCapacity().name());
         statement.setString(4, room.getPrice().toString());
@@ -128,6 +127,20 @@ public class RoomDaoJDBCImpl implements RoomDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    @Override
+    public void addToReservedRooms(Request request, Room room) {
+    }
+
+    @Override
+    public Set<Integer> getAllReservedRooms() {
+        return null;
+    }
+
+    @Override
+    public List<Request> getRequestsByRoomNumber(int roomNumber) {
         return null;
     }
 }

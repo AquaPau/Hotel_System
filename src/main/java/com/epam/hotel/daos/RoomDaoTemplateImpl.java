@@ -1,14 +1,15 @@
 package com.epam.hotel.daos;
 
+import com.epam.hotel.model.Request;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.Aspect;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.epam.hotel.model.enums.*;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,6 +25,12 @@ public class RoomDaoTemplateImpl implements RoomDao {
     private final String SQL_DELETE_ROOM = "DELETE FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_GET_BY_ID = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_GET_BY_ROOM_NUMBER = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.rooms WHERE roomnumber = ?";
+    private final String SQL_ADD_TO_RESERVED_ROOMS = "INSERT INTO hotel.reservedrooms (roomnumber, requestid) VALUES (?, ?)";
+    private final String SQL_GET_ALL_RESERVED_ROOMS = "SELECT roomnumber FROM hotel.reservedrooms";
+    private final String SQL_GET_REQUESTS_BY_ROOM_NUMBER = "SELECT hotel.requests.requestid," +
+            "  hotel.requests.userid, hotel.requests.capacity, hotel.requests.classid, hotel.requests.checkin," +
+            "  hotel.requests.checkout, hotel.requests.paymentstatus FROM hotel.reservedrooms left join hotel.requests" +
+            "  on reservedrooms.requestid = requests.requestid WHERE hotel.reservedrooms.roomnumber = ?";
 
     public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -102,6 +109,21 @@ public class RoomDaoTemplateImpl implements RoomDao {
         return room;
     }
 
+    @Override
+    public void addToReservedRooms(Request request, Room room) {
+        jdbcTemplate.update(SQL_ADD_TO_RESERVED_ROOMS, room.getRoomNumber(), request.getRequestID());
+    }
+
+    public Set<Integer> getAllReservedRooms() {
+        List<Integer> allReservedRoomsList = jdbcTemplate.query(SQL_GET_ALL_RESERVED_ROOMS, (rs, rowNum) -> rs.getInt(1));
+        return new HashSet<Integer>(allReservedRoomsList);
+    }
+
+    @Override
+    public List<Request> getRequestsByRoomNumber(int roomNumber) {
+        return jdbcTemplate.query(SQL_GET_REQUESTS_BY_ROOM_NUMBER, new Object[] { roomNumber }, new RequestRowMapper());
+    }
+
     class RoomRowMapper implements RowMapper<Room> {
         @Override
         public Room mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -112,6 +134,21 @@ public class RoomDaoTemplateImpl implements RoomDao {
             room.setCapacity(Capacity.valueOf(rs.getString("capacity")));
             room.setPrice(rs.getBigDecimal("price"));
             return room;
+        }
+    }
+
+    class RequestRowMapper implements RowMapper<Request> {
+        @Override
+        public Request mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Request request = new Request();
+            request.setRequestID(rs.getLong("requestid"));
+            request.setUserID(rs.getLong("userid"));
+            request.setClassID(ClassID.valueOf(rs.getString("classid")));
+            request.setCapacity(Capacity.valueOf(rs.getString("capacity")));
+            request.setCheckIn(rs.getTimestamp("checkin"));
+            request.setCheckOut(rs.getTimestamp("checkout"));
+            request.setPaymentStatus(PaymentStatus.valueOf(rs.getString("paymentstatus")));
+            return request;
         }
     }
 
