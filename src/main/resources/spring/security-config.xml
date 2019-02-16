@@ -6,6 +6,7 @@
 
     <http auto-config="true" disable-url-rewriting="true" use-expressions="true">
         <intercept-url pattern="/" access="hasAnyRole('USER','ADMIN')"/>
+        <intercept-url pattern="/index" access="hasAnyRole('USER','ADMIN')"/>
         <intercept-url pattern="/request/*" access="hasAnyRole('USER','ADMIN')"/>
         <intercept-url pattern="/admin" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/roomseditor" access="hasRole('ADMIN')"/>
