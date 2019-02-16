@@ -12,72 +12,88 @@
 </head>
 <body>
 
-
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <article class="card-body mx-auto" style="max-width: 400px;">
                 <div class="card-header">
-                    <h3 class="text-center">Create Account</h3>
+                    <h3 class="text-center" th:text="#{message.register-page.header}">Create Account</h3>
                 </div>
                 <form name="sign-in-form" th:object="${user}" th:action="@{/register}"
                       onsubmit="return validateSignInForm()" method="post">
-                    <div class="form-group input-group">
+
+                    <div class="login-input-group form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input id="login-input" name="login" class="form-control" placeholder="Login" type="text"
+                        <input id="login-input" name="login" class="form-control"
+                               th:placeholder="#{message.register-page.login}" type="text"
                                th:field="*{login}">
+                        <p hidden="" id="login-error" class="error" th:text="#{message.register-page.error.login}">login
+                            error</p>
                     </div>
-                    <p hidden="" id="login-error" class="error">Login must be at least 5-20 characters long and must contain only
-                        letters digits and underscores.</p>
 
-                    <div class="form-group input-group">
+                    <div class="login-input-group form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input id="fn-input" name="firstname" class="form-control" placeholder="First name" type="text"
+                        <input id="fn-input" name="firstname" class="form-control"
+                               th:placeholder="#{message.register-page.firstname}" type="text"
                                th:field="*{firstName}">
+                        <p hidden id="fn-error" class="error" th:text="#{message.register-page.error.firstname}">First
+                            name error</p>
                     </div>
-                    <p hidden id="fn-error" class="error">First name must be at least 3-20 characters long and must contain
-                        only letters.</p>
 
-                    <div class="form-group input-group">
+                    <div class="login-input-group form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                         </div>
-                        <input id="ln-input" name="lastname" class="form-control" placeholder="Last name" type="text"
+                        <input id="ln-input" name="lastname" class="form-control"
+                               th:placeholder="#{message.register-page.lastname}" type="text"
                                th:field="*{lastName}">
+                        <p hidden id="ln-error" class="error" th:text="#{message.register-page.error.lastname}">Last
+                            name error</p>
                     </div>
-                    <p hidden id="ln-error" class="error">Last name must be at least 3-20 characters long and must contain only
-                        letters.</p>
 
-                    <div class="form-group input-group">
+
+                    <div class="login-input-group form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                         </div>
                         <input id="pw-input" name="password" th:field="*{password}" class="form-control"
-                               placeholder="Create password"
+                               th:placeholder="#{message.register-page.create-password}"
                                type="password">
                     </div>
-                    <p hidden id="pw-error" class="error">Password must be at least 6 characters long.</p>
+                    <p hidden id="pw-error" class="error" th:text="#{message.register-page.error.password}">Password
+                        error</p>
 
-                    <div class="form-group input-group">
+                    <div class="login-input-group form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                         </div>
-                        <input id="confirm-input" name="confirm" class="form-control" placeholder="Repeat password"
+                        <input id="confirm-input" name="confirm" class="form-control"
+                               th:placeholder="#{message.register-page.repeat-password}"
                                type="password">
                     </div>
-                    <p hidden id="confirm-error" class="error">The password and confirm password fields do not match.</p>
+                    <p hidden id="confirm-error" class="error" th:text="#{message.register-page.error.confirm}">
+                        Confirm error</p>
 
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block"> Create account</button>
+                    <div class="login-input-group form-group">
+                        <button type="submit" class="btn btn-primary btn-block"
+                                th:text="#{message.register-page.create-button}"> Create account
+                        </button>
                     </div>
-
-                    <p class="d-flex justify-content-center links">Have an account? <a href="/login">Log In</a></p>
+                    <div class="d-flex justify-content-center ">
+                        <p th:text="#{message.register-page.have-account}">Have an account?</p>
+                        <a href="/login" th:text="#{message.register-page.login-link}">Log In</a>
+                    </div>
                 </form>
             </article>
+            <div class="text-center">
+                <span th:text="#{message.change-language}+': '"></span>
+                <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
+                <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+            </div>
         </div>
     </div>
 </div>

@@ -20,22 +20,23 @@
             <div class="card-body">
                 <form th:action="@{/login}" method="post">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <div class="input-group form-group center-block">
+                    <div class="login-input-group input-group form-group center-block">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
                         <input id="un-login-input" name="username" type="text" class="form-control"
                                th:placeholder="#{message.login-page.placeholder.login}">
                     </div>
-                    <div class="input-group form-group">
+                    <div class="login-input-group input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
                         <input id="pw-login-input" name="password" type="password" class="form-control"
                                th:placeholder="#{message.login-page.placeholder.password}">
+                        <p hidden th:text="#{message.login-page.error}" id="lgn-error" class="error text-center">error</p>
                     </div>
-                    <p hidden th:text="#{message.login-page.error}" id="lgn-error" class="error text-center">error</p>
-                    <div class="form-group">
+
+                    <div class="center-align form-group">
                         <input type="submit" th:value="#{message.login-page.button}" class="btn login_btn">
                     </div>
                 </form>
