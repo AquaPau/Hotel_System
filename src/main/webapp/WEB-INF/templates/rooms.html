@@ -34,10 +34,10 @@
                             <span class="input-group-text"> <i class="fa fa-bed"></i> </span>
                         </div>
 
-                        <select th:field="*{classId}" class="form-control" id="selClass">
-                            <option th:each="classIdValue : ${T(com.epam.hotel.model.enums.ClassID).values()}"
-                                    th:value="${classIdValue.name()}"
-                                    th:text="${classIdValue.name()}">
+                        <select th:field="*{classID}" class="form-control" id="selClass">
+                            <option th:each="classIDValue : ${T(com.epam.hotel.model.enums.ClassID).values()}"
+                                    th:value="${classIDValue.name()}"
+                                    th:text="${classIDValue.name()}">
                             </option>
                         </select>
                     </div>
@@ -63,7 +63,7 @@
                         </div>
                         <input th:field="*{price}" name="price" type="number" class="form-control" placeholder="Price">
                     </div>
-                    <input hidden class="form-control" type="text" th:field="*{roomId}">
+                    <input hidden class="form-control" type="text" th:field="*{roomID}">
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block" th:text="${buttonName}"></button>

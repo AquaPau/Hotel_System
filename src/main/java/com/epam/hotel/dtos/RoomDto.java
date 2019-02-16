@@ -7,12 +7,13 @@ import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.utils.DateFormatter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
-public class RoomDto {
+public class RoomDto implements Comparable<RoomDto> {
     private long roomID;
     private int roomNumber;
     private String classID;
@@ -35,6 +36,13 @@ public class RoomDto {
         room.setClassID(ClassID.valueOf(this.classID));
         room.setPrice(new BigDecimal(this.price));
         return room;
+    }
+
+    @Override
+    public int compareTo(@NotNull RoomDto roomDto) {
+        if (this.roomID == roomDto.getRoomID()) return 0;
+        else if (this.roomID < roomDto.getRoomID()) return -1;
+        return 1;
     }
 
 }

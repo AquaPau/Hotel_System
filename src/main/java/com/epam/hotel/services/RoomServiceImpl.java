@@ -31,11 +31,6 @@ public class RoomServiceImpl implements RoomService {
         if (room.getPrice() == null) room.setPrice(new BigDecimal(0));
     }
 
-    public BigDecimal calculateRoomPrice(BigDecimal baseprice, double classMultiplier, double capMultiplier) {
-        MathContext mc = new MathContext(2);
-        return baseprice.multiply(BigDecimal.valueOf(capMultiplier * classMultiplier), mc);
-    }
-
     @Override
     public Room create(Room room) {
         roomValidation(room);
