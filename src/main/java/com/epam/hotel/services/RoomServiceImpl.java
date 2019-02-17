@@ -1,5 +1,6 @@
 package com.epam.hotel.services;
 
+import com.epam.hotel.daos.ReservedRoomDao;
 import com.epam.hotel.daos.RoomDao;
 import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.dtos.RoomDto;
@@ -21,9 +22,7 @@ public class RoomServiceImpl implements RoomService {
 
     private final RoomDao roomDao;
 
-    public RoomServiceImpl(RoomDao roomDao) {
-        this.roomDao = roomDao;
-    }
+    public RoomServiceImpl(RoomDao roomDao) { this.roomDao = roomDao; }
 
     private void roomValidation(Room room) {
         if (room.getCapacity() == null) room.setCapacity(Capacity.SINGLE);
@@ -93,11 +92,6 @@ public class RoomServiceImpl implements RoomService {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void addToReservedRooms(Long requestID, int roomNumber) {
-        roomDao.addToReservedRooms(requestID, roomNumber);
     }
 
 

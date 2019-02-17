@@ -7,6 +7,6 @@ public class ReservedRoom {
 
     private long reservedRoomID;
     private long requestID;
-    private int roomnumber;
+    private int roomNumber;
 
 }

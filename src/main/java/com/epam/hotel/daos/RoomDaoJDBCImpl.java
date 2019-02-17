@@ -8,7 +8,6 @@ import lombok.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Data
 public class RoomDaoJDBCImpl implements RoomDao {
@@ -131,17 +130,8 @@ public class RoomDaoJDBCImpl implements RoomDao {
     }
 
     @Override
-    public boolean addToReservedRooms(Long requestID, int roomNumber) {
-        return true;
-    }
-
-    @Override
-    public Set<Integer> getAllReservedRooms() {
-        return null;
-    }
-
-    @Override
     public List<Request> getRequestsByRoomNumber(int roomNumber) {
         return null;
     }
+
 }

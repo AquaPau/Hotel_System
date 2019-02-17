@@ -4,8 +4,6 @@ import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.Aspect;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -69,7 +67,6 @@ public class RequestDaoTemplateImpl implements RequestDao {
         }, keyHolder);
         request.setRequestID(Objects.requireNonNull(keyHolder.getKey()).longValue());
         return request;
-
     }
 
     @Override

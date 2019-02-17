@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface RoomService extends Service<Room> {
 
-    public Room getByRoomNumber(int roomNumber);
+    Room getByRoomNumber(int roomNumber);
 
     List<RoomDto> getAllRoomsDto();
 
     List<RoomDto> getAllFittingRoomsDto(Request request);
 
-    public void addToReservedRooms(Long requestID, int roomNumber);
+/*    public void addToReservedRooms(Long requestID, int roomNumber);*/
 
     RoomDto getRoomDto(Room room);
 

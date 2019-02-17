@@ -4,16 +4,11 @@ import com.epam.hotel.model.Request;
 import com.epam.hotel.model.Room;
 
 import java.util.List;
-import java.util.Set;
 
 public interface RoomDao extends Dao<Room> {
 
-    public Room getByRoomNumber(int roomNumber);
+    Room getByRoomNumber(int roomNumber);
 
-    public boolean addToReservedRooms(Long requestID, int roomNumber);
-
-    public Set<Integer> getAllReservedRooms();
-
-    public List<Request> getRequestsByRoomNumber(int roomNumber);
+    List<Request> getRequestsByRoomNumber(int roomNumber);
 
 }

@@ -22,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RoomController {
 
-    private final UserService userService;
     private final RequestService requestService;
     private final RoomService roomService;
 
@@ -82,21 +81,13 @@ public class RoomController {
     @GetMapping("getallrooms/{id}")
     public String getAllFittingRooms(@PathVariable String id, Model model) {
         Request request = requestService.getById(new Long(id));
-        RequestDto requestDto = requestService.getRequestDto(request);
         List<RoomDto> allFittingRoomsList = roomService.getAllFittingRoomsDto(request);
         ReservedRoom reservedRoom = new ReservedRoom();
         reservedRoom.setRequestID(new Long(id));
         model.addAttribute("allfittingroomsList", allFittingRoomsList);
         model.addAttribute("requestID", id);
-        model.addAttribute("reservedRoom",reservedRoom);
+        model.addAttribute("reservedRoom", reservedRoom);
         return "allfittingrooms";
-    }
-
-    @PostMapping("allfittingrooms/pick/")
-    public String submitRoomRequest(@ModelAttribute ReservedRoom reservedRoom, Model model) {
-        roomService.addToReservedRooms(reservedRoom.getRequestID(), reservedRoom.getRoomnumber());
-        requestService.updatePaymentStatus(reservedRoom.getRequestID(), PaymentStatus.BILLSENT);
-        return "submitform";
     }
 
 }
