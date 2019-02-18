@@ -68,7 +68,6 @@ public class RoomController {
     @GetMapping("roomseditor")
     public String roomsEditor(Model model) {
         List<RoomDto> roomDtoList = roomService.getRoomDtoList();
-        model.addAttribute("headerName", "List of hotel rooms <ADMIN PAGE>");
         model.addAttribute("roomsList", roomDtoList);
         return "roomsEditor";
     }
