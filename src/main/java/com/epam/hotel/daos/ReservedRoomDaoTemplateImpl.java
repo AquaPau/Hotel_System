@@ -15,9 +15,9 @@ import java.util.Objects;
 public class ReservedRoomDaoTemplateImpl implements ReservedRoomDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private final String CREATE_RESERVATION = "INSERT INTO hotel.reservedrooms (roomnumber, requestid) VALUES " +
+    private final String CREATE_RESERVATION = "INSERT INTO hotel.reservedrooms (roomid, requestid) VALUES " +
             "(?, ?)";
-    private final String UPDATE_RESERVATION = "UPDATE hotel.reservedrooms SET  roomnumber = ?, requestid = ?" +
+    private final String UPDATE_RESERVATION = "UPDATE hotel.reservedrooms SET  roomid = ?, requestid = ?" +
             "WHERE reservedroomid = ?";
     private final String DELETE_RESERVATION = "DELETE FROM hotel.reservedrooms WHERE reservedroomid = ?";
     private final String GET_RESERVATION_BY_ID = "SELECT * FROM hotel.reservedrooms WHERE reservedroomid = ?";
@@ -67,7 +67,7 @@ public class ReservedRoomDaoTemplateImpl implements ReservedRoomDao {
         public ReservedRoom mapRow(ResultSet rs, int rowNum) throws SQLException {
             ReservedRoom reservedRoom = new ReservedRoom();
             reservedRoom.setReservedRoomID(rs.getLong("reservedroomid"));
-            reservedRoom.setRoomID(rs.getInt("roomnumber"));
+            reservedRoom.setRoomID(rs.getInt("roomid"));
             reservedRoom.setRequestID(rs.getLong("requestid"));
             return reservedRoom;
         }

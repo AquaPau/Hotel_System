@@ -15,20 +15,20 @@ public class ReservedRoomDaoJdbcImpl implements ReservedRoomDao {
     private String username;
     private String password;
 
-    private final String CREATE_RESERVATION = "INSERT INTO hotel.reservedrooms (roomnumber, requestid) VALUES " +
+    private final String CREATE_RESERVATION = "INSERT INTO hotel.reservedrooms (roomid, requestid) VALUES " +
             "(?, ?)";
-    private final String UPDATE_RESERVATION = "UPDATE hotel.reservedrooms SET  roomnumber = ?, requestid = ?" +
+    private final String UPDATE_RESERVATION = "UPDATE hotel.reservedrooms SET  roomid = ?, requestid = ?" +
             "WHERE reservedroomid = ?";
     private final String DELETE_RESERVATION = "DELETE FROM hotel.reservedrooms WHERE reservedroomid = ?";
     private final String GET_RESERVATION_BY_ID = "SELECT * FROM hotel.reservedrooms WHERE reservedroomid = ?";
     private final String GET_ALL_RESERVATIONS = "SELECT * FROM hotel.reservedrooms";
-    private final String SQL_ADD_TO_RESERVED_ROOMS = "INSERT INTO hotel.reservedrooms (roomnumber, requestid) VALUES ((SELECT hotel.rooms.roomnumber" +
-            "  FROM hotel.rooms WHERE hotel.rooms.roomnumber = ?), (SELECT hotel.requests.requestid" +
+    private final String SQL_ADD_TO_RESERVED_ROOMS = "INSERT INTO hotel.reservedrooms (roomid, requestid) VALUES ((SELECT hotel.rooms.roomid" +
+            "  FROM hotel.rooms WHERE hotel.rooms.roomid = ?), (SELECT hotel.requests.requestid" +
             "  FROM hotel.requests WHERE hotel.requests.requestid = ?))";
     private final String SQL_GET_REQUESTS_BY_ROOM_NUMBER = "SELECT hotel.requests.requestid," +
             "  hotel.requests.userid, hotel.requests.capacity, hotel.requests.classid, hotel.requests.checkin," +
             "  hotel.requests.checkout, hotel.requests.paymentstatus FROM hotel.reservedrooms left join hotel.requests" +
-            "  on reservedrooms.requestid = requests.requestid WHERE hotel.reservedrooms.roomnumber = ?";
+            "  on reservedrooms.requestid = requests.requestid WHERE hotel.reservedrooms.roomid = ?";
 
     private PreparedStatement initReservedRoomBody(Connection connection, ReservedRoom reservedRoom, String query)
             throws SQLException {
@@ -40,7 +40,7 @@ public class ReservedRoomDaoJdbcImpl implements ReservedRoomDao {
 
     private void extractReservedRoomBody(ResultSet rs, ReservedRoom reservedRoom) throws SQLException {
         reservedRoom.setReservedRoomID(rs.getLong("reservedroomid"));
-        reservedRoom.setRoomID(rs.getInt("roomnumber"));
+        reservedRoom.setRoomID(rs.getInt("roomid"));
         reservedRoom.setRequestID(rs.getLong("requestid"));
     }
 

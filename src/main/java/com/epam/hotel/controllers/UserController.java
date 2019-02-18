@@ -28,8 +28,9 @@ public class UserController {
     @GetMapping({"/", "/index"})
     public String index(Model model, Principal principal) {
         User user = userService.getByLogin(principal.getName());
+        List<RequestDto> userRequestDtoList = requestService.getUserRequestsDto(user.getId());
 
-        List<RequestDto> unprocessedRequests = reservedRoomService.getAllUnprocessedRequestDtoOfUser(user);
+        List<RequestDto> unprocessedRequests = reservedRoomService.getAllUnprocessedRequestDtoOfUser(user, userRequestDtoList);
         List<ProcessedRequestDto> processedRequestDtoList = reservedRoomService.getAllProcessedRequestDtoOfUser(user);
 
         model.addAttribute("user", user);
@@ -43,15 +44,6 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/admin")
-    public String adminGetAllRequests(Model model, Principal principal) {
-        User user = userService.getByLogin(principal.getName());
-        List<RequestDto> allRequestsDtoList = requestService.getAllRequestsDto();
-        model.addAttribute("requestList", allRequestsDtoList);
-        return "admin";
-    }
-
-
     @GetMapping("/register")
     public String registration(Model model) {
         model.addAttribute("user", new User());
@@ -63,6 +55,5 @@ public class UserController {
         userService.create(user);
         return "redirect:/login";
     }
-
 
 }
