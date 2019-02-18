@@ -1,4 +1,5 @@
 package com.epam.hotel.controllers;
+src/main/java/com/epam/hotel/controllers/RoomController.java
 import com.epam.hotel.Exceptions.RoomNumberAlreadyExistsException;
 import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.dtos.RoomDto;
@@ -25,12 +26,12 @@ public class RoomController {
     private final RoomService roomService;
 
     @GetMapping("/rooms/new")
-    public String createRoomForm(Model model){
+    public String createRoomForm(Model model) {
         Room room = new Room();
         RoomDto roomDto = roomService.getRoomDto(room);
         model.addAttribute("room", roomDto);
-        model.addAttribute("headerName", "Create new room");
-        model.addAttribute("buttonName", "Create");
+        model.addAttribute("headerName", "create");
+        model.addAttribute("buttonName", "create");
         return "rooms";
     }
 
@@ -50,8 +51,8 @@ public class RoomController {
         Room room = roomService.getById(new Long(id));
         RoomDto roomDto = roomService.getRoomDto(room);
         model.addAttribute("room", roomDto);
-        model.addAttribute("headerName", "Edit room");
-        model.addAttribute("buttonName", "Save");
+        model.addAttribute("headerName", "edit");
+        model.addAttribute("buttonName", "save");
         return "rooms";
     }
 
@@ -62,17 +63,15 @@ public class RoomController {
     }
 
     @GetMapping("rooms")
-    public String roomsTable(Model model){
+    public String roomsTable(Model model) {
         List<RoomDto> roomDtoList = roomService.getRoomDtoList();
-        model.addAttribute("headerName", "List of hotel rooms");
         model.addAttribute("roomsList", roomDtoList);
         return "roomsList";
     }
 
     @GetMapping("roomseditor")
-    public String roomsEditor(Model model){
+    public String roomsEditor(Model model) {
         List<RoomDto> roomDtoList = roomService.getRoomDtoList();
-        model.addAttribute("headerName", "List of hotel rooms <ADMIN PAGE>");
         model.addAttribute("roomsList", roomDtoList);
         return "roomsEditor";
     }
