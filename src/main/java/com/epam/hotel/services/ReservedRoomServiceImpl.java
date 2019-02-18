@@ -1,7 +1,11 @@
 package com.epam.hotel.services;
 
+import com.epam.hotel.Exceptions.RequestNotExistException;
+import com.epam.hotel.Exceptions.ReservationNotExistException;
+import com.epam.hotel.Exceptions.RoomNotExistException;
 import com.epam.hotel.daos.RequestDao;
 import com.epam.hotel.daos.ReservedRoomDao;
+import com.epam.hotel.model.Request;
 import com.epam.hotel.model.ReservedRoom;
 import com.epam.hotel.model.User;
 
@@ -17,9 +21,9 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
         this.requestDao = requestDao;
     }
 
-    private void reservedRoomtValidation(ReservedRoom reservedRoom) {
-        if (reservedRoom.getRequestID() == 0) throw new RuntimeException("request doesn't exist");
-        if (reservedRoom.getRoomNumber() == 0) throw new RuntimeException("room doesn't exist");
+    private void reservedRoomValidation(ReservedRoom reservedRoom) {
+        if (reservedRoom.getRequestId() == 0) throw new RequestNotExistException("request doesn't exist");
+        if (reservedRoom.getRoomNumber() == 0) throw new RoomNotExistException("room doesn't exist");
     }
 
     @Override
@@ -30,7 +34,7 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
     @Override
     public List<ReservedRoom> getReservationsByUserId(long userId) {
         List<Long> requestsOfUser = requestDao.getAll().stream().filter(s -> s.getUserID() == userId).
-                map(s -> s.getRequestID()).collect(Collectors.toList());
+                map(Request::getRequestID).collect(Collectors.toList());
         return reservedRoomDao.getAll().stream().
                 filter(s -> requestsOfUser.contains(s.getRequestID())).collect(Collectors.toList());
 
@@ -38,7 +42,7 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
 
     @Override
     public ReservedRoom create(ReservedRoom reservedRoom) {
-        reservedRoomtValidation(reservedRoom);
+        reservedRoomValidation(reservedRoom);
         return reservedRoomDao.create(reservedRoom);
     }
 
@@ -49,7 +53,7 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
 
     @Override
     public boolean update(ReservedRoom reservedRoom) {
-        reservedRoomtValidation(reservedRoom);
+        reservedRoomValidation(reservedRoom);
         return reservedRoomDao.update(reservedRoom);
     }
 
@@ -62,6 +66,6 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
     public ReservedRoom getById(long id) {
         ReservedRoom reservedRoom = reservedRoomDao.getById(id);
         if (reservedRoom != null) return reservedRoom;
-        else throw new RuntimeException("There is no reserved rooms with this ID");
+        else throw new ReservationNotExistException("There is no reserved rooms with this ID");
     }
 }
