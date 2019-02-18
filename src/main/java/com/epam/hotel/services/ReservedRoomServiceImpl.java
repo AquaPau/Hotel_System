@@ -22,7 +22,7 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
     }
 
     private void reservedRoomValidation(ReservedRoom reservedRoom) {
-        if (reservedRoom.getRequestId() == 0) throw new RequestNotExistException("request doesn't exist");
+        if (reservedRoom.getRequestID() == 0) throw new RequestNotExistException("request doesn't exist");
         if (reservedRoom.getRoomNumber() == 0) throw new RoomNotExistException("room doesn't exist");
     }
 

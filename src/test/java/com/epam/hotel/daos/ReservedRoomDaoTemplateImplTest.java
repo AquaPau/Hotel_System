@@ -87,7 +87,7 @@ public class ReservedRoomDaoTemplateImplTest {
     private ReservedRoom createTestReservation() {
         ReservedRoom reservedRoom = new ReservedRoom();
         reservedRoom.setRequestID(1);
-        reservedRoom.setRoomnumber(1);
+        reservedRoom.setRoomNumber(1);
         return reservedRoom;
     }
 
@@ -118,7 +118,7 @@ public class ReservedRoomDaoTemplateImplTest {
         reservedRoomDao.create(reservedRoom);
         ReservedRoom testReservedroom = createTestReservation();
         Room room = createTestRoom(4);
-        testReservedroom.setRoomnumber(4);
+        testReservedroom.setRoomNumber(4);
         reservedRoomDao.create(testReservedroom);
         List<ReservedRoom> reservedRoomList = Arrays.asList(reservedRoom, testReservedroom);
         List<ReservedRoom> receivedRoomList = reservedRoomDao.getAll();
