@@ -30,8 +30,8 @@ public class RequestController {
         request.setUserID(user.getId());
         RequestDto requestDto = requestService.getRequestDto(request);
         model.addAttribute("request", requestDto);
-        model.addAttribute("headerName", "Create request");
-        model.addAttribute("buttonName", "Create");
+        model.addAttribute("header", "create");
+        model.addAttribute("buttonName", "create");
         return "request";
     }
 
@@ -51,8 +51,8 @@ public class RequestController {
         Request request = requestService.getById(new Long(id));
         RequestDto requestDto = requestService.getRequestDto(request);
         model.addAttribute("request", requestDto);
-        model.addAttribute("headerName", "Edit request");
-        model.addAttribute("buttonName", "Save");
+        model.addAttribute("header", "edit");
+        model.addAttribute("buttonName", "save");
         return "request";
     }
 

@@ -96,6 +96,10 @@ function validateLoginPage() {
     }
 }
 
+function back(){
+    window.history.back();
+}
+
 $(function () {
     $(".datepicker").datepicker();
 });

@@ -7,8 +7,12 @@ html, body {
     font-family: 'Numans', sans-serif;
 }
 
-.error{
+.error {
     color: #ff5a5a !important;
+}
+
+.center-align {
+    text-align: center;
 }
 
 h3 {
@@ -49,11 +53,14 @@ h3 {
 
 .login_btn {
     width: 150px !important;
-    margin-left: 355px;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 0px;
+}
+
+.login-input-group {
+    margin-bottom: 15px !important;
 }
 
 .a {
@@ -81,6 +88,7 @@ h3 {
 .btn {
     background-color: #a0a0a063;
     border-color: #23232305;
+    margin: 5px;
 }
 
 .container {
