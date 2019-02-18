@@ -125,8 +125,4 @@ public class ReservedRoomDaoJdbcImpl implements ReservedRoomDao {
         return new ReservedRoom();
     }
 
-    @Override
-    public List<Request> getRequestsByRoomNumber(int roomNumber) {
-        return null;
-    }
 }

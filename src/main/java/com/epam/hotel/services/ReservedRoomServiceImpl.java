@@ -18,7 +18,7 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
     }
 
     private void reservedRoomtValidation(ReservedRoom reservedRoom) {
-        if (reservedRoom.getRequestId() == 0) throw new RuntimeException("request doesn't exist");
+        if (reservedRoom.getRequestID() == 0) throw new RuntimeException("request doesn't exist");
         if (reservedRoom.getRoomNumber() == 0) throw new RuntimeException("room doesn't exist");
     }
 
@@ -32,7 +32,7 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
         List<Long> requestsOfUser = requestDao.getAll().stream().filter(s -> s.getUserID() == userId).
                 map(s -> s.getRequestID()).collect(Collectors.toList());
         return reservedRoomDao.getAll().stream().
-                filter(s -> requestsOfUser.contains(s.getRequestId())).collect(Collectors.toList());
+                filter(s -> requestsOfUser.contains(s.getRequestID())).collect(Collectors.toList());
 
     }
 

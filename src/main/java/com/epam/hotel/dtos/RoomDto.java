@@ -18,14 +18,14 @@ public class RoomDto implements Comparable<RoomDto> {
     private int roomNumber;
     private String classID;
     private String capacity;
-    private String price;
+    private long price;
 
     public RoomDto(Room room) {
         this.roomID = room.getRoomID();
         this.roomNumber = room.getRoomNumber();
         this.capacity = room.getCapacity().name();
         this.classID = room.getClassID().name();
-        this.price = room.getPrice().toString();
+        this.price = room.getPrice().longValue();
     }
 
     public Room getRoom() {
@@ -34,7 +34,7 @@ public class RoomDto implements Comparable<RoomDto> {
         room.setRoomNumber(this.getRoomNumber());
         room.setCapacity(Capacity.valueOf(this.capacity));
         room.setClassID(ClassID.valueOf(this.classID));
-        room.setPrice(new BigDecimal(this.price));
+        room.setPrice(BigDecimal.valueOf(this.getPrice()));
         return room;
     }
 
