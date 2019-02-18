@@ -1,4 +1,5 @@
 package com.epam.hotel.controllers;
+
 import com.epam.hotel.dtos.RoomDto;
 import com.epam.hotel.model.Room;
 import com.epam.hotel.services.RoomService;
@@ -20,7 +21,7 @@ public class RoomController {
     private final RoomService roomService;
 
     @GetMapping("/rooms/new")
-    public String createRoomForm(Model model){
+    public String createRoomForm(Model model) {
         Room room = new Room();
         RoomDto roomDto = roomService.getRoomDto(room);
         model.addAttribute("room", roomDto);
@@ -58,23 +59,28 @@ public class RoomController {
     }
 
     @GetMapping("rooms")
-    public String roomsTable(Model model){
+    public String roomsTable(Model model) {
         List<RoomDto> roomDtoList = roomService.getRoomDtoList();
         model.addAttribute("headerName", "List of hotel rooms");
         model.addAttribute("roomsList", roomDtoList);
         return "roomsList";
     }
 
+    @GetMapping("rooms/view/{id}")
+    public String roomsTable(@PathVariable String id, Model model) {
+        Room room = roomService.getById(new Long(id));
+        RoomDto roomDto = roomService.getRoomDto(room);
+        model.addAttribute("room", roomDto);
+        return "roomview";
+    }
+
     @GetMapping("roomseditor")
-    public String roomsEditor(Model model){
+    public String roomsEditor(Model model) {
         List<RoomDto> roomDtoList = roomService.getRoomDtoList();
         model.addAttribute("headerName", "List of hotel rooms <ADMIN PAGE>");
         model.addAttribute("roomsList", roomDtoList);
         return "roomsEditor";
     }
-
-
-
 
 
 }

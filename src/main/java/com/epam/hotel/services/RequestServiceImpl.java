@@ -94,6 +94,13 @@ public class RequestServiceImpl implements RequestService {
         return userRequests.stream().map(RequestDto::new).collect(Collectors.toList());
     }
 
+    @Override
+    public void pay(Long id) {
+        Request request = requestDao.getById(id);
+        request.setPaymentStatus(PaymentStatus.PAID);
+        requestDao.update(request);
+    }
+
 
 }
 

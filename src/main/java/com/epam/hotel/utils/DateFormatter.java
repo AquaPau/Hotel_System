@@ -2,6 +2,7 @@ package com.epam.hotel.utils;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class DateFormatter {
 
@@ -21,6 +22,12 @@ public class DateFormatter {
         int day = Integer.parseInt(split[1]);
         int year = Integer.parseInt(split[2]);
         return Timestamp.valueOf(LocalDateTime.of(year, month, day, 0, 0));
+    }
+
+    public static long getDifferenceInDays(Timestamp date1, Timestamp date2) {
+        LocalDateTime localDateTime1 = date1.toLocalDateTime();
+        LocalDateTime localDateTime2 = date2.toLocalDateTime();
+        return ChronoUnit.DAYS.between(localDateTime2, localDateTime1);
     }
 
 }

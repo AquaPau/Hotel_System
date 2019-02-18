@@ -74,6 +74,8 @@
     <bean id="reservedRoomService" class="com.epam.hotel.services.ReservedRoomServiceImpl">
         <constructor-arg ref="reservedRoomsDaoTemplate"/>
         <constructor-arg ref="requestDaoTemplate"/>
+        <constructor-arg ref="roomDaoTemplate"/>
+        <constructor-arg ref="requestService"/>
     </bean>
 
 

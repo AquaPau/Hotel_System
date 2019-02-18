@@ -62,4 +62,10 @@ public class RequestController {
         return "redirect:/";
     }
 
+    @GetMapping("request/pay/{id}")
+    public String payRequest(@PathVariable String id) {
+        requestService.pay(new Long(id));
+        return "redirect:/";
+    }
+
 }

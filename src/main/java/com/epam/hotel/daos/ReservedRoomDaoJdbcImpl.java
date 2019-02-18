@@ -25,14 +25,14 @@ public class ReservedRoomDaoJdbcImpl implements ReservedRoomDao {
     private PreparedStatement initReservedRoomBody(Connection connection, ReservedRoom reservedRoom, String query)
             throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setInt(1, reservedRoom.getRoomNumber());
+        preparedStatement.setInt(1, reservedRoom.getRoomId());
         preparedStatement.setLong(2, reservedRoom.getRequestId());
         return preparedStatement;
     }
 
     private void extractReservedRoomBody(ResultSet rs, ReservedRoom reservedRoom) throws SQLException {
         reservedRoom.setReservedRoomID(rs.getLong("reservedroomid"));
-        reservedRoom.setRoomNumber(rs.getInt("roomnumber"));
+        reservedRoom.setRoomId(rs.getInt("roomnumber"));
         reservedRoom.setRequestId(rs.getLong("requestid"));
     }
 

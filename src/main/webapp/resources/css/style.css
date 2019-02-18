@@ -11,6 +11,10 @@ html, body {
     color: #ff5a5a !important;
 }
 
+.paid{
+    color:#00ff6a;
+}
+
 .center-align {
     text-align: center;
 }
