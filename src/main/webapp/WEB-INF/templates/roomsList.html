@@ -15,37 +15,46 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-                <div>
-                    <h3 class="text-center" th:text="${headerName}"></h3>
-                </div>
-                <div class="card-body">
-                    <p class="white" th:if="${roomsList.isEmpty()==true}">There is no rooms for booking in hotel now</p>
-                    <table th:if="${roomsList.isEmpty()==false}" class="table table-bordered white">
-                        <thead>
+            <div>
+                <h3 class="text-center" th:text="#{message.roomslist-page.header.title}"></h3>
+            </div>
+            <div class="card-body">
+                <p class="white" th:if="${roomsList.isEmpty()==true}" th:text="#{message.roomslist-page.norooms}">There
+                    is no rooms for booking in hotel now</p>
+                <table th:if="${roomsList.isEmpty()==false}" class="table table-bordered white">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" th:text="#{message.roomslist-page.roomnumber}">Room Number</th>
+                        <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                        <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                        <th scope="col" th:text="#{message.roomslist-page.price}">Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="room : ${roomsList}">
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Room Number</th>
-                            <th scope="col">Capacity</th>
-                            <th scope="col">Class</th>
-                            <th scope="col">Price</th>
+                            <th th:text="${room.roomId}" scope="row">1</th>
+                            <td th:text="${room.roomNumber}"></td>
+                            <td th:text="#{'message.capacity.'+${room.capacity}}"></td>
+                            <td th:text="#{'message.class.'+${room.classId}}"></td>
+                            <td th:text="${room.price}"></td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        <th:block th:each="room : ${roomsList}">
-                            <tr>
-                                <th th:text="${room.roomId}" scope="row">1</th>
-                                <td th:text="${room.roomNumber}"></td>
-                                <td th:text="${room.capacity}"></td>
-                                <td th:text="${room.classId}"></td>
-                                <td th:text="${room.price}"></td>
-                            </tr>
-                        </th:block>
-                        </tbody>
-                    </table>
-                    <div>
-                    </div>
-                    <a th:href="@{/index/}" class="btn btn-dark float-left">Back to home page</a>
-                    </div>
+                    </th:block>
+                    </tbody>
+                </table>
+                <div>
+                </div>
+                <a th:href="@{/index/}" class="btn btn-dark float-left" th:text="#{message.roomslist-page.button.home}">Back
+                    to home page</a>
+            </div>
+            <div class="card-footer">
+                <div class="text-center">
+                    <span th:text="#{message.change-language}+': '"></span>
+                    <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
+                    <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
