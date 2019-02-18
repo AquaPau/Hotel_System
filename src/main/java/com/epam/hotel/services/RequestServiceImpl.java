@@ -94,6 +94,19 @@ public class RequestServiceImpl implements RequestService {
         return userRequests.stream().map(RequestDto::new).collect(Collectors.toList());
     }
 
+    @Override
+    public List<RequestDto> getAllRequestsDto() {
+        List<Request> allRequests = getAll();
+        return allRequests.stream().map(RequestDto::new).
+                filter(request -> request.getPaymentStatus().equals(PaymentStatus.NOBILL.name())).
+                collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean updatePaymentStatus(long id, PaymentStatus status) {
+        return requestDao.updatePaymentStatus(id, status);
+    }
+
 
 }
 

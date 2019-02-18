@@ -1,6 +1,10 @@
 package com.epam.hotel.daos;
 
+import com.epam.hotel.model.Request;
 import com.epam.hotel.model.ReservedRoom;
+import com.epam.hotel.model.enums.Capacity;
+import com.epam.hotel.model.enums.ClassID;
+import com.epam.hotel.model.enums.PaymentStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -13,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ReservedRoomDaoTemplateImpl implements ReservedRoomDao {
+
     private final JdbcTemplate jdbcTemplate;
     private final String CREATE_RESERVATION = "INSERT INTO hotel.reservedrooms (roomnumber, requestid) VALUES " +
             "(?, ?)";
@@ -32,7 +37,7 @@ public class ReservedRoomDaoTemplateImpl implements ReservedRoomDao {
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_RESERVATION, new String[]{"reservedroomid"});
             preparedStatement.setInt(1, reservedRoom.getRoomNumber());
-            preparedStatement.setLong(2, reservedRoom.getRequestId());
+            preparedStatement.setLong(2, reservedRoom.getRequestID());
             return preparedStatement;
         }, keyHolder);
         reservedRoom.setReservedRoomID(Objects.requireNonNull(keyHolder.getKey()).longValue());
@@ -47,7 +52,7 @@ public class ReservedRoomDaoTemplateImpl implements ReservedRoomDao {
 
     @Override
     public boolean update(ReservedRoom reservedRoom) {
-        return jdbcTemplate.update(UPDATE_RESERVATION, reservedRoom.getRoomNumber(), reservedRoom.getRequestId(), reservedRoom.getReservedRoomID()) > 0;
+        return jdbcTemplate.update(UPDATE_RESERVATION, reservedRoom.getRoomNumber(), reservedRoom.getRequestID(), reservedRoom.getReservedRoomID()) > 0;
     }
 
     @Override
@@ -67,8 +72,9 @@ public class ReservedRoomDaoTemplateImpl implements ReservedRoomDao {
             ReservedRoom reservedRoom = new ReservedRoom();
             reservedRoom.setReservedRoomID(rs.getLong("reservedroomid"));
             reservedRoom.setRoomNumber(rs.getInt("roomnumber"));
-            reservedRoom.setRequestId(rs.getLong("requestid"));
+            reservedRoom.setRequestID(rs.getLong("requestid"));
             return reservedRoom;
         }
     }
+
 }

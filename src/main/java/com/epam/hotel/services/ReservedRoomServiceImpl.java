@@ -36,7 +36,7 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
         List<Long> requestsOfUser = requestDao.getAll().stream().filter(s -> s.getUserID() == userId).
                 map(Request::getRequestID).collect(Collectors.toList());
         return reservedRoomDao.getAll().stream().
-                filter(s -> requestsOfUser.contains(s.getRequestId())).collect(Collectors.toList());
+                filter(s -> requestsOfUser.contains(s.getRequestID())).collect(Collectors.toList());
 
     }
 

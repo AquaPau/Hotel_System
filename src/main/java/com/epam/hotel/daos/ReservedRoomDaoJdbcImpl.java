@@ -1,5 +1,6 @@
 package com.epam.hotel.daos;
 
+import com.epam.hotel.model.Request;
 import com.epam.hotel.model.ReservedRoom;
 import lombok.Data;
 
@@ -21,19 +22,26 @@ public class ReservedRoomDaoJdbcImpl implements ReservedRoomDao {
     private final String DELETE_RESERVATION = "DELETE FROM hotel.reservedrooms WHERE reservedroomid = ?";
     private final String GET_RESERVATION_BY_ID = "SELECT * FROM hotel.reservedrooms WHERE reservedroomid = ?";
     private final String GET_ALL_RESERVATIONS = "SELECT * FROM hotel.reservedrooms";
+    private final String SQL_ADD_TO_RESERVED_ROOMS = "INSERT INTO hotel.reservedrooms (roomnumber, requestid) VALUES ((SELECT hotel.rooms.roomnumber" +
+            "  FROM hotel.rooms WHERE hotel.rooms.roomnumber = ?), (SELECT hotel.requests.requestid" +
+            "  FROM hotel.requests WHERE hotel.requests.requestid = ?))";
+    private final String SQL_GET_REQUESTS_BY_ROOM_NUMBER = "SELECT hotel.requests.requestid," +
+            "  hotel.requests.userid, hotel.requests.capacity, hotel.requests.classid, hotel.requests.checkin," +
+            "  hotel.requests.checkout, hotel.requests.paymentstatus FROM hotel.reservedrooms left join hotel.requests" +
+            "  on reservedrooms.requestid = requests.requestid WHERE hotel.reservedrooms.roomnumber = ?";
 
     private PreparedStatement initReservedRoomBody(Connection connection, ReservedRoom reservedRoom, String query)
             throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setInt(1, reservedRoom.getRoomNumber());
-        preparedStatement.setLong(2, reservedRoom.getRequestId());
+        preparedStatement.setLong(2, reservedRoom.getRequestID());
         return preparedStatement;
     }
 
     private void extractReservedRoomBody(ResultSet rs, ReservedRoom reservedRoom) throws SQLException {
         reservedRoom.setReservedRoomID(rs.getLong("reservedroomid"));
         reservedRoom.setRoomNumber(rs.getInt("roomnumber"));
-        reservedRoom.setRequestId(rs.getLong("requestid"));
+        reservedRoom.setRequestID(rs.getLong("requestid"));
     }
 
     private List<ReservedRoom> getReservedRoomList(List<ReservedRoom> reservedRoomList, ResultSet resultSet)
@@ -116,4 +124,5 @@ public class ReservedRoomDaoJdbcImpl implements ReservedRoomDao {
         }
         return new ReservedRoom();
     }
+
 }
