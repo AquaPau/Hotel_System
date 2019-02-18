@@ -1,5 +1,6 @@
 package com.epam.hotel.services;
 
+import com.epam.hotel.Exceptions.LoginIsBusyException;
 import com.epam.hotel.daos.UserDao;
 import com.epam.hotel.model.enums.Permission;
 import com.epam.hotel.model.User;
@@ -20,6 +21,9 @@ public class UserServiceImpl implements UserService {
         userValidation(entity);
         PasswordEncoder encoder = new BCryptPasswordEncoder(11);
         entity.setPassword(encoder.encode(entity.getPassword()));
+        if (getByLogin(entity.getLogin()) != null){
+            throw new LoginIsBusyException();
+        }
         return userDao.create(entity);
     }
 

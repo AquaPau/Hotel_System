@@ -1,5 +1,6 @@
 package com.epam.hotel.controllers;
 
+import com.epam.hotel.Exceptions.LoginIsBusyException;
 import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.model.Request;
 import com.epam.hotel.model.User;
@@ -54,7 +55,11 @@ public class UserController {
 
     @PostMapping("/register")
     public String saveOrUpdate(@ModelAttribute("user") User user) {
-        userService.create(user);
+        try {
+            userService.create(user);
+        } catch (LoginIsBusyException ex){
+            return "redirect:/registration";
+        }
         return "redirect:/login";
     }
 
