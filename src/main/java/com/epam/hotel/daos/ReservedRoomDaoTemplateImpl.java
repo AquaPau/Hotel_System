@@ -57,10 +57,8 @@ public class ReservedRoomDaoTemplateImpl implements ReservedRoomDao {
 
     @Override
     public ReservedRoom getById(long id) {
-        ReservedRoom result = jdbcTemplate.queryForObject(GET_RESERVATION_BY_ID, new Object[]{id},
+        return jdbcTemplate.queryForObject(GET_RESERVATION_BY_ID, new Object[]{id},
                 new ReservedRoomRowMapper());
-        if (result != null) return result;
-        else return null;
     }
 
     class ReservedRoomRowMapper implements RowMapper<ReservedRoom> {
