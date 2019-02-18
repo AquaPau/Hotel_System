@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class ReservedRoom {
     private long reservedRoomID;
-    private int roomId;
-    private long requestId;
+    private int roomID;
+    private long requestID;
 }
