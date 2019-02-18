@@ -17,32 +17,32 @@
         <div class="card">
             <article class="card-body mx-auto" style="max-width: 400px;">
                 <div class="card-header">
-                    <h3 class="text-center" th:text="${headerName}"></h3>
+                    <h3 class="text-center" th:text="#{'message.rooms-page.header.' + ${headerName}}"></h3>
                 </div>
                 <form th:object="${room}" th:action="@{/rooms/save}" method="post">
 
-                    <p class="white">Insert room number:</p>
+                    <p class="white" th:text="#{message.rooms-page.insert.roomnumber}">Insert room number:</p>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-key"></i> </span>
                         </div>
-                        <input th:field="*{roomNumber}" name="roomnumber" type="number" class="form-control" placeholder="Room number">
+                        <input th:field="*{roomNumber}" name="roomNumber" type="number" class="form-control">
                     </div>
-                    <p class="white">Select class:</p>
+                    <p class="white" th:text="#{message.rooms-page.select.class}">Select class:</p>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-bed"></i> </span>
                         </div>
 
-                        <select th:field="*{classId}" class="form-control" id="selClass">
-                            <option th:each="classIdValue : ${T(com.epam.hotel.model.enums.ClassID).values()}"
-                                    th:value="${classIdValue.name()}"
-                                    th:text="${classIdValue.name()}">
+                        <select th:field="*{classID}" class="form-control" id="selClass">
+                            <option th:each="classIDValue : ${T(com.epam.hotel.model.enums.ClassID).values()}"
+                                    th:value="${classIDValue.name()}"
+                                    th:text="#{'message.class.'+ ${classIDValue.name()}}">
                             </option>
                         </select>
                     </div>
 
-                    <p class="white">Select capacity:</p>
+                    <p class="white" th:text="#{message.rooms-page.select.capacity}">Select capacity:</p>
                     <div class="form-group input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-users"></i> </span>
@@ -51,28 +51,35 @@
 
                             <option th:each="capacityValue : ${T(com.epam.hotel.model.enums.Capacity).values()}"
                                     th:value="${capacityValue.name()}"
-                                    th:text="${capacityValue.name()}">
+                                    th:text="#{'message.capacity.' + ${capacityValue.name()}}">
                             </option>
                         </select>
                     </div>
 
-                    <p class="white">Insert price:</p>
+                    <p class="white" th:text="#{message.rooms-page.insert.price}">Insert price:</p>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-credit-card"></i> </span>
                         </div>
-                        <input th:field="*{price}" name="price" type="number" class="form-control" placeholder="Price">
+                        <input th:field="*{price}" name="price" type="number" class="form-control">
                     </div>
-                    <input hidden class="form-control" type="text" th:field="*{roomId}">
+                    <input hidden class="form-control" type="text" th:field="*{roomID}">
 
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block" th:text="${buttonName}"></button>
+                        <button type="submit" class="btn btn-primary btn-block"
+                                th:text="#{'message.rooms-page.button.' + ${buttonName}}"></button>
                     </div>
                 </form>
                 <div>
                 </div>
-                <a th:href="@{/roomseditor/}" class="btn btn-dark btn-block">Back to the list of rooms</a>
+                <a th:href="@{/roomseditor/}" class="btn btn-dark btn-block"
+                   th:text="#{message.rooms-page.button.back}">Back to the list of rooms</a>
             </article>
+            <div class="text-center">
+                <span th:text="#{message.change-language}+': '"></span>
+                <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
+                <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+            </div>
         </div>
     </div>
 </div>

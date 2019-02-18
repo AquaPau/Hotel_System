@@ -4,8 +4,6 @@ import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.Aspect;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -30,6 +28,7 @@ public class RequestDaoTemplateImpl implements RequestDao {
     private static final String GET_REQUESTS_BY_USERID = "SELECT * FROM hotel.requests WHERE userid = %d";
     private static final String GET_REQUESTS_BY_PAYMENTSTATUS = "SELECT * FROM hotel.requests WHERE " +
             "paymentStatus = %s";
+    private static final String UPDATE_BILLING_STATUS = "UPDATE hotel.requests SET paymentstatus = ? WHERE requestid = ?";
 
 
     public RequestDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
@@ -49,6 +48,11 @@ public class RequestDaoTemplateImpl implements RequestDao {
     }
 
     @Override
+    public boolean updatePaymentStatus(long id, PaymentStatus status) {
+        return jdbcTemplate.update(UPDATE_BILLING_STATUS, status.name(), id) > 0;
+    }
+
+    @Override
     public Request create(Request request) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
@@ -63,7 +67,6 @@ public class RequestDaoTemplateImpl implements RequestDao {
         }, keyHolder);
         request.setRequestID(Objects.requireNonNull(keyHolder.getKey()).longValue());
         return request;
-
     }
 
     @Override

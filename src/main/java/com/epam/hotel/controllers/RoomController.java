@@ -1,8 +1,14 @@
 package com.epam.hotel.controllers;
 
+import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.dtos.RoomDto;
+import com.epam.hotel.model.Request;
+import com.epam.hotel.model.ReservedRoom;
 import com.epam.hotel.model.Room;
+import com.epam.hotel.model.enums.PaymentStatus;
+import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.RoomService;
+import com.epam.hotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,13 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import java.util.List;
 
-
 @Controller
-@RequiredArgsConstructor(onConstructor_ = {@Autowired})
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RoomController {
+
+    private final RequestService requestService;
     private final RoomService roomService;
 
     @GetMapping("/rooms/new")
@@ -25,10 +31,9 @@ public class RoomController {
         Room room = new Room();
         RoomDto roomDto = roomService.getRoomDto(room);
         model.addAttribute("room", roomDto);
-        model.addAttribute("headerName", "Create new room");
-        model.addAttribute("buttonName", "Create");
+        model.addAttribute("headerName", "create");
+        model.addAttribute("buttonName", "create");
         return "rooms";
-
     }
 
     @PostMapping("rooms/save")
@@ -47,8 +52,8 @@ public class RoomController {
         Room room = roomService.getById(new Long(id));
         RoomDto roomDto = roomService.getRoomDto(room);
         model.addAttribute("room", roomDto);
-        model.addAttribute("headerName", "Edit room");
-        model.addAttribute("buttonName", "Save");
+        model.addAttribute("headerName", "edit");
+        model.addAttribute("buttonName", "save");
         return "rooms";
     }
 
@@ -61,26 +66,27 @@ public class RoomController {
     @GetMapping("rooms")
     public String roomsTable(Model model) {
         List<RoomDto> roomDtoList = roomService.getRoomDtoList();
-        model.addAttribute("headerName", "List of hotel rooms");
         model.addAttribute("roomsList", roomDtoList);
         return "roomsList";
-    }
-
-    @GetMapping("rooms/view/{id}")
-    public String roomsTable(@PathVariable String id, Model model) {
-        Room room = roomService.getById(new Long(id));
-        RoomDto roomDto = roomService.getRoomDto(room);
-        model.addAttribute("room", roomDto);
-        return "roomview";
     }
 
     @GetMapping("roomseditor")
     public String roomsEditor(Model model) {
         List<RoomDto> roomDtoList = roomService.getRoomDtoList();
-        model.addAttribute("headerName", "List of hotel rooms <ADMIN PAGE>");
         model.addAttribute("roomsList", roomDtoList);
         return "roomsEditor";
     }
 
+    @GetMapping("getallrooms/{id}")
+    public String getAllFittingRooms(@PathVariable String id, Model model) {
+        Request request = requestService.getById(new Long(id));
+        List<RoomDto> allFittingRoomsList = roomService.getAllFittingRoomsDto(request);
+        ReservedRoom reservedRoom = new ReservedRoom();
+        reservedRoom.setRequestID(new Long(id));
+        model.addAttribute("allfittingroomsList", allFittingRoomsList);
+        model.addAttribute("requestID", id);
+        model.addAttribute("reservedRoom", reservedRoom);
+        return "allfittingrooms";
+    }
 
 }

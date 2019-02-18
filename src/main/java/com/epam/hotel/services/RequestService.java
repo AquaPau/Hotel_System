@@ -18,4 +18,9 @@ public interface RequestService extends Service<Request> {
     List<RequestDto> getUserRequestsDto(long id);
 
     void pay(Long id);
+
+    List<RequestDto> getAllRequestsDto();
+
+    boolean updatePaymentStatus(long id, PaymentStatus status);
+
 }

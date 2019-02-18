@@ -1,6 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <meta charset="UTF-8">
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <head>
     <title>Hotel System</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -15,12 +19,56 @@
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div class="card-header">
-                <h3 class="text-center">Welcome</h3>
-                <p class="text-center white">To admin page!</p>
+                <h3 id="index-header" class="text-center"
+                    th:text="#{message.admin-page.header}">Administration page</span></h3>
             </div>
             <div class="card-body">
+                <p class="white" th:if="${requestList.isEmpty()==true}" th:text="#{message.admin-page.no-request}">There are no active requests</p>
+                <table th:if="${requestList.isEmpty()==false}" class="table table-bordered white">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                        <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                        <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
+                        <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
+                        <th scope="col" th:text="#{message.hotel.status}">Payment status</th>
+                        <th scope="col" th:text="#{message.find}">Find</th>
+                        <th scope="col" th:text="#{message.delete}">Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="request : ${requestList}">
+                        <tr>
+                            <th th:text="${request.requestID}" scope="row">1</th>
+                            <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
+                            <td th:text="#{'message.class.'+${request.classID}}"></td>
+                            <td th:text="${request.checkIn}"></td>
+                            <td th:text="${request.checkOut}"></td>
+                            <td th:text="#{'message.status.'+${request.paymentStatus}}"></td>
+                            <td>
+                                <a th:href="@{'/getallrooms/'+${request.requestID}}" th:text="#{message.find}"
+                                   class="btn btn-dark float-left" >Find</a>
+                            </td>
+                            <td>
+                                <a th:href="@{'/request/delete/'+${request.requestID}}" th:text="#{message.delete}"
+                                   class="btn btn-dark float-left">Delete</a>
+                            </td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+                <div>
+                </div>
             </div>
             <div class="card-footer">
+                <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User menu</a>
+                <a th:href="@{/roomseditor}" th:text="#{message.admin-page.editrooms}" class="btn btn-dark float-right">Edit rooms</a>
+                <div class="text-center">
+                    <span th:text="#{message.change-language}+': '"></span>
+                    <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
+                    <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+                </div>
             </div>
         </div>
     </div>
@@ -28,5 +76,6 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script th:src="@{resources/js/hotel.js}"></script>
+
 </body>
 </html>

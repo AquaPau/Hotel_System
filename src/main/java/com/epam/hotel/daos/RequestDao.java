@@ -6,7 +6,9 @@ import java.util.List;
 
 
 public interface RequestDao extends Dao <Request>{
+
     List<Request> getUserRequests(long id);
     List<Request> getPaymentStatus(PaymentStatus paymentStatus);
+    boolean updatePaymentStatus(long id, PaymentStatus status);
 
 }

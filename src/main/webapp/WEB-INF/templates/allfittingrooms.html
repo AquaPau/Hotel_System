@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<meta charset="UTF-8">
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<head>
+    <title>Hotel System</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card">
+            <div class="card-header">
+                <h3 id="index-header" class="text-center">Possible rooms</span></h3>
+            </div>
+            <div class="card-body">
+                <p class="white" th:if="${allfittingroomsList.isEmpty()==true}">There are no fitting rooms</p>
+                <table th:if="${allfittingroomsList.isEmpty()==false}" class="table table-bordered white">
+                    <thead>
+                    <tr>
+                        <th scope="col">Room number</th>
+                        <th scope="col">Class</th>
+                        <th scope="col">Capacity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Pick Room</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="room : ${allfittingroomsList}">
+                        <tr>
+                            <th th:text="${room.roomNumber}" scope="row">1</th>
+                            <td th:text="${room.classID}"></td>
+                            <td th:text="${room.capacity}"></td>
+                            <td th:text="${room.price}"></td>
+                            <td>
+                                <form th:action="@{/allfittingrooms/pick/}" th:object="${reservedRoom}" method="post">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary btn-block"> Submit</button>
+                                    </div>
+
+                                    <input hidden th:field="*{requestID}"/>
+                                    <input hidden id="roomNumber" name="roomNumber" th:value="${room.roomNumber}">
+
+                                </form>
+
+                            </td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+                <div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a th:href="@{/admin}" class="btn btn-info float-left">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script th:src="@{resources/js/hotel.js}"></script>
+
+
+</body>
+</html>
