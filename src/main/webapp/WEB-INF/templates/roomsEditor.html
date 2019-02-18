@@ -36,17 +36,17 @@
                     <tbody>
                     <th:block th:each="room : ${roomsList}">
                         <tr>
-                            <th th:text="${room.roomId}" scope="row">1</th>
+                            <th th:text="${room.roomID}" scope="row">1</th>
                             <td th:text="${room.roomNumber}"></td>
                             <td th:text="#{'message.capacity.'+${room.capacity}}"></td>
-                            <td th:text="#{'message.class.'+${room.classId}}"></td>
+                            <td th:text="#{'message.class.'+${room.classID}}"></td>
                             <td th:text="${room.price}"></td>
                             <td>
-                                <a th:href="@{'/rooms/edit/'+${room.roomId}}" class="btn btn-dark float-left"
+                                <a th:href="@{'/rooms/edit/'+${room.roomID}}" class="btn btn-dark float-left"
                                    th:text="#{message.roomseditor-page.edit}">Edit</a>
                             </td>
                             <td>
-                                <a th:href="@{'/rooms/delete/'+${room.roomId}}"
+                                <a th:href="@{'/rooms/delete/'+${room.roomID}}"
                                    class="btn btn-dark float-left"
                                    th:text="#{message.roomseditor-page.delete}">Delete</a>
                             </td>

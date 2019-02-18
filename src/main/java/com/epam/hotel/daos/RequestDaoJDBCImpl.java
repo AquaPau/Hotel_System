@@ -5,10 +5,6 @@ import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.Aspect;
-
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +84,11 @@ public class RequestDaoJDBCImpl implements RequestDao {
             e.printStackTrace();
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public boolean updatePaymentStatus(long id, PaymentStatus status) {
+        return true;
     }
 
     @Override

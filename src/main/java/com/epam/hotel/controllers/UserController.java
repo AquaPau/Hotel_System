@@ -38,7 +38,10 @@ public class UserController {
     }
 
     @GetMapping("/admin")
-    public String admin() {
+    public String adminGetAllRequests(Model model, Principal principal) {
+        User user = userService.getByLogin(principal.getName());
+        List<RequestDto> allRequestsDtoList = requestService.getAllRequestsDto();
+        model.addAttribute("requestList", allRequestsDtoList);
         return "admin";
     }
 

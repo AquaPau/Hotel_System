@@ -7,6 +7,7 @@ import com.epam.hotel.model.Request;
 import java.util.List;
 
 public interface RequestService extends Service<Request> {
+
     List<Request> getUserRequests(long id);
 
     List<Request> getPaymentStatus(PaymentStatus paymentStatus);
@@ -16,4 +17,9 @@ public interface RequestService extends Service<Request> {
     Request getRequestFromDto(RequestDto requestDto);
 
     List<RequestDto> getUserRequestsDto(long id);
+
+    List<RequestDto> getAllRequestsDto();
+
+    boolean updatePaymentStatus(long id, PaymentStatus status);
+
 }

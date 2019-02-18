@@ -86,7 +86,7 @@ public class ReservedRoomDaoTemplateImplTest {
 
     private ReservedRoom createTestReservation() {
         ReservedRoom reservedRoom = new ReservedRoom();
-        reservedRoom.setRequestId(1);
+        reservedRoom.setRequestID(1);
         reservedRoom.setRoomNumber(1);
         return reservedRoom;
     }
@@ -108,7 +108,7 @@ public class ReservedRoomDaoTemplateImplTest {
     public void update() {
         reservedRoomDao.create(reservedRoom);
         Request request = createTestRequest();
-        reservedRoom.setRequestId(2);
+        reservedRoom.setRequestID(2);
         boolean isUpdated = reservedRoomDao.update(reservedRoom);
         assertTrue(isUpdated);
     }
