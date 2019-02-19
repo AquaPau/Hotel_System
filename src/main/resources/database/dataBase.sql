@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS hotel.Users
 
 CREATE TABLE IF NOT EXISTS hotel.Rooms
 (
-  roomID     SMALLSERIAL PRIMARY KEY,
-  roomNumber SMALLINT NOT NULL UNIQUE,
+  roomID     BIGSERIAL PRIMARY KEY,
+  roomNumber BIGINT NOT NULL UNIQUE,
   classID    VARCHAR(10) DEFAULT 'STANDARD' CHECK (classID IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')),
   capacity   VARCHAR(10) DEFAULT 'SINGLE' CHECK (capacity IN ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD')),
   price      DECIMAL(19,4)    NOT NULL
@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS hotel.Requests
 
 CREATE TABLE IF NOT EXISTS hotel.ReservedRooms
 (
-  reservedRoomID SMALLSERIAL PRIMARY KEY,
-  roomNumber     SMALLSERIAL REFERENCES hotel.Rooms (roomID),
+  reservedRoomID BIGSERIAL PRIMARY KEY,
+  roomNumber     BIGINT REFERENCES hotel.Rooms (roomID),
   requestID      BIGINT REFERENCES hotel.Requests (requestID)
 );
 

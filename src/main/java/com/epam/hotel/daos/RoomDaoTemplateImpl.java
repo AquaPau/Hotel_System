@@ -4,12 +4,17 @@ import com.epam.hotel.model.Request;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 import com.epam.hotel.model.enums.*;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 public class RoomDaoTemplateImpl implements RoomDao {
     
@@ -40,14 +45,20 @@ public class RoomDaoTemplateImpl implements RoomDao {
     }
 
     @Override
-    public Room create(Room room) {
-        jdbcTemplate.update(SQL_CREATE_NEW_ROOM, room.getRoomNumber(), room.getClassID().toString(),
-                room.getCapacity().toString(), room.getPrice());
-        Room newroom = null;
-        if (this.checkIfNumberExists(room.getRoomNumber()) > 0) {
-            newroom = this.getByRoomNumber(room.getRoomNumber());
-        }
-        return newroom;
+    public Room create(Room entity) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(
+                connection -> {
+                    PreparedStatement statement = connection.prepareStatement(SQL_CREATE_NEW_ROOM, new String[]{"roomid"});
+                    statement.setInt(1, entity.getRoomNumber());
+                    statement.setString(2, entity.getClassID().name());
+                    statement.setString(3, entity.getCapacity().name());
+                    statement.setBigDecimal(4, entity.getPrice());
+                    return statement;
+                },
+                keyHolder);
+        entity.setRoomID(Objects.requireNonNull(keyHolder.getKey()).longValue());
+        return entity;
     }
 
     @Override
