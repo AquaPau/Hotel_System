@@ -20,13 +20,11 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
     private final ReservedRoomDao reservedRoomDao;
     private final RequestDao requestDao;
     private final RoomDao roomDao;
-    private final RequestService requestService;
 
-    public ReservedRoomServiceImpl(ReservedRoomDao reservedRoomDao, RequestDao requestDao, RoomDao roomDao, RequestService requestService) {
+    public ReservedRoomServiceImpl(ReservedRoomDao reservedRoomDao, RequestDao requestDao, RoomDao roomDao) {
         this.reservedRoomDao = reservedRoomDao;
         this.requestDao = requestDao;
         this.roomDao = roomDao;
-        this.requestService = requestService;
     }
 
     private void reservedRoomValidation(ReservedRoom reservedRoom) {
