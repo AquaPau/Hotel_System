@@ -15,9 +15,11 @@ public interface ReservedRoomService extends Service<ReservedRoom> {
 
     List<ReservedRoom> getReservationsByUserId(long userId);
 
-    List<ProcessedRequestDto> getAllProcessedRequestDtoOfUser(User user);
-
     ProcessedRequestDto getProcessedRequestDto(ReservedRoom reservedRoom);
 
-    List<RequestDto> getAllUnprocessedRequestDtoOfUser(User user, List<RequestDto> userRequestDtoList);
+    List<ProcessedRequestDto> getAllProcessedRequestDtoOfUser(User user);
+
+    List<RequestDto> getAllUnprocessedRequestDtoOfUser(User user, List<RequestDto> requestList);
+
+    void cancelReservation(long id);
 }

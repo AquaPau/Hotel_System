@@ -32,7 +32,7 @@ public class ReservedRoomDaoTemplateImpl implements ReservedRoomDao {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_RESERVATION, new String[]{"reservedroomid"});
-            preparedStatement.setInt(1, reservedRoom.getRoomID());
+            preparedStatement.setLong(1, reservedRoom.getRoomID());
             preparedStatement.setLong(2, reservedRoom.getRequestID());
             return preparedStatement;
         }, keyHolder);

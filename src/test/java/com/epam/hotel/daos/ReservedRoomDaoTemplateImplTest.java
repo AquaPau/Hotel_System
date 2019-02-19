@@ -6,9 +6,10 @@ import com.epam.hotel.model.Room;
 import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.enums.PaymentStatus;
-
-import org.junit.*;
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
@@ -22,8 +23,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ReservedRoomDaoTemplateImplTest {
     private static ReservedRoomDao reservedRoomDao;
@@ -73,21 +74,19 @@ public class ReservedRoomDaoTemplateImplTest {
                 0, 0)));
         request.setCheckOut(Timestamp.valueOf(LocalDateTime.of(2018, 1, 2, 1, 0,
                 0, 0)));
-        request.setRequestID(requestDao.create(request).getRequestID());
-        return request;
+
+        return requestDao.create(request);
     }
 
     private Room createTestRoom(int roomnumber) {
-        if (roomnumber == 0) roomnumber = 1;
         Room room = new Room(roomnumber, ClassID.STANDARD, Capacity.SINGLE, BigDecimal.valueOf(1000));
-        room.setRoomID(roomDao.create(room).getRoomID());
-        return room;
+        return roomDao.create(room);
     }
 
     private ReservedRoom createTestReservation() {
         ReservedRoom reservedRoom = new ReservedRoom();
         reservedRoom.setRequestID(1);
-        reservedRoom.setRoomNumber(1);
+        reservedRoom.setRoomID(1);
         return reservedRoom;
     }
 
@@ -115,14 +114,28 @@ public class ReservedRoomDaoTemplateImplTest {
 
     @Test
     public void getAll() {
-        reservedRoomDao.create(reservedRoom);
-        ReservedRoom testReservedroom = createTestReservation();
-        Room room = createTestRoom(4);
-        testReservedroom.setRoomNumber(4);
-        reservedRoomDao.create(testReservedroom);
-        List<ReservedRoom> reservedRoomList = Arrays.asList(reservedRoom, testReservedroom);
-        List<ReservedRoom> receivedRoomList = reservedRoomDao.getAll();
-        assertEquals(reservedRoomList, receivedRoomList);
+        Room room1 = createTestRoom(1);
+        Room room2 = createTestRoom(2);
+
+        Request request1 = createTestRequest();
+        Request request2 = createTestRequest();
+
+        ReservedRoom reservedRoom1 = new ReservedRoom();
+        reservedRoom1.setRequestID(1);
+        reservedRoom1.setRoomID(1);
+
+        ReservedRoom reservedRoom2 = new ReservedRoom();
+        reservedRoom2.setRoomID(2);
+        reservedRoom2.setRequestID(2);
+
+        List<ReservedRoom> reservedRoomList = Arrays.asList(reservedRoom1, reservedRoom2);
+
+        ReservedRoom reservedRoom1FromDao = reservedRoomDao.create(reservedRoom1);
+        ReservedRoom reservedRoom2FromDao = reservedRoomDao.create(reservedRoom2);
+
+        List<ReservedRoom> reservedRooms = reservedRoomDao.getAll();
+
+        assertEquals(reservedRoomList, reservedRooms);
     }
 
     @Test

@@ -52,7 +52,7 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
     public ProcessedRequestDto getProcessedRequestDto(ReservedRoom reservedRoom) {
         Request request = requestDao.getById(reservedRoom.getRequestID());
         Room room = roomDao.getById(reservedRoom.getRoomID());
-        return new ProcessedRequestDto(request, room);
+        return new ProcessedRequestDto(request, room, reservedRoom.getReservedRoomID());
     }
 
     @Override
@@ -63,13 +63,12 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
                 .collect(Collectors.toList());
     }
 
+
     @Override
-    public List<RequestDto> getAllUnprocessedRequestDtoOfUser(User user, List<RequestDto> userRequestDtoList) {
+    public List<RequestDto> getAllUnprocessedRequestDtoOfUser(User user, List<RequestDto> requestList) {
         List<ReservedRoom> ids = this.getReservationsOfUser(user);
         List<Long> collect = ids.stream().map(ReservedRoom::getRequestID).collect(Collectors.toList());
-        return userRequestDtoList.stream()
-                .filter(x -> (!collect.contains(x.getRequestID())))
-                .collect(Collectors.toList());
+        return requestList.stream().filter(x -> (!collect.contains(x.getRequestID()))).collect(Collectors.toList());
     }
 
     @Override
@@ -100,5 +99,14 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
         if (reservedRoom != null) return reservedRoom;
         else throw new ReservationNotExistException("There is no reserved rooms with this ID");
     }
+
+    @Override
+    public void cancelReservation(long id) {
+        ReservedRoom reservedRoom = reservedRoomDao.getById(id);
+        long requestID = reservedRoom.getRequestID();
+        reservedRoomDao.delete(id);
+        requestDao.delete(requestID);
+    }
+
 }
 

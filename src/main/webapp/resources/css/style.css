@@ -11,8 +11,8 @@ html, body {
     color: #ff5a5a !important;
 }
 
-.paid{
-    color:#00ff6a;
+.paid {
+    color: #00ff6a;
 }
 
 .center-align {
@@ -105,7 +105,7 @@ h3 {
     margin-top: auto;
     margin-bottom: auto;
     width: auto;
-    min-width: 900px;
+    min-width: 800px;
     background-color: rgba(0, 0, 0, 0.6) !important;
     padding-bottom: 20px;
 }

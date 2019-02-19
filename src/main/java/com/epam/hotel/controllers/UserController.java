@@ -22,15 +22,15 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final RequestService requestService;
     private final ReservedRoomService reservedRoomService;
+    private final RequestService requestService;
 
     @GetMapping({"/", "/index"})
     public String index(Model model, Principal principal) {
         User user = userService.getByLogin(principal.getName());
-        List<RequestDto> userRequestDtoList = requestService.getUserRequestsDto(user.getId());
 
-        List<RequestDto> unprocessedRequests = reservedRoomService.getAllUnprocessedRequestDtoOfUser(user, userRequestDtoList);
+        List<RequestDto> userRequestsDto = requestService.getUserRequestsDto(user.getId());
+        List<RequestDto> unprocessedRequests = reservedRoomService.getAllUnprocessedRequestDtoOfUser(user, userRequestsDto);
         List<ProcessedRequestDto> processedRequestDtoList = reservedRoomService.getAllProcessedRequestDtoOfUser(user);
 
         model.addAttribute("user", user);
@@ -43,6 +43,7 @@ public class UserController {
     public String login() {
         return "login";
     }
+
 
     @GetMapping("/register")
     public String registration(Model model) {

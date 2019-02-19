@@ -7,7 +7,9 @@ import com.epam.hotel.services.ReservedRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -23,6 +25,12 @@ public class ReservedRoomController {
         reservedRoomService.create(reservedRoom);
         requestService.updatePaymentStatus(reservedRoom.getRequestID(), PaymentStatus.BILLSENT);
         return "submitform";
+    }
+
+    @GetMapping("reservation/cancel/{id}")
+    public String cancelReservation(@PathVariable String id) {
+        reservedRoomService.cancelReservation(new Long(id));
+        return "redirect:/";
     }
 
 }
