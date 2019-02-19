@@ -16,6 +16,7 @@ import org.springframework.jdbc.datasource.init.ScriptUtils;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class RoomDaoTemplateImplTest {
@@ -79,10 +80,8 @@ public class RoomDaoTemplateImplTest {
 
     @Test
     public void delete() {
-        Room testRoom = roomDao.create(createTestRoom());
-        roomDao.delete(1);
-        Room deletedRoom = roomDao.getById(1);
-        assertNull(deletedRoom);
+        roomDao.create(createTestRoom());
+        assertTrue(roomDao.delete(1L));
     }
 
     @Test
@@ -92,7 +91,7 @@ public class RoomDaoTemplateImplTest {
         testRoom.setRoomNumber(2);
         roomDao.create(testRoom);
         List<Room> roomList = roomDao.getAll();
-        assertTrue(roomList.size() == 2);
+        assertEquals(2, roomList.size());
     }
 
 }

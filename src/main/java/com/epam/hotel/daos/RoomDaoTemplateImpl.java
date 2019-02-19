@@ -17,7 +17,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 public class RoomDaoTemplateImpl implements RoomDao {
-    
+
     private final JdbcTemplate jdbcTemplate;
     private final String SQL_CHECK_IF_EXISTS_BY_ID = "SELECT COUNT(*) FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_CHECK_IF_EXISTS_BY_ROOM_NUMBER = "SELECT COUNT(*) FROM hotel.rooms WHERE roomnumber = ?";
@@ -30,7 +30,7 @@ public class RoomDaoTemplateImpl implements RoomDao {
     private final String SQL_GET_REQUESTS_BY_ROOM_NUMBER = "SELECT hotel.requests.requestid," +
             "  hotel.requests.userid, hotel.requests.capacity, hotel.requests.classid, hotel.requests.checkin," +
             "  hotel.requests.checkout, hotel.requests.paymentstatus FROM hotel.reservedrooms left join hotel.requests" +
-            "  on reservedrooms.requestid = requests.requestid WHERE hotel.reservedrooms.roomnumber = ?";
+            "  on reservedrooms.requestid = requests.requestid WHERE hotel.reservedrooms.roomid = ?";
 
     public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -74,12 +74,7 @@ public class RoomDaoTemplateImpl implements RoomDao {
 
     @Override
     public boolean delete(long id) {
-        boolean isDeleted = false;
-        if (this.checkIfExists(id) > 0) {
-            jdbcTemplate.update(SQL_DELETE_ROOM, id);
-            isDeleted = true;
-        }
-        return isDeleted;
+        return jdbcTemplate.update(SQL_DELETE_ROOM, id) != 0;
     }
 
     @Override
@@ -99,7 +94,7 @@ public class RoomDaoTemplateImpl implements RoomDao {
     public Room getById(long id) {
         Room room = null;
         if (this.checkIfExists(id) > 0) {
-            room = jdbcTemplate.queryForObject(SQL_GET_BY_ID, new Object[]{ id }, new RoomRowMapper());
+            room = jdbcTemplate.queryForObject(SQL_GET_BY_ID, new Object[]{id}, new RoomRowMapper());
         }
         return room;
     }
@@ -108,14 +103,14 @@ public class RoomDaoTemplateImpl implements RoomDao {
     public Room getByRoomNumber(int roomNumber) {
         Room room = null;
         if (this.checkIfNumberExists(roomNumber) > 0) {
-            room = jdbcTemplate.queryForObject(SQL_GET_BY_ROOM_NUMBER, new Object[] { roomNumber }, new RoomRowMapper());
+            room = jdbcTemplate.queryForObject(SQL_GET_BY_ROOM_NUMBER, new Object[]{roomNumber}, new RoomRowMapper());
         }
         return room;
     }
 
     @Override
     public List<Request> getRequestsByRoomNumber(int roomNumber) {
-        return jdbcTemplate.query(SQL_GET_REQUESTS_BY_ROOM_NUMBER, new Object[] { roomNumber }, new RequestRowMapper());
+        return jdbcTemplate.query(SQL_GET_REQUESTS_BY_ROOM_NUMBER, new Object[]{roomNumber}, new RequestRowMapper());
     }
 
     class RoomRowMapper implements RowMapper<Room> {

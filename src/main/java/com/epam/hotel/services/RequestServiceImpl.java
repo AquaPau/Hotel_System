@@ -95,13 +95,6 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void pay(Long id) {
-        Request request = requestDao.getById(id);
-        request.setPaymentStatus(PaymentStatus.PAID);
-        requestDao.update(request);
-    }
-
-    @Override
     public List<RequestDto> getAllRequestsDto() {
         List<Request> allRequests = getAll();
         return allRequests.stream().map(RequestDto::new).
