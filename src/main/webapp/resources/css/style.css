@@ -15,6 +15,16 @@ html, body {
     color: #00ff6a;
 }
 
+.vert-fixed {
+    position: fixed;
+    width: 900px;
+    height: 1800px;
+    top: 10%;
+    left: 25%;
+    margin-top: 0px;
+    margin-left: 0px;
+}
+
 .center-align {
     text-align: center;
 }
@@ -52,7 +62,7 @@ h3 {
 
 .card-header {
     padding-top: 20px;
-    padding-bottom: 0;
+    padding-bottom: 10px;
 }
 
 .login_btn {
@@ -153,6 +163,26 @@ input:focus {
     height: 20px;
     margin-left: 15px;
     margin-right: 5px;
+}
+
+.btn-yellow {
+    color: black;
+    background-color: #f9f814;
+    opacity: 0.9;
+    width: 280px;
+}
+
+.btn-grey {
+    color: white;
+    background-color: rgba(29, 29, 3, 0.2);
+    opacity: 0.9;
+    width: 280px;
+}
+
+.btn-grey:hover {
+    color:black;
+    background-color: #f9f814;
+    opacity: 0.9;
 }
 
 .login_btn {

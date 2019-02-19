@@ -1,5 +1,6 @@
 package com.epam.hotel.services;
 
+import com.epam.hotel.dtos.ApprovedRequestDto;
 import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
@@ -20,5 +21,7 @@ public interface RequestService extends Service<Request> {
     List<RequestDto> getAllRequestsDto();
 
     boolean updatePaymentStatus(long id, PaymentStatus status);
+
+    public List<ApprovedRequestDto> getAllApprovedRequests();
 
 }

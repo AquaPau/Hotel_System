@@ -1,6 +1,7 @@
 package com.epam.hotel.services;
 
 import com.epam.hotel.daos.RequestDao;
+import com.epam.hotel.dtos.ApprovedRequestDto;
 import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
@@ -107,6 +108,10 @@ public class RequestServiceImpl implements RequestService {
         return requestDao.updatePaymentStatus(id, status);
     }
 
+    @Override
+    public List<ApprovedRequestDto> getAllApprovedRequests() {
+        return requestDao.getAllApprovedRequests();
+    }
 
 }
 
