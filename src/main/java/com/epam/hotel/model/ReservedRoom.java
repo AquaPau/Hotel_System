@@ -4,9 +4,7 @@ import lombok.Data;
 
 @Data
 public class ReservedRoom {
-
     private long reservedRoomID;
+    private int roomID;
     private long requestID;
-    private int roomNumber;
-
 }

@@ -3,6 +3,7 @@ package com.epam.hotel.controllers;
 import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.model.Request;
 import com.epam.hotel.model.User;
+import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +60,12 @@ public class RequestController {
     @GetMapping("request/delete/{id}")
     public String deleteRequest(@PathVariable String id) {
         requestService.delete(new Long(id));
+        return "redirect:/";
+    }
+
+    @GetMapping("request/pay/{id}")
+    public String payRequest(@PathVariable String id) {
+        requestService.updatePaymentStatus(new Long(id), PaymentStatus.PAID);
         return "redirect:/";
     }
 

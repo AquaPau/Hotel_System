@@ -27,10 +27,51 @@
             <div class="card-body">
                 <a th:href="@{/request/new}" class="btn btn-dark float-right"
                    th:text="#{message.hotel.new-request}">New request</a>
-                <p class="white" th:if="${requestList.isEmpty()==true}" th:text="#{message.index-page.no-request}">You
-                    have not requests.</p>
+                <div th:if="${processedRequestList.isEmpty()==false}">
+                    <p class="white" th:text="#{message.index-page.processed-requests}"> Processed requests:</p>
+                    <table class="table table-bordered white">
+                        <thead>
+                        <tr>
+                            <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                            <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                            <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
+                            <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
+                            <th scope="col" th:text="#{message.view}">View room</th>
+                            <th scope="col" th:text="#{message.hotel.status}">Status</th>
+                            <th scope="col" th:text="#{message.cancel}">Cancel</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="request : ${processedRequestList}">
+                            <tr>
+                                <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
+                                <td th:text="#{'message.class.'+${request.classID}}"></td>
+                                <td th:text="${request.checkIn}"></td>
+                                <td th:text="${request.checkOut}"></td>
+                                <td>
+                                    <a th:text="#{message.view}" th:href="@{'/rooms/view/'+${request.roomId}}"
+                                       class="btn btn-dark float-left">view</a>
+                                </td>
+                                <td>
+                                    <a th:if="${request.paymentStatus=='BILLSENT'}"
+                                       th:text="#{message.pay}+' '+${request.price}" th:href="@{'/request/pay/'+${request.requestID}}"
+                                       class="btn btn-dark float-left">pay</a>
+                                    <p class="paid" th:if="${request.paymentStatus=='PAID'}"
+                                       th:text="#{message.payment-status.paid}"></p>
+                                </td>
+                                <td>
+                                    <a th:href="@{'/request/delete/'+${request.requestID}}" th:text="#{message.cancel}"
+                                       class="btn btn-dark float-left">cancel</a>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                </div>
 
-                <div th:if="${requestList.isEmpty()==false}">
+                <p class="white" th:if="${unprocessedRequestList.isEmpty()==true}" th:text="#{message.index-page.no-request}">You
+                    have not requests.</p>
+                <div th:if="${unprocessedRequestList.isEmpty()==false}">
                     <p class="white" th:text="#{message.index-page.your-requests}"> Your requests</p>
                     <table class="table table-bordered white">
                         <thead>
@@ -39,19 +80,17 @@
                             <th scope="col" th:text="#{message.hotel.class}">Class</th>
                             <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
                             <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
-                            <!--                            <th scope="col" th:text="#{message.hotel.status}">Status</th>-->
                             <th scope="col" th:text="#{message.edit}">Edit</th>
                             <th scope="col" th:text="#{message.delete}">Delete</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <th:block th:each="request : ${requestList}">
+                        <th:block th:each="request : ${unprocessedRequestList}">
                             <tr>
                                 <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
                                 <td th:text="#{'message.class.'+${request.classID}}"></td>
                                 <td th:text="${request.checkIn}"></td>
                                 <td th:text="${request.checkOut}"></td>
-                                <!--<td th:text="${request.paymentStatus}"></td>-->
                                 <td>
                                     <a th:href="@{'/request/edit/'+${request.requestID}}" th:text="#{message.edit}"
                                        class="btn btn-dark float-left">Edit</a>
