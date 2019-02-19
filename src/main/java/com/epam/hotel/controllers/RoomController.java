@@ -1,5 +1,5 @@
 package com.epam.hotel.controllers;
-
+import com.epam.hotel.Exceptions.RoomNumberAlreadyExistsException;
 import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.dtos.RoomDto;
 import com.epam.hotel.model.Request;
@@ -13,10 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Controller
@@ -87,6 +85,12 @@ public class RoomController {
         model.addAttribute("requestID", id);
         model.addAttribute("reservedRoom", reservedRoom);
         return "allfittingrooms";
+    }
+
+    @ExceptionHandler(RoomNumberAlreadyExistsException.class)
+    public String existingRoomException(Model model){
+        model.addAttribute("errorCode", "roomexists");
+        return "error";
     }
 
 }

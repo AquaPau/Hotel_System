@@ -19,7 +19,5 @@ public interface ReservedRoomService extends Service<ReservedRoom> {
 
     ProcessedRequestDto getProcessedRequestDto(ReservedRoom reservedRoom);
 
-    List<ProcessedRequestDto> getProcessedRequestDtoList(List<ReservedRoom> reservedRoom);
-
-    List<RequestDto> getAllUnprocessedRequestDtoOfUser(User user);
+    List<RequestDto> getAllUnprocessedRequestDtoOfUser(User user, List<RequestDto> userRequestDtoList);
 }
