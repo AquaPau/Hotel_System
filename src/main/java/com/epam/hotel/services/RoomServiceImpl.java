@@ -23,9 +23,11 @@ import java.util.stream.Collectors;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomDao roomDao;
+    private final ReservedRoomService reservedRoomService;
 
-    public RoomServiceImpl(RoomDao roomDao) {
+    public RoomServiceImpl(RoomDao roomDao, ReservedRoomService reservedRoomService) {
         this.roomDao = roomDao;
+        this.reservedRoomService = reservedRoomService;
     }
 
     private void roomValidation(Room room) {
@@ -77,8 +79,10 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomDto> getAllFittingRoomsDto(Request request) {
-        List<RoomDto> allFittingRooms = getAllRoomsDto();
-        String cap = request.getCapacity().name();
+        return getAllFittingRooms(request).stream().map(RoomDto::new).collect(Collectors.toList());
+/*        List<RoomDto>  resultList =
+
+        *//*String cap = request.getCapacity().name();
         String classID = request.getClassID().name();
         List<RoomDto> fittingRooms = allFittingRooms.stream().
                 filter(room -> room.getCapacity().equals(cap)).
@@ -90,18 +94,23 @@ public class RoomServiceImpl implements RoomService {
             for (Request e : getAllRequestsByRoomNumber) {
                 if (compareRequestsByTime(request, e)) bookedRooms.add(room);
             }
-        }
-        return fittingRooms.stream().filter(room -> !bookedRooms.contains(room)).collect(Collectors.toList());
+        }*//*
+        return fittingRooms.stream().filter(room -> !bookedRooms.contains(room)).collect(Collectors.toList());*/
     }
 
-    private boolean compareRequestsByTime(Request req1, Request req2) {
-        if (req1.getCheckOut().getTime() >= req2.getCheckIn().getTime() && req1.getCheckOut().getTime() <= req1.getCheckOut().getTime()) {
-            return true;
-        } else if (req1.getCheckIn().getTime() >= req2.getCheckIn().getTime() && req1.getCheckIn().getTime() <= req1.getCheckOut().getTime()) {
-            return true;
-        }
-        return false;
+    private List<Room> getAllFittingRooms(Request request){
+        List<Room> notAvailableByTimeRooms = reservedRoomService.getReservedRoomsForTheTimeOfRequest(request).stream().
+                map(c -> roomDao.getById(c.getRoomID())).collect(Collectors.toList());
+        List<Room> availableByTimeAndCapacityRooms = getAll().stream().filter(c -> (!notAvailableByTimeRooms.contains(c)) &&
+                c.getCapacity() == request.getCapacity()).collect(Collectors.toList());
+        List<Room> mostsuitableList = availableByTimeAndCapacityRooms.stream().filter(c ->
+                c.getClassID() == request.getClassID()).collect(Collectors.toList());
+        List<Room> lessSuitableList = (availableByTimeAndCapacityRooms.stream().filter(c ->
+                c.getClassID() != request.getClassID()).collect(Collectors.toList()));
+        mostsuitableList.addAll(lessSuitableList);
+    return mostsuitableList;
     }
+
 
 
     @Override

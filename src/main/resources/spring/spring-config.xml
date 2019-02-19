@@ -60,6 +60,7 @@
 
     <bean id="roomService" class="com.epam.hotel.services.RoomServiceImpl">
         <constructor-arg ref="roomDaoTemplate"/>
+        <constructor-arg ref="reservedRoomService"/>
     </bean>
 
     <bean id="requestService" class="com.epam.hotel.services.RequestServiceImpl">

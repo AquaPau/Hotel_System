@@ -63,7 +63,6 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public List<RequestDto> getAllUnprocessedRequestDtoOfUser(User user, List<RequestDto> requestList) {
         List<ReservedRoom> ids = this.getReservationsOfUser(user);
@@ -99,6 +98,30 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
         if (reservedRoom != null) return reservedRoom;
         else throw new ReservationNotExistException("There is no reserved rooms with this ID");
     }
+
+    @Override
+    public List<ReservedRoom> getReservedRoomsForTheTimeOfRequest(Request request){
+        return getAll().stream().filter(c -> isBusyPeriod(request)).collect(Collectors.toList());
+    }
+
+    private boolean isBusyPeriod(Request request){
+        long newIn = request.getCheckIn().getTime();
+        long newOut = request.getCheckOut().getTime();
+        List<ReservedRoom> allRooms = reservedRoomDao.getAll();
+        for (ReservedRoom reservedRoom: allRooms){
+            long requestID = reservedRoom.getRequestID();
+            long oldIn = requestDao.getById(requestID).getCheckIn().getTime();
+            long oldOut = requestDao.getById(requestID).getCheckOut().getTime();
+            if (isInPeriod(newIn, newOut, oldIn, oldOut)) return true;
+        }
+        return false;
+    }
+    private boolean isInPeriod(long newIn, long newOut, long oldIn, long oldOut){
+        boolean result1 = (newIn >= oldIn) && (newIn <= oldOut);
+        boolean result2 = (newOut >= oldIn) && (newOut <= oldOut);
+        return result1 || result2;
+    }
+
 
     @Override
     public void cancelReservation(long id) {
