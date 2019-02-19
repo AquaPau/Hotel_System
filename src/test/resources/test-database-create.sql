@@ -12,7 +12,7 @@ CREATE TABLE hotel.Users
 
 CREATE TABLE hotel.Rooms
 (
-  roomID     SMALLINT AUTO_INCREMENT PRIMARY KEY,
+  roomID     IDENTITY PRIMARY KEY,
   roomNumber SMALLINT NOT NULL UNIQUE,
   classID    VARCHAR(10) DEFAULT 'STANDARD' CHECK (classID IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')),
   capacity   VARCHAR(10) DEFAULT 'SINGLE' CHECK (capacity IN ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD')),
@@ -32,7 +32,7 @@ CREATE TABLE hotel.Requests
 
 CREATE TABLE hotel.ReservedRooms
 (
-  reservedRoomID SMALLINT AUTO_INCREMENT PRIMARY KEY,
-  roomNumber     SMALLINT REFERENCES hotel.Rooms (roomNumber),
+  reservedRoomID IDENTITY PRIMARY KEY,
+  roomNumber     BIGINT REFERENCES hotel.Rooms (roomID),
   requestID      BIGINT REFERENCES hotel.Requests (requestID)
 );
