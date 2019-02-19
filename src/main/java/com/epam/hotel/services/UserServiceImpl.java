@@ -4,6 +4,7 @@ import com.epam.hotel.Exceptions.LoginIsBusyException;
 import com.epam.hotel.daos.UserDao;
 import com.epam.hotel.model.enums.Permission;
 import com.epam.hotel.model.User;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,10 +22,13 @@ public class UserServiceImpl implements UserService {
         userValidation(entity);
         PasswordEncoder encoder = new BCryptPasswordEncoder(11);
         entity.setPassword(encoder.encode(entity.getPassword()));
-        if (getByLogin(entity.getLogin()) != null){
-            throw new LoginIsBusyException();
+        try {
+            getByLogin(entity.getLogin());
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return userDao.create(entity);
         }
-        return userDao.create(entity);
+        throw new LoginIsBusyException("busylogin");
+
     }
 
     @Override

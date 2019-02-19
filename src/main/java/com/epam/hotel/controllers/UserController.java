@@ -3,7 +3,6 @@ package com.epam.hotel.controllers;
 import com.epam.hotel.dtos.ProcessedRequestDto;
 import com.epam.hotel.Exceptions.LoginIsBusyException;
 import com.epam.hotel.dtos.RequestDto;
-import com.epam.hotel.model.Request;
 import com.epam.hotel.model.User;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.ReservedRoomService;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,12 +54,14 @@ public class UserController {
 
     @PostMapping("/register")
     public String saveOrUpdate(@ModelAttribute("user") User user) {
-        try {
-            userService.create(user);
-        } catch (LoginIsBusyException ex){
-            return "redirect:/registration";
-        }
+        userService.create(user);
         return "redirect:/login";
+    }
+
+    @ExceptionHandler(LoginIsBusyException.class)
+    public String loginIsBusyException(Model model){
+        model.addAttribute("errorCode", "busylogin");
+        return "error";
     }
 
 }
