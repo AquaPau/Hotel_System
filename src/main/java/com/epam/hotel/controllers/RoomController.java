@@ -1,5 +1,4 @@
 package com.epam.hotel.controllers;
-src/main/java/com/epam/hotel/controllers/RoomController.java
 import com.epam.hotel.Exceptions.RoomNumberAlreadyExistsException;
 import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.dtos.RoomDto;
