@@ -80,25 +80,9 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public List<RoomDto> getAllFittingRoomsDto(Request request) {
         return getAllFittingRooms(request).stream().map(RoomDto::new).collect(Collectors.toList());
-/*        List<RoomDto>  resultList =
-
-        *//*String cap = request.getCapacity().name();
-        String classID = request.getClassID().name();
-        List<RoomDto> fittingRooms = allFittingRooms.stream().
-                filter(room -> room.getCapacity().equals(cap)).
-                filter(room -> room.getClassID().equals(classID)).collect(Collectors.toList());
-        List<RoomDto> bookedRooms = new ArrayList<>();
-        for (RoomDto room : fittingRooms) {
-            Integer roomNumber = room.getRoomNumber();
-            List<Request> getAllRequestsByRoomNumber = roomDao.getRequestsByRoomNumber(roomNumber);
-            for (Request e : getAllRequestsByRoomNumber) {
-                if (compareRequestsByTime(request, e)) bookedRooms.add(room);
-            }
-        }*//*
-        return fittingRooms.stream().filter(room -> !bookedRooms.contains(room)).collect(Collectors.toList());*/
     }
 
-    private List<Room> getAllFittingRooms(Request request){
+    private List<Room> getAllFittingRooms(Request request) {
         List<Room> notAvailableByTimeRooms = reservedRoomService.getReservedRoomsForTheTimeOfRequest(request).stream().
                 map(c -> roomDao.getById(c.getRoomID())).collect(Collectors.toList());
         List<Room> availableByTimeAndCapacityRooms = getAll().stream().filter(c -> (!notAvailableByTimeRooms.contains(c)) &&
@@ -108,9 +92,8 @@ public class RoomServiceImpl implements RoomService {
         List<Room> lessSuitableList = (availableByTimeAndCapacityRooms.stream().filter(c ->
                 c.getClassID() != request.getClassID()).collect(Collectors.toList()));
         mostsuitableList.addAll(lessSuitableList);
-    return mostsuitableList;
+        return mostsuitableList;
     }
-
 
 
     @Override

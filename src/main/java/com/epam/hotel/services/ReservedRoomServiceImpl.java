@@ -100,15 +100,15 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
     }
 
     @Override
-    public List<ReservedRoom> getReservedRoomsForTheTimeOfRequest(Request request){
+    public List<ReservedRoom> getReservedRoomsForTheTimeOfRequest(Request request) {
         return getAll().stream().filter(c -> isBusyPeriod(request)).collect(Collectors.toList());
     }
 
-    private boolean isBusyPeriod(Request request){
+    private boolean isBusyPeriod(Request request) {
         long newIn = request.getCheckIn().getTime();
         long newOut = request.getCheckOut().getTime();
         List<ReservedRoom> allRooms = reservedRoomDao.getAll();
-        for (ReservedRoom reservedRoom: allRooms){
+        for (ReservedRoom reservedRoom : allRooms) {
             long requestID = reservedRoom.getRequestID();
             long oldIn = requestDao.getById(requestID).getCheckIn().getTime();
             long oldOut = requestDao.getById(requestID).getCheckOut().getTime();
@@ -116,7 +116,8 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
         }
         return false;
     }
-    private boolean isInPeriod(long newIn, long newOut, long oldIn, long oldOut){
+
+    private boolean isInPeriod(long newIn, long newOut, long oldIn, long oldOut) {
         boolean result1 = (newIn >= oldIn) && (newIn <= oldOut);
         boolean result2 = (newOut >= oldIn) && (newOut <= oldOut);
         return result1 || result2;
