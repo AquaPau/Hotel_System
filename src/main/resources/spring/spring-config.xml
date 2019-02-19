@@ -10,9 +10,11 @@
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
-    <aop:config><aop:aspect id = "Aspect" ref = "aBean"/></aop:config>
+    <aop:config>
+        <aop:aspect id="Aspect" ref="aBean"/>
+    </aop:config>
 
-    <bean id= "aBean" class= "com.epam.hotel.aspects.Logging"></bean>
+    <bean id="aBean" class="com.epam.hotel.aspects.Logging"></bean>
 
     <bean id="user" class="com.epam.hotel.model.User" scope="prototype">
     </bean>
@@ -74,6 +76,7 @@
     <bean id="reservedRoomService" class="com.epam.hotel.services.ReservedRoomServiceImpl">
         <constructor-arg ref="reservedRoomsDaoTemplate"/>
         <constructor-arg ref="requestDaoTemplate"/>
+        <constructor-arg ref="roomDaoTemplate"/>
     </bean>
 
 

@@ -1,5 +1,6 @@
 package com.epam.hotel.services;
 
+import com.epam.hotel.Exceptions.RoomNumberAlreadyExistsException;
 import com.epam.hotel.daos.ReservedRoomDao;
 import com.epam.hotel.daos.RoomDao;
 import com.epam.hotel.dtos.RequestDto;
@@ -8,6 +9,7 @@ import com.epam.hotel.model.Request;
 import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
@@ -22,7 +24,9 @@ public class RoomServiceImpl implements RoomService {
 
     private final RoomDao roomDao;
 
-    public RoomServiceImpl(RoomDao roomDao) { this.roomDao = roomDao; }
+    public RoomServiceImpl(RoomDao roomDao) {
+        this.roomDao = roomDao;
+    }
 
     private void roomValidation(Room room) {
         if (room.getCapacity() == null) room.setCapacity(Capacity.SINGLE);
@@ -33,6 +37,9 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Room create(Room room) {
         roomValidation(room);
+        if (roomDao.getByRoomNumber(room.getRoomNumber()) != null) {
+            throw new RoomNumberAlreadyExistsException("The room already exists");
+        }
         return roomDao.create(room);
     }
 
@@ -48,7 +55,9 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getAll() { return roomDao.getAll(); }
+    public List<Room> getAll() {
+        return roomDao.getAll();
+    }
 
     @Override
     public Room getById(long id) {
@@ -107,7 +116,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<RoomDto> getRoomDtoList(){
+    public List<RoomDto> getRoomDtoList() {
         List<Room> roomList = getAll();
         return roomList.stream().map(RoomDto::new).sorted().collect(Collectors.toList());
     }

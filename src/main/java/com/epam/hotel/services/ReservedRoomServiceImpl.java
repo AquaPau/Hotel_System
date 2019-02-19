@@ -5,8 +5,12 @@ import com.epam.hotel.Exceptions.ReservationNotExistException;
 import com.epam.hotel.Exceptions.RoomNotExistException;
 import com.epam.hotel.daos.RequestDao;
 import com.epam.hotel.daos.ReservedRoomDao;
+import com.epam.hotel.daos.RoomDao;
+import com.epam.hotel.dtos.ProcessedRequestDto;
+import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.model.Request;
 import com.epam.hotel.model.ReservedRoom;
+import com.epam.hotel.model.Room;
 import com.epam.hotel.model.User;
 
 import java.util.List;
@@ -15,15 +19,17 @@ import java.util.stream.Collectors;
 public class ReservedRoomServiceImpl implements ReservedRoomService {
     private final ReservedRoomDao reservedRoomDao;
     private final RequestDao requestDao;
+    private final RoomDao roomDao;
 
-    public ReservedRoomServiceImpl(ReservedRoomDao reservedRoomDao, RequestDao requestDao) {
+    public ReservedRoomServiceImpl(ReservedRoomDao reservedRoomDao, RequestDao requestDao, RoomDao roomDao) {
         this.reservedRoomDao = reservedRoomDao;
         this.requestDao = requestDao;
+        this.roomDao = roomDao;
     }
 
     private void reservedRoomValidation(ReservedRoom reservedRoom) {
         if (reservedRoom.getRequestID() == 0) throw new RequestNotExistException("request doesn't exist");
-        if (reservedRoom.getRoomNumber() == 0) throw new RoomNotExistException("room doesn't exist");
+        if (reservedRoom.getRoomID() == 0) throw new RoomNotExistException("room doesn't exist");
     }
 
     @Override
@@ -33,11 +39,37 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
 
     @Override
     public List<ReservedRoom> getReservationsByUserId(long userId) {
-        List<Long> requestsOfUser = requestDao.getAll().stream().filter(s -> s.getUserID() == userId).
-                map(Request::getRequestID).collect(Collectors.toList());
-        return reservedRoomDao.getAll().stream().
-                filter(s -> requestsOfUser.contains(s.getRequestID())).collect(Collectors.toList());
+        List<Long> requestsOfUser = requestDao.getAll().stream()
+                .filter(s -> s.getUserID() == userId)
+                .map(Request::getRequestID)
+                .collect(Collectors.toList());
+        return reservedRoomDao.getAll().stream()
+                .filter(s -> requestsOfUser.contains(s.getRequestID()))
+                .collect(Collectors.toList());
+    }
 
+    @Override
+    public ProcessedRequestDto getProcessedRequestDto(ReservedRoom reservedRoom) {
+        Request request = requestDao.getById(reservedRoom.getRequestID());
+        Room room = roomDao.getById(reservedRoom.getRoomID());
+        return new ProcessedRequestDto(request, room);
+    }
+
+    @Override
+    public List<ProcessedRequestDto> getAllProcessedRequestDtoOfUser(User user) {
+        List<ReservedRoom> reservationsOfUser = getReservationsOfUser(user);
+        return reservationsOfUser.stream()
+                .map(this::getProcessedRequestDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RequestDto> getAllUnprocessedRequestDtoOfUser(User user, List<RequestDto> userRequestDtoList) {
+        List<ReservedRoom> ids = this.getReservationsOfUser(user);
+        List<Long> collect = ids.stream().map(ReservedRoom::getRequestID).collect(Collectors.toList());
+        return userRequestDtoList.stream()
+                .filter(x -> (!collect.contains(x.getRequestID())))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -69,3 +101,4 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
         else throw new ReservationNotExistException("There is no reserved rooms with this ID");
     }
 }
+
