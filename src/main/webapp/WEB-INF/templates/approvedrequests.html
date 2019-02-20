@@ -21,12 +21,12 @@
             <div class="card-header">
                 <h3 id="index-header" class="text-center"
                     th:text="#{message.admin-page.header}">Administration page</span></h3>
-                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-yellow center-align">Pending requests</a>
-                <a th:href="@{/approvedrequests}" th:text="#{message.admin-page.approved}" class="btn btn-grey center-align">Approved requests</a>
+                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-grey center-align">Pending requests</a>
+                <a th:href="@{/approvedrequests}" th:text="#{message.admin-page.approved}" class="btn btn-yellow center-align">Approved requests</a>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${requestList.isEmpty()==true}" th:text="#{message.admin-page.no-request}">There are no active requests</p>
-                <table th:if="${requestList.isEmpty()==false}" class="table table-bordered white">
+                <p class="white" th:if="${approvedRequestList.isEmpty()==true}" th:text="#{message.admin-page.no-request}">There are no approved requests</p>
+                <table th:if="${approvedRequestList.isEmpty()==false}" class="table table-bordered white">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -35,35 +35,28 @@
                         <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
                         <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
                         <th scope="col" th:text="#{message.hotel.status}">Payment status</th>
-                        <th scope="col" th:text="#{message.find}">Find</th>
-                        <th scope="col" th:text="#{message.delete}">Delete</th>
+                        <th scope="col" th:text="#{message.hotel.room}">Room #</th>
+                        <th scope="col" th:text="#{message.hotel.firstname}">Name</th>
+                        <th scope="col" th:text="#{message.hotel.lastname}">Last name</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <th:block th:each="request : ${pagedList}">
+                    <th:block th:each="approvedRequest : ${approvedRequestList}">
                         <tr>
-                            <th th:text="${request.requestID}" scope="row">1</th>
-                            <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
-                            <td th:text="#{'message.class.'+${request.classID}}"></td>
-                            <td th:text="${request.checkIn}"></td>
-                            <td th:text="${request.checkOut}"></td>
-                            <td th:text="#{'message.status.'+${request.paymentStatus}}"></td>
-                            <td>
-                                <a th:href="@{'/getallrooms/'+${request.requestID}}" th:text="#{message.find}"
-                                   class="btn btn-dark float-left" >Find</a>
-                            </td>
-                            <td>
-                                <a th:href="@{'/request/delete/'+${request.requestID}}" th:text="#{message.delete}"
-                                   class="btn btn-dark float-left">Delete</a>
-                            </td>
+                            <th th:text="${approvedRequest.requestID}" scope="row">1</th>
+                            <td th:text="#{'message.capacity.'+${approvedRequest.capacity}}"></td>
+                            <td th:text="#{'message.class.'+${approvedRequest.classID}}"></td>
+                            <td th:text="${approvedRequest.checkIn}"></td>
+                            <td th:text="${approvedRequest.checkOut}"></td>
+                            <td th:text="#{'message.status.'+${approvedRequest.paymentStatus}}"></td>
+                            <td th:text="${approvedRequest.roomNumber}"></td>
+                            <td th:text="${approvedRequest.firstName}"></td>
+                            <td th:text="${approvedRequest.lastName}"></td>
                         </tr>
                     </th:block>
                     </tbody>
                 </table>
-                <div th:if="${pageNumbers.size() > 1}" class="pagination">
-                    <a th:each="pageNumber : ${pageNumbers}"
-                       th:href="@{'/admin?page='+${pageNumber}}"
-                       class="btn btn-grey-small" th:text="${pageNumber}">Number</a>
+                <div>
                 </div>
             </div>
             <div class="card-footer">

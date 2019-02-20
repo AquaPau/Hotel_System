@@ -79,15 +79,7 @@ public class RoomDaoTemplateImpl implements RoomDao {
 
     @Override
     public List<Room> getAll() {
-        return jdbcTemplate.query(SQL_GET_ALL_ROOMS, (rs, rowNum) -> {
-            Room room = new Room();
-            room.setRoomID(rs.getInt(1));
-            room.setRoomNumber(rs.getInt(2));
-            room.setClassID(ClassID.valueOf(rs.getString(3)));
-            room.setCapacity(Capacity.valueOf(rs.getString(4)));
-            room.setPrice(rs.getBigDecimal(5));
-            return room;
-        });
+        return jdbcTemplate.query(SQL_GET_ALL_ROOMS, new RoomRowMapper());
     }
 
     @Override
