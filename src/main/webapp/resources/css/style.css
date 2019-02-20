@@ -123,6 +123,10 @@ h3 {
     margin: 5px;
 }
 
+.roomsbutton {
+    position: absolute;
+}
+
 .container {
     height: 100%;
     align-content: center;
@@ -210,7 +214,7 @@ input:focus {
 }
 
 .btn-grey:hover {
-    color:black;
+    color: black;
     background-color: #FFC312;
     opacity: 0.9;
 }
@@ -232,7 +236,7 @@ input:focus {
 }
 
 .btn-grey-small:hover {
-    color:black;
+    color: black;
     background-color: #FFC312;
     opacity: 0.9;
 }
