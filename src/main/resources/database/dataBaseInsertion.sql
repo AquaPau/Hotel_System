@@ -317,5 +317,5 @@ INSERT INTO "hotel"."requests"("userid","capacity","classid","checkin","checkout
 VALUES(3,E'DOUBLE',E'STANDARD','2019-04-06 00:00:00.000000','2019-04-06 00:00:00.000000',E'NOBILL');
 COMMIT;
 
-UPDATE "hotel"."requests" SET checkout=checkout + (random() * 14 + 1 ) * interval '1 day';
+UPDATE "hotel"."requests" SET checkout=checkout + round(random() * 14 + 1 ) * interval '1 day';
 COMMIT;
