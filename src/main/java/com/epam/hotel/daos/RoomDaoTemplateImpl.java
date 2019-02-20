@@ -6,10 +6,12 @@ import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,16 +40,29 @@ public class RoomDaoTemplateImpl implements RoomDao {
             "  on reservedrooms.requestid = requests.requestid WHERE hotel.reservedrooms.roomid = ?";
     private final String GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY = "SELECT rooms.roomid AS roomid, rooms.roomnumber " +
             "AS roomnumber, rooms.capacity as capacity, rooms.classid as classid, rooms.price as price " +
-                "FROM hotel.rooms AS rooms FULL JOIN hotel.reservedrooms as res ON rooms.roomid = res.roomid " +
-                    "WHERE rooms.roomid NOT IN " +
-                        "(SELECT res.roomid FROM hotel.reservedrooms AS res JOIN hotel.requests AS req " +
-                          "ON res.requestid = req.requestid " +
-                            "WHERE " +
-                                "req.checkin <= :checkin AND req.checkout >= :checkin " +
-                            "OR " +
-                                "req.checkin <= :checkout AND req.checkout >= :checkout" +
-                            ") " +
-            "AND rooms.capacity IN (:capacityList)";
+            "FROM hotel.rooms AS rooms FULL JOIN hotel.reservedrooms as res ON rooms.roomid = res.roomid " +
+            "WHERE rooms.roomid NOT IN " +
+            "(SELECT res.roomid FROM hotel.reservedrooms AS res JOIN hotel.requests AS req " +
+            "ON res.requestid = req.requestid " +
+            "WHERE " +
+            "req.checkin <= :checkin AND req.checkout >= :checkin " +
+            "OR " +
+            "req.checkin <= :checkout AND req.checkout >= :checkout" +
+            ") " +
+            "AND rooms.capacity IN (:capacityList) " +
+            "ORDER BY CASE\n" +
+            "           WHEN classid = :class1 THEN 1\n" +
+            "           WHEN classid = :class2 THEN 2\n" +
+            "           WHEN classid = :class3 THEN 3\n" +
+            "           WHEN classid = :class4 THEN 4\n" +
+            "           END,\n" +
+            "         CASE\n" +
+            "           WHEN capacity = :cap1 THEN 1\n" +
+            "           WHEN capacity = :cap2 THEN 2\n" +
+            "           WHEN capacity = :cap3 THEN 3\n" +
+            "           WHEN capacity = :cap4 THEN 4\n" +
+            "           END";
+
 
     public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -132,9 +147,10 @@ public class RoomDaoTemplateImpl implements RoomDao {
 
     @Override
     public List<Room> getAvailableRoomsInPeriodAndCapacity(Request request) {
-        NamedParameterJdbcTemplate tempTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
+        NamedParameterJdbcTemplate tempTemplate =
+                new NamedParameterJdbcTemplate(Objects.requireNonNull(jdbcTemplate.getDataSource()));
 
-        List<String> capacityList =  new ArrayList<>();
+        List<String> capacityList = new ArrayList<>();
         switch (request.getCapacity()) {
             case SINGLE:
                 capacityList.add("SINGLE");
@@ -146,10 +162,39 @@ public class RoomDaoTemplateImpl implements RoomDao {
                 capacityList.add("QUAD");
         }
 
+        ArrayList<String> classOrder = new ArrayList<>(Arrays.asList("ECONOMY", "STANDARD", "FAMILY", "LUX"));
+        switch (request.getClassID()) {
+            case STANDARD:
+                classOrder.add(0, classOrder.get(1));
+                classOrder.remove(2);
+                break;
+            case FAMILY:
+                classOrder.add(0, classOrder.get(2));
+                classOrder.remove(3);
+                break;
+            case LUX:
+                classOrder.add(0, classOrder.get(3));
+                classOrder.remove(4);
+                break;
+        }
+
+        ArrayList<String> capacityOrder = new ArrayList<>(Arrays.asList("SINGLE", "DOUBLE", "TRIPLE", "QUAD"));
+
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("checkin", request.getCheckIn());
         parameters.addValue("checkout", request.getCheckOut());
         parameters.addValue("capacityList", capacityList);
+
+        parameters.addValue("class1", classOrder.get(0));
+        parameters.addValue("class2", classOrder.get(1));
+        parameters.addValue("class3", classOrder.get(2));
+        parameters.addValue("class4", classOrder.get(3));
+
+        parameters.addValue("cap1", capacityOrder.get(0));
+        parameters.addValue("cap2", capacityOrder.get(1));
+        parameters.addValue("cap3", capacityOrder.get(2));
+        parameters.addValue("cap4", capacityOrder.get(3));
+
 
         return tempTemplate.query(GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY, parameters, new RoomRowMapper());
     }
