@@ -40,7 +40,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <th:block th:each="request : ${requestList}">
+                    <th:block th:each="request : ${pagedList}">
                         <tr>
                             <th th:text="${request.requestID}" scope="row">1</th>
                             <td th:text="#{'message.capacity.'+${request.capacity}}"></td>

@@ -104,6 +104,12 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    public List<RequestDto> getRequestsByPage(int page, int limit) {
+        return requestDao.getRequestsByPage(page, limit).stream().
+                map(RequestDto::new).collect(Collectors.toList());
+    }
+
+    @Override
     public boolean updatePaymentStatus(long id, PaymentStatus status) {
         return requestDao.updatePaymentStatus(id, status);
     }

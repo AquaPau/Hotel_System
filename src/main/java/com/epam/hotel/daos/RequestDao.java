@@ -12,5 +12,6 @@ public interface RequestDao extends Dao <Request>{
     List<Request> getPaymentStatus(PaymentStatus paymentStatus);
     boolean updatePaymentStatus(long id, PaymentStatus status);
     public List<ApprovedRequestDto> getAllApprovedRequests();
+    public List<Request> getRequestsByPage(int page, int limit);
 
 }
