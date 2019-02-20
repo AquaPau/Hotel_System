@@ -20,11 +20,11 @@ function validateSignInForm() {
     if (password !== confirm) {
         setFieldErrorColor($('#pw-input'), true);
         setFieldErrorColor($('#confirm-input'), true);
-        showError($('#confirm-error'), true);
+        showElement($('#confirm-error'), true);
         validated = false;
     } else {
         setFieldErrorColor($('#confirm-input'), false);
-        showError($('#confirm-error'), false);
+        showElement($('#confirm-error'), false);
     }
     return validated;
 }
@@ -32,11 +32,11 @@ function validateSignInForm() {
 function validate(elem, matcher, error) {
     if (matcher == null) {
         setFieldErrorColor(elem, true);
-        showError(error, true);
+        showElement(error, true);
         return false;
     } else {
         setFieldErrorColor(elem, false);
-        showError(error, false);
+        showElement(error, false);
         return true;
     }
 }
@@ -56,19 +56,19 @@ function calendarValidate() {
     var today = new Date();
     if (checkIn <= today) {
         setFieldErrorColor($('#checkIn'), true);
-        showError($('#checkIn-error'), true);
+        showElement($('#checkIn-error'), true);
         validated = false;
     } else {
         setFieldErrorColor($('#checkIn'), false);
-        showError($('#checkIn-error'), false);
+        showElement($('#checkIn-error'), false);
     }
     if (checkOut <= checkIn) {
         setFieldErrorColor($('#checkOut'), true);
-        showError($('#checkOut-error'), true);
+        showElement($('#checkOut-error'), true);
         validated = false;
     } else {
         setFieldErrorColor($('#checkOut'), false);
-        showError($('#checkOut-error'), false);
+        showElement($('#checkOut-error'), false);
     }
     return validated;
 }
@@ -82,9 +82,8 @@ function getDate(elemId) {
     return new Date("" + year + "-" + month + "-" + day);
 }
 
-function showError(error, flag) {
-    flag = !flag;
-    error.attr("hidden", flag);
+function showElement(element, flag) {
+    element.attr("hidden", !flag);
 }
 
 function validateLoginPage() {
@@ -92,11 +91,15 @@ function validateLoginPage() {
     if (currentLocation.endsWith("error")) {
         setFieldErrorColor($('#un-login-input'), true);
         setFieldErrorColor($('#pw-login-input'), true);
-        showError($('#lgn-error'), true);
+        showElement($('#lgn-error'), true);
     }
 }
 
-function back(){
+function showPaymentMessage(flag) {
+    showElement($('#payment'), flag);
+}
+
+function back() {
     window.history.back();
 }
 

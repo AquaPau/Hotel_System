@@ -21,14 +21,26 @@ html, body {
     color: #00ff6a;
 }
 
-.vert-fixed {
+.warning-msg {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    width: 500px;
+    height: 200px;
+    padding: 25px;
+    border: 2px solid #FFC312;
+    position: relative;
+    margin: auto;
+    top: 40%;
+    z-index: 2;
+}
+
+.warning-msg-bg {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
+    height: available;
+    width: available;
     position: fixed;
-    width: 900px;
-    height: 1800px;
-    top: 10%;
-    left: 25%;
-    margin-top: 0px;
-    margin-left: 0px;
+    z-index: 1;
 }
 
 .center-align {
@@ -59,7 +71,6 @@ h3 {
 }
 
 .card-body {
-    padding-bottom: 0;
 }
 
 .input-group-text {
@@ -73,6 +84,7 @@ h3 {
 
 .login_btn {
     width: 150px !important;
+    color: black !important;
 }
 
 .form-group {
@@ -123,7 +135,19 @@ h3 {
     width: auto;
     min-width: 800px;
     background-color: rgba(0, 0, 0, 0.6) !important;
-    padding-bottom: 20px;
+}
+
+.reserv-buttons {
+    height: 50px;
+}
+
+table {
+    text-align: center !important;
+
+}
+
+.table td {
+    vertical-align: middle !important;
 }
 
 .social_icon span {
