@@ -13,6 +13,8 @@ html, body {
 
 .pagination {
     display: inline-block;
+    text-align: center;
+    width: 100%;
 }
 
 .paid {
@@ -194,6 +196,7 @@ input:focus {
     background-color: #FFC312;
     opacity: 0.9;
     width: 30px;
+    border-radius: 5px;
 }
 
 .btn-grey-small {
@@ -201,6 +204,7 @@ input:focus {
     background-color: rgba(29, 29, 3, 0.2);
     opacity: 0.9;
     width: 30px;
+    border-radius: 5px;
 }
 
 .btn-grey-small:hover {
