@@ -5,6 +5,7 @@ import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 import lombok.Data;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
