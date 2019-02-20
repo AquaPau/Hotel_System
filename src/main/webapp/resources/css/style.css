@@ -11,6 +11,12 @@ html, body {
     color: #ff5a5a !important;
 }
 
+.pagination {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+
 .paid {
     color: #00ff6a;
 }
@@ -167,7 +173,7 @@ input:focus {
 
 .btn-yellow {
     color: black;
-    background-color: #f9f814;
+    background-color: #FFC312;
     opacity: 0.9;
     width: 280px;
 }
@@ -181,7 +187,29 @@ input:focus {
 
 .btn-grey:hover {
     color:black;
-    background-color: #f9f814;
+    background-color: #FFC312;
+    opacity: 0.9;
+}
+
+.btn-yellow-small {
+    color: black;
+    background-color: #FFC312;
+    opacity: 0.9;
+    width: 30px;
+    border-radius: 5px;
+}
+
+.btn-grey-small {
+    color: white;
+    background-color: rgba(29, 29, 3, 0.2);
+    opacity: 0.9;
+    width: 30px;
+    border-radius: 5px;
+}
+
+.btn-grey-small:hover {
+    color:black;
+    background-color: #FFC312;
     opacity: 0.9;
 }
 

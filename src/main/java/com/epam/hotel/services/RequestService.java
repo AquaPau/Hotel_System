@@ -24,4 +24,6 @@ public interface RequestService extends Service<Request> {
 
     public List<ApprovedRequestDto> getAllApprovedRequests();
 
+    public List<RequestDto> getRequestsByPage(int page, int limit);
+
 }
