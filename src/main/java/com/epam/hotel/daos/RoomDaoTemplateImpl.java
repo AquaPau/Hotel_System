@@ -1,6 +1,7 @@
 package com.epam.hotel.daos;
 
 import com.epam.hotel.model.Request;
+import com.epam.hotel.model.ReservedRoom;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.epam.hotel.model.enums.*;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -31,6 +33,18 @@ public class RoomDaoTemplateImpl implements RoomDao {
             "  hotel.requests.userid, hotel.requests.capacity, hotel.requests.classid, hotel.requests.checkin," +
             "  hotel.requests.checkout, hotel.requests.paymentstatus FROM hotel.reservedrooms left join hotel.requests" +
             "  on reservedrooms.requestid = requests.requestid WHERE hotel.reservedrooms.roomid = ?";
+    private final String GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY = "SELECT rooms.roomid AS roomid, rooms.roomnumber " +
+            "AS roomnumber, rooms.capacity as capacity, rooms.classid as classid, rooms.price as price " +
+                "FROM hotel.rooms AS rooms FULL JOIN hotel.reservedrooms as res ON rooms.roomid = res.roomid " +
+                    "WHERE rooms.roomid NOT IN " +
+                        "(SELECT res.roomid FROM hotel.reservedrooms AS res JOIN hotel.requests AS req " +
+                          "ON res.requestid = req.requestid" +
+                            "WHERE" +
+                                "req.checkin <= ? AND req.checkout >= ?" +
+                            "OR" +
+                                "req.checkin <= ? AND req.checkout >= ?" +
+                            ")" +
+            "GROUP BY rooms.roomid HAVING rooms.classid = ?";
 
     public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -111,6 +125,12 @@ public class RoomDaoTemplateImpl implements RoomDao {
     @Override
     public List<Request> getRequestsByRoomNumber(int roomNumber) {
         return jdbcTemplate.query(SQL_GET_REQUESTS_BY_ROOM_NUMBER, new Object[]{roomNumber}, new RequestRowMapper());
+    }
+
+    @Override
+    public List<ReservedRoom> getAvailableRoomsInPeriodAndCapacity(Request request) {
+
+        return null;
     }
 
     class RoomRowMapper implements RowMapper<Room> {
