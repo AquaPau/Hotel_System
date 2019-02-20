@@ -81,12 +81,12 @@ public class RoomServiceImpl implements RoomService {
 
     private List<Room> getAllFittingRooms(Request request) {
         List<Room> receivedList = roomDao.getAvailableRoomsInPeriodAndCapacity(request);
-        LinkedList<Room> result = new LinkedList<>();
+/*        LinkedList<Room> result = new LinkedList<>();
         for (Room room: receivedList)
             if (room.getCapacity() == request.getCapacity() && room.getClassID() == request.getClassID())
                 result.offerFirst(room);
-            else result.offerLast(room);
-        return result;
+            else result.offerLast(room);*/
+        return receivedList;
     }
 
 
