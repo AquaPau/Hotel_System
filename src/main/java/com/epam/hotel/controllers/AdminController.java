@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +21,15 @@ public class AdminController {
 
     private final RequestService requestService;
 
-    @GetMapping("/admin?page={pageNumber}")
-    public String adminGetRequestsByPage(@PathVariable String pageNumber, Model model) {
-        List<RequestDto> pagedList = requestService.getRequestsByPage(Integer.valueOf(pageNumber), 5);
+    @RequestMapping(value = "/admin", params = {"page"})
+    public String adminGetRequestsByPage(@RequestParam(value = "page") int page, Model model) {
+        List<RequestDto> pagedList = requestService.getRequestsByPage(Integer.valueOf(page), 5);
         model.addAttribute("pagedList", pagedList);
         return "/admin";
     }
 
-    @GetMapping("/admin")
-    public String adminGetAllRequests(Model model) {
+    @RequestMapping(value = "/admin", params = {"page"})
+    public String adminGetAllRequests(@RequestParam(value = "page") int page, Model model) {
         List<RequestDto> allRequestsDtoList = requestService.getAllRequestsDto();
         Integer numberOfPages = allRequestsDtoList.size() / 5 + 1;
         ArrayList<Integer> pageNumbers = new ArrayList<>();
