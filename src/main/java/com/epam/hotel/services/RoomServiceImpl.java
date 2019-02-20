@@ -12,12 +12,9 @@ import com.epam.hotel.model.Room;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class RoomServiceImpl implements RoomService {
@@ -83,16 +80,13 @@ public class RoomServiceImpl implements RoomService {
     }
 
     private List<Room> getAllFittingRooms(Request request) {
-        List<Room> notAvailableByTimeRooms = reservedRoomService.getReservedRoomsForTheTimeOfRequest(request).stream().
-                map(c -> roomDao.getById(c.getRoomID())).collect(Collectors.toList());
-        List<Room> availableByTimeAndCapacityRooms = getAll().stream().filter(c -> (!notAvailableByTimeRooms.contains(c)) &&
-                c.getCapacity() == request.getCapacity()).collect(Collectors.toList());
-        List<Room> mostsuitableList = availableByTimeAndCapacityRooms.stream().filter(c ->
-                c.getClassID() == request.getClassID()).collect(Collectors.toList());
-        List<Room> lessSuitableList = (availableByTimeAndCapacityRooms.stream().filter(c ->
-                c.getClassID() != request.getClassID()).collect(Collectors.toList()));
-        mostsuitableList.addAll(lessSuitableList);
-        return mostsuitableList;
+        List<Room> receivedList = roomDao.getAvailableRoomsInPeriodAndCapacity(request);
+        LinkedList<Room> result = new LinkedList<>();
+        for (Room room: receivedList)
+            if (room.getCapacity() == request.getCapacity() && room.getClassID() == request.getClassID())
+                result.offerFirst(room);
+            else result.offerLast(room);
+        return result;
     }
 
 

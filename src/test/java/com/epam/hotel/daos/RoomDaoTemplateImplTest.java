@@ -95,7 +95,7 @@ public class RoomDaoTemplateImplTest {
     }
 
     @Test
-    void getAvailableRoomsInPeriodAndCapacity() {
+    public void getAvailableRoomsInPeriodAndCapacity() {
 
     }
 }
