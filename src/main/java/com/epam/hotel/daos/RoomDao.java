@@ -12,7 +12,7 @@ public interface RoomDao extends Dao<Room> {
 
     List<Request> getRequestsByRoomNumber(int roomNumber);
 
-    List<ReservedRoom> getAvailableRoomsInPeriodAndCapacity(Request request);
+    List<Room> getAvailableRoomsInPeriodAndCapacity(Request request);
 
 
 }

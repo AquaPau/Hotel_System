@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,7 +45,7 @@ public class RoomDaoTemplateImpl implements RoomDao {
                             "OR" +
                                 "req.checkin <= ? AND req.checkout >= ?" +
                             ")" +
-            "GROUP BY rooms.roomid HAVING rooms.classid = ?";
+            "AND rooms.capacity IN (?)";
 
     public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -128,9 +129,21 @@ public class RoomDaoTemplateImpl implements RoomDao {
     }
 
     @Override
-    public List<ReservedRoom> getAvailableRoomsInPeriodAndCapacity(Request request) {
+    public List<Room> getAvailableRoomsInPeriodAndCapacity(Request request) {
 
-        return null;
+        List<String> capacityList =  new ArrayList<>();
+        switch (request.getCapacity()) {
+            case SINGLE:
+                capacityList.add("SINGLE");
+            case DOUBLE:
+                capacityList.add("DOUBLE");
+            case TRIPLE:
+                capacityList.add("TRIPLE");
+            case QUAD:
+                capacityList.add("QUAD");
+        }
+        return jdbcTemplate.query(GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY, new Object[]{request.getCheckIn(),
+        request.getCheckIn(), request.getCheckOut(), request.getCheckOut(), capacityList}, new RoomRowMapper());
     }
 
     class RoomRowMapper implements RowMapper<Room> {
