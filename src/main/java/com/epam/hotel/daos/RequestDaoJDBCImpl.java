@@ -1,5 +1,6 @@
 package com.epam.hotel.daos;
 
+import com.epam.hotel.dtos.ApprovedRequestDto;
 import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.enums.PaymentStatus;
@@ -26,6 +27,12 @@ public class RequestDaoJDBCImpl implements RequestDao {
     private final String GET_REQUESTS_BY_USERID = "SELECT * FROM hotel.requests WHERE userid = ?";
     private final String GET_REQUESTS_BY_PAYMENTSTATUS = "SELECT * FROM hotel.requests WHERE " +
             "paymentstatus = ?";
+    private final String SQL_GET_ALL_APPROVED_REQUESTS = "SELECT hotel.requests.requestid, hotel.requests.capacity, " +
+            " hotel.requests.classid, hotel.requests.checkin, hotel.requests.checkout, hotel.requests.paymentstatus," +
+            " hotel.rooms.roomnumber, hotel.requests.userid, hotel.users.firstname, hotel.users.lastname" +
+            " FROM hotel.users RIGHT JOIN hotel.rooms RIGHT JOIN hotel.reservedrooms FULL JOIN hotel.requests" +
+            " ON reservedrooms.requestid = requests.requestid ON rooms.roomid = reservedrooms.roomid" +
+            " ON requests.userid = users.userid WHERE roomnumber NOTNULL ORDER BY requests.checkin";
 
     private void extractRequestBody(ResultSet rs, Request request) throws SQLException {
         request.setRequestID(rs.getLong("requestid"));
@@ -89,6 +96,11 @@ public class RequestDaoJDBCImpl implements RequestDao {
     @Override
     public boolean updatePaymentStatus(long id, PaymentStatus status) {
         return true;
+    }
+
+    @Override
+    public List<ApprovedRequestDto> getAllApprovedRequests() {
+        return null;
     }
 
     @Override

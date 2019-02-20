@@ -1,5 +1,6 @@
 package com.epam.hotel.controllers;
 
+import com.epam.hotel.dtos.ApprovedRequestDto;
 import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.services.RequestService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,13 @@ public class AdminController {
         List<RequestDto> allRequestsDtoList = requestService.getAllRequestsDto();
         model.addAttribute("requestList", allRequestsDtoList);
         return "admin";
+    }
+
+    @GetMapping("/approvedrequests")
+    public String adminApprovedRequestList(Model model) {
+        List<ApprovedRequestDto> approvedRequestsList = requestService.getAllApprovedRequests();
+        model.addAttribute("approvedRequestList", approvedRequestsList);
+        return "approvedrequests";
     }
 
 }
