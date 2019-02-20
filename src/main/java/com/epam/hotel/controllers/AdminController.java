@@ -22,25 +22,35 @@ public class AdminController {
     private final RequestService requestService;
 
     @RequestMapping(value = "/admin", params = {"page"})
-    public String adminGetRequestsByPage(@RequestParam(value = "page") int page, Model model) {
-        List<RequestDto> pagedList = requestService.getRequestsByPage(Integer.valueOf(page), 5);
+    public String adminGetRequestsByPages(@RequestParam(value = "page") int page, Model model) {
+        List<RequestDto> pagedList = requestService.getRequestsByPage(page, 5);
+        model.addAttribute("requestList", allRequests());
+        model.addAttribute("pageNumbers", getPages());
         model.addAttribute("pagedList", pagedList);
         return "/admin";
     }
 
-    @RequestMapping(value = "/admin", params = {"page"})
-    public String adminGetAllRequests(@RequestParam(value = "page") int page, Model model) {
+    @GetMapping("/admin")
+    public String adminGetAllRequests(Model model) {
+        List<RequestDto> pagedList = requestService.getRequestsByPage(1, 5);
+        model.addAttribute("requestList", allRequests());
+        model.addAttribute("pageNumbers", getPages());
+        model.addAttribute("pagedList", pagedList);
+        return "/admin";
+    }
+
+    private List<RequestDto> allRequests() {
+        return requestService.getAllRequestsDto();
+    }
+
+    private List<Integer> getPages() {
         List<RequestDto> allRequestsDtoList = requestService.getAllRequestsDto();
         Integer numberOfPages = allRequestsDtoList.size() / 5 + 1;
         ArrayList<Integer> pageNumbers = new ArrayList<>();
         for (int i = 1; i <= numberOfPages; i++) {
             pageNumbers.add(i);
         }
-        List<RequestDto> pagedList = requestService.getRequestsByPage(1, 5);
-        model.addAttribute("requestList", allRequestsDtoList);
-        model.addAttribute("pageNumbers", pageNumbers);
-        model.addAttribute("pagedList", pagedList);
-        return "/admin";
+        return pageNumbers;
     }
 
     @GetMapping("/approvedrequests")
