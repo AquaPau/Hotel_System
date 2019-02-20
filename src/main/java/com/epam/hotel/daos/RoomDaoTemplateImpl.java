@@ -39,12 +39,12 @@ public class RoomDaoTemplateImpl implements RoomDao {
                 "FROM hotel.rooms AS rooms FULL JOIN hotel.reservedrooms as res ON rooms.roomid = res.roomid " +
                     "WHERE rooms.roomid NOT IN " +
                         "(SELECT res.roomid FROM hotel.reservedrooms AS res JOIN hotel.requests AS req " +
-                          "ON res.requestid = req.requestid" +
-                            "WHERE" +
+                          "ON res.requestid = req.requestid " +
+                            "WHERE " +
+                                "req.checkin <= ? AND req.checkout >= ? " +
+                            "OR " +
                                 "req.checkin <= ? AND req.checkout >= ?" +
-                            "OR" +
-                                "req.checkin <= ? AND req.checkout >= ?" +
-                            ")" +
+                            ") " +
             "AND rooms.capacity IN (?)";
 
     public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
@@ -131,16 +131,16 @@ public class RoomDaoTemplateImpl implements RoomDao {
     @Override
     public List<Room> getAvailableRoomsInPeriodAndCapacity(Request request) {
 
-        List<String> capacityList =  new ArrayList<>();
+        StringBuffer capacityList =  new StringBuffer();
         switch (request.getCapacity()) {
             case SINGLE:
-                capacityList.add("SINGLE");
+                capacityList.append("SINGLE, ");
             case DOUBLE:
-                capacityList.add("DOUBLE");
+                capacityList.append ("DOUBLE, ");
             case TRIPLE:
-                capacityList.add("TRIPLE");
+                capacityList.append("TRIPLE, ");
             case QUAD:
-                capacityList.add("QUAD");
+                capacityList.append("QUAD");
         }
         return jdbcTemplate.query(GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY, new Object[]{request.getCheckIn(),
         request.getCheckIn(), request.getCheckOut(), request.getCheckOut(), capacityList}, new RoomRowMapper());
