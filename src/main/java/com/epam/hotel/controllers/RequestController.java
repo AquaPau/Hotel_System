@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @Controller
@@ -64,9 +65,10 @@ public class RequestController {
     }
 
     @GetMapping("request/pay/{id}")
-    public String payRequest(@PathVariable String id) {
+    public String payRequest(@PathVariable String id, HttpServletRequest request) {
         requestService.updatePaymentStatus(new Long(id), PaymentStatus.PAID);
-        return "redirect:/";
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
 
 }

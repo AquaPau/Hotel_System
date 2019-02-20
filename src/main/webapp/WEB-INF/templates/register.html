@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 <head>
@@ -89,12 +89,12 @@
                         <a href="/login" th:text="#{message.register-page.login-link}">Log In</a>
                     </div>
                 </form>
+                <div class="text-center">
+                    <span th:text="#{message.change-language}+': '"></span>
+                    <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
+                    <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+                </div>
             </article>
-            <div class="text-center">
-                <span th:text="#{message.change-language}+': '"></span>
-                <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
-                <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
-            </div>
         </div>
     </div>
 </div>
