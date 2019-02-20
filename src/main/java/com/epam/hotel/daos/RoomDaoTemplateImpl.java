@@ -55,13 +55,13 @@ public class RoomDaoTemplateImpl implements RoomDao {
             "           WHEN classid = :class2 THEN 2\n" +
             "           WHEN classid = :class3 THEN 3\n" +
             "           WHEN classid = :class4 THEN 4\n" +
-            "           END"/*,\n" +
+            "           END,\n" +
             "         CASE\n" +
             "           WHEN capacity = :cap1 THEN 1\n" +
             "           WHEN capacity = :cap2 THEN 2\n" +
             "           WHEN capacity = :cap3 THEN 3\n" +
             "           WHEN capacity = :cap4 THEN 4\n" +
-            "           END"*/;
+            "           END";
 
 
     public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
@@ -177,6 +177,17 @@ public class RoomDaoTemplateImpl implements RoomDao {
                 break;
         }
 
+        ArrayList<String> capacityOrder = new ArrayList<>(Arrays.asList("SINGLE","DOUBLE","TRIPLE","QUAD"));
+        /*switch (request.getCapacity()) {
+            case DOUBLE:
+                capacityOrder
+                break;
+            case TRIPLE:
+                break;
+            case QUAD:
+                break;
+        }*/
+
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("checkin", request.getCheckIn());
         parameters.addValue("checkout", request.getCheckOut());
@@ -187,7 +198,10 @@ public class RoomDaoTemplateImpl implements RoomDao {
         parameters.addValue("class3",classOrder.get(2));
         parameters.addValue("class4",classOrder.get(3));
 
-        parameters.addValue("cap1",classOrder.get(0));
+        parameters.addValue("cap1",capacityOrder.get(0));
+        parameters.addValue("cap2",capacityOrder.get(1));
+        parameters.addValue("cap3",capacityOrder.get(2));
+        parameters.addValue("cap4",capacityOrder.get(3));
 
 
         return tempTemplate.query(GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY, parameters, new RoomRowMapper());
