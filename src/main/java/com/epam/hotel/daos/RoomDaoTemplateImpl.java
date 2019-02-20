@@ -16,6 +16,8 @@ import java.util.Objects;
 import com.epam.hotel.model.enums.*;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
@@ -41,11 +43,11 @@ public class RoomDaoTemplateImpl implements RoomDao {
                         "(SELECT res.roomid FROM hotel.reservedrooms AS res JOIN hotel.requests AS req " +
                           "ON res.requestid = req.requestid " +
                             "WHERE " +
-                                "req.checkin <= ? AND req.checkout >= ? " +
+                                "req.checkin <= :checkin AND req.checkout >= :checkin " +
                             "OR " +
-                                "req.checkin <= ? AND req.checkout >= ?" +
+                                "req.checkin <= :checkout AND req.checkout >= :checkout" +
                             ") " +
-            "AND rooms.capacity IN (?)";
+            "AND rooms.capacity IN (:capacityList)";
 
     public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -130,20 +132,26 @@ public class RoomDaoTemplateImpl implements RoomDao {
 
     @Override
     public List<Room> getAvailableRoomsInPeriodAndCapacity(Request request) {
+        NamedParameterJdbcTemplate tempTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
 
-        StringBuffer capacityList =  new StringBuffer();
+        List<String> capacityList =  new ArrayList<>();
         switch (request.getCapacity()) {
             case SINGLE:
-                capacityList.append("SINGLE, ");
+                capacityList.add("SINGLE");
             case DOUBLE:
-                capacityList.append ("DOUBLE, ");
+                capacityList.add("DOUBLE");
             case TRIPLE:
-                capacityList.append("TRIPLE, ");
+                capacityList.add("TRIPLE");
             case QUAD:
-                capacityList.append("QUAD");
+                capacityList.add("QUAD");
         }
-        return jdbcTemplate.query(GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY, new Object[]{request.getCheckIn(),
-        request.getCheckIn(), request.getCheckOut(), request.getCheckOut(), capacityList}, new RoomRowMapper());
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("checkin", request.getCheckIn());
+        parameters.addValue("checkout", request.getCheckOut());
+        parameters.addValue("capacityList", capacityList);
+
+        return tempTemplate.query(GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY, parameters, new RoomRowMapper());
     }
 
     class RoomRowMapper implements RowMapper<Room> {
