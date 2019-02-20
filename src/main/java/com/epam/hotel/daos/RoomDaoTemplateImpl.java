@@ -6,10 +6,12 @@ import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,7 +49,20 @@ public class RoomDaoTemplateImpl implements RoomDao {
                             "OR " +
                                 "req.checkin <= :checkout AND req.checkout >= :checkout" +
                             ") " +
-            "AND rooms.capacity IN (:capacityList)";
+            "AND rooms.capacity IN (:capacityList) " +
+            "ORDER BY CASE\n" +
+            "           WHEN classid = :class1 THEN 1\n" +
+            "           WHEN classid = :class2 THEN 2\n" +
+            "           WHEN classid = :class3 THEN 3\n" +
+            "           WHEN classid = :class4 THEN 4\n" +
+            "           END"/*,\n" +
+            "         CASE\n" +
+            "           WHEN capacity = :cap1 THEN 1\n" +
+            "           WHEN capacity = :cap2 THEN 2\n" +
+            "           WHEN capacity = :cap3 THEN 3\n" +
+            "           WHEN capacity = :cap4 THEN 4\n" +
+            "           END"*/;
+
 
     public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -146,10 +161,34 @@ public class RoomDaoTemplateImpl implements RoomDao {
                 capacityList.add("QUAD");
         }
 
+        ArrayList<String> classOrder = new ArrayList<>(Arrays.asList("ECONOMY","STANDARD","FAMILY","LUX"));
+        switch (request.getClassID()) {
+            case STANDARD:
+                classOrder.add(0,classOrder.get(1));
+                classOrder.remove(2);
+                break;
+            case FAMILY:
+                classOrder.add(0,classOrder.get(2));
+                classOrder.remove(3);
+                break;
+            case LUX:
+                classOrder.add(0,classOrder.get(3));
+                classOrder.remove(4);
+                break;
+        }
+
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("checkin", request.getCheckIn());
         parameters.addValue("checkout", request.getCheckOut());
         parameters.addValue("capacityList", capacityList);
+
+        parameters.addValue("class1",classOrder.get(0));
+        parameters.addValue("class2",classOrder.get(1));
+        parameters.addValue("class3",classOrder.get(2));
+        parameters.addValue("class4",classOrder.get(3));
+
+        parameters.addValue("cap1",classOrder.get(0));
+
 
         return tempTemplate.query(GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY, parameters, new RoomRowMapper());
     }
