@@ -1,9 +1,12 @@
 package com.epam.hotel.daos;
 
+import com.epam.hotel.dtos.ApprovedRequestDto;
+import com.epam.hotel.dtos.RequestDto;
 import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
+import com.epam.hotel.utils.DateFormatter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -29,6 +32,14 @@ public class RequestDaoTemplateImpl implements RequestDao {
     private static final String GET_REQUESTS_BY_PAYMENTSTATUS = "SELECT * FROM hotel.requests WHERE " +
             "paymentStatus = %s";
     private static final String UPDATE_BILLING_STATUS = "UPDATE hotel.requests SET paymentstatus = ? WHERE requestid = ?";
+    private final String SQL_GET_ALL_APPROVED_REQUESTS = "SELECT hotel.requests.requestid, hotel.requests.capacity, " +
+            " hotel.requests.classid, hotel.requests.checkin, hotel.requests.checkout, hotel.requests.paymentstatus," +
+            " hotel.rooms.roomnumber, hotel.requests.userid, hotel.users.firstname, hotel.users.lastname" +
+            " FROM hotel.users RIGHT JOIN hotel.rooms RIGHT JOIN hotel.reservedrooms FULL JOIN hotel.requests" +
+            " ON reservedrooms.requestid = requests.requestid ON rooms.roomid = reservedrooms.roomid" +
+            " ON requests.userid = users.userid WHERE roomnumber NOTNULL ORDER BY requests.checkin";
+    private final String SQL_GET_REQUESTS_PAGE = "SELECT * FROM hotel.requests " +
+            "WHERE paymentstatus='NOBILL' ORDER BY requestid OFFSET ? LIMIT ?";
 
 
     public RequestDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
@@ -93,6 +104,17 @@ public class RequestDaoTemplateImpl implements RequestDao {
         else return null;
     }
 
+    @Override
+    public List<ApprovedRequestDto> getAllApprovedRequests() {
+        return jdbcTemplate.query(SQL_GET_ALL_APPROVED_REQUESTS, new ApprovedRequestRowMapper());
+    }
+
+    @Override
+    public List<Request> getRequestsByPage(int page, int limit) {
+        int offset = (page-1)*limit;
+        return jdbcTemplate.query(SQL_GET_REQUESTS_PAGE, new Object[]{offset, limit},new RequestRowMapper());
+    }
+
     class RequestRowMapper implements RowMapper<Request> {
         @Override
         public Request mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -107,4 +129,23 @@ public class RequestDaoTemplateImpl implements RequestDao {
             return request;
         }
     }
+
+    class ApprovedRequestRowMapper implements RowMapper<ApprovedRequestDto> {
+        @Override
+        public ApprovedRequestDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+            ApprovedRequestDto approvedRequestDto = new ApprovedRequestDto();
+            approvedRequestDto.setRequestID(rs.getLong("requestid"));
+            approvedRequestDto.setRoomNumber(rs.getInt("roomnumber"));
+            approvedRequestDto.setUserID(rs.getLong("userid"));
+            approvedRequestDto.setFirstName(rs.getString("firstname"));
+            approvedRequestDto.setLastName(rs.getString("lastname"));
+            approvedRequestDto.setCapacity(rs.getString("capacity"));
+            approvedRequestDto.setClassID(rs.getString("classid"));
+            approvedRequestDto.setCheckIn(DateFormatter.convertDateToString(rs.getTimestamp("checkin")));
+            approvedRequestDto.setCheckOut(DateFormatter.convertDateToString(rs.getTimestamp("checkout")));
+            approvedRequestDto.setPaymentStatus(rs.getString("paymentstatus"));
+            return approvedRequestDto;
+        }
+    }
+
 }

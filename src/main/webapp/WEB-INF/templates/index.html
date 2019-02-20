@@ -25,7 +25,7 @@
                     Welcome</h3>
             </div>
             <div class="card-body">
-                <a th:href="@{/request/new}" class="btn btn-dark float-right"
+                <a th:href="@{/request/new}" class="btn btn-success float-right"
                    th:text="#{message.hotel.new-request}">New request</a>
                 <div th:if="${processedRequestList.isEmpty()==false}">
                     <p class="white" th:text="#{message.index-page.processed-requests}"> Processed requests:</p>
@@ -49,19 +49,15 @@
                                 <td th:text="${request.checkIn}"></td>
                                 <td th:text="${request.checkOut}"></td>
                                 <td>
-                                    <a th:text="#{message.view}" th:href="@{'/rooms/view/'+${request.roomId}}"
-                                       class="btn btn-dark float-left">view</a>
+                                    <a th:text="#{message.view}"
+                                       th:href="@{'/reservation/view/'+${request.reservationID}}"
+                                       class="btn btn-info float-left">view</a>
                                 </td>
+                                <td th:text="#{'message.status.'+${request.paymentStatus}}"></td>
                                 <td>
-                                    <a th:if="${request.paymentStatus=='BILLSENT'}"
-                                       th:text="#{message.pay}+' '+${request.price}" th:href="@{'/request/pay/'+${request.requestID}}"
-                                       class="btn btn-dark float-left">pay</a>
-                                    <p class="paid" th:if="${request.paymentStatus=='PAID'}"
-                                       th:text="#{message.payment-status.paid}"></p>
-                                </td>
-                                <td>
-                                    <a th:href="@{'/reservation/cancel/'+${request.reservationID}}" th:text="#{message.cancel}"
-                                       class="btn btn-dark float-left">cancel</a>
+                                    <a th:href="@{'/reservation/cancel/'+${request.reservationID}}"
+                                       th:text="#{message.cancel}"
+                                       class="btn btn-danger float-left">cancel</a>
                                 </td>
                             </tr>
                         </th:block>
@@ -69,7 +65,13 @@
                     </table>
                 </div>
 
-                <p class="white" th:if="${unprocessedRequestList.isEmpty()==true}" th:text="#{message.index-page.no-request}">You
+                <p class="white"
+                   th:if="${processedRequestList.isEmpty()==false && unprocessedRequestList.isEmpty()==true}"
+                   th:text="#{message.index-page.no-unprocessed-request}">You
+                    have not unprocessed requests.</p>
+                <p class="white"
+                   th:if="${processedRequestList.isEmpty()==true && unprocessedRequestList.isEmpty()==true}"
+                   th:text="#{message.index-page.no-request}">You
                     have not requests.</p>
                 <div th:if="${unprocessedRequestList.isEmpty()==false}">
                     <p class="white" th:text="#{message.index-page.your-requests}"> Your requests</p>
@@ -92,12 +94,14 @@
                                 <td th:text="${request.checkIn}"></td>
                                 <td th:text="${request.checkOut}"></td>
                                 <td>
-                                    <a th:href="@{'/request/edit/'+${request.requestID}}" th:text="#{message.edit}"
-                                       class="btn btn-dark float-left">Edit</a>
+                                    <a th:href="@{'/request/edit/'+${request.requestID}}"
+                                       th:text="#{message.edit}"
+                                       class="btn btn-info float-left">Edit</a>
                                 </td>
                                 <td>
-                                    <a th:href="@{'/request/delete/'+${request.requestID}}" th:text="#{message.delete}"
-                                       class="btn btn-dark float-left">Delete</a>
+                                    <a th:href="@{'/request/delete/'+${request.requestID}}"
+                                       th:text="#{message.delete}"
+                                       class="btn btn-danger float-left">Delete</a>
                                 </td>
                             </tr>
                         </th:block>
@@ -105,22 +109,25 @@
                     </table>
                     <div>
                     </div>
-                    <a th:href="@{/rooms}" class="btn btn-dark float-right"
+                    <a th:href="@{/rooms}" class="btn btn-info float-right"
                        th:text="#{message.hotel.rooms}">Rooms</a>
                 </div>
             </div>
             <div class="card-footer">
-                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}" th:text="#{message.index-page.admin}"
-                   class="btn btn-info float-left">Admin
-                    menu</a>
-                <form name="logoutForm" th:action="@{/logout}" method="post">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <input type="submit" class="btn btn-dark float-right" th:value="#{message.signout}"/>
-                </form>
                 <div class="text-center">
-                    <span th:text="#{message.change-language}+': '"></span>
-                    <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
-                    <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+                    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}"
+                       th:text="#{message.index-page.admin}"
+                       class="btn btn-info">Admin
+                        menu</a>
+                    <div>
+                        <span th:text="#{message.change-language}+': '"></span>
+                        <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
+                        <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+                    </div>
+                    <form name="logoutForm" th:action="@{/logout}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <input type="submit" class="btn btn-dark" th:value="#{message.signout}"/>
+                    </form>
                 </div>
             </div>
         </div>
