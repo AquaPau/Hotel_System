@@ -77,16 +77,13 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomDto> getAllFittingRoomsDto(Request request) {
-        List<RoomDto> allFittingRooms = getAllRoomsDto();
-        String cap = request.getCapacity().name();
-        String classID = request.getClassID().name();
-        List<RoomDto> fittingRooms = allFittingRooms.stream().
-                filter(room -> room.getCapacity().equals(cap)).
-                filter(room -> room.getClassID().equals(classID)).collect(Collectors.toList());
+        List<RoomDto> fittingRooms = getAllRoomsDto().stream().
+                filter(room -> room.getCapacity().equals(request.getCapacity().name())).
+                filter(room -> room.getClassID().equals(request.getClassID().name())).
+                collect(Collectors.toList());
         List<RoomDto> bookedRooms = new ArrayList<>();
         for (RoomDto room : fittingRooms) {
-            Integer roomNumber = room.getRoomNumber();
-            List<Request> getAllRequestsByRoomNumber = roomDao.getRequestsByRoomNumber(roomNumber);
+            List<Request> getAllRequestsByRoomNumber = roomDao.getRequestsByRoomNumber(room.getRoomNumber());
             for (Request e : getAllRequestsByRoomNumber) {
                 if (compareRequestsByTime(request, e)) bookedRooms.add(room);
             }
@@ -95,11 +92,10 @@ public class RoomServiceImpl implements RoomService {
     }
 
     private boolean compareRequestsByTime(Request req1, Request req2) {
-        if (req1.getCheckOut().getTime() >= req2.getCheckIn().getTime() && req1.getCheckOut().getTime() <= req1.getCheckOut().getTime()) {
-            return true;
-        } else if (req1.getCheckIn().getTime() >= req2.getCheckIn().getTime() && req1.getCheckIn().getTime() <= req1.getCheckOut().getTime()) {
-            return true;
-        }
+        if (req1.getCheckOut().getTime() >= req2.getCheckIn().getTime()
+                && req1.getCheckOut().getTime() <= req1.getCheckOut().getTime()) { return true; }
+        if (req1.getCheckIn().getTime() >= req2.getCheckIn().getTime()
+                && req1.getCheckIn().getTime() <= req1.getCheckOut().getTime()) { return true; }
         return false;
     }
 

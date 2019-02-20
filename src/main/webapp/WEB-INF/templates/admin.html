@@ -60,7 +60,9 @@
                     </th:block>
                     </tbody>
                 </table>
-                <div>
+                <div th:if="${pageNumbers.size() > 1}" class="pagination"
+                     th:each="pageNumber : ${pageNumbers}">
+                    <a th:href="@{'/admin?page='+${pageNumber}}" class="btn btn-grey-small center-align" th:text="${pageNumber}">Number</a>
                 </div>
             </div>
             <div class="card-footer">
