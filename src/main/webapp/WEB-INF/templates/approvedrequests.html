@@ -25,8 +25,8 @@
                 <a th:href="@{/approvedrequests}" th:text="#{message.admin-page.approved}" class="btn btn-yellow center-align">Approved requests</a>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${approvedRequestList.isEmpty()==true}" th:text="#{message.admin-page.no-request}">There are no approved requests</p>
-                <table th:if="${approvedRequestList.isEmpty()==false}" class="table table-bordered white">
+                <p class="white" th:if="${pagedList.isEmpty()==true}" th:text="#{message.admin-page.no-request}">There are no approved requests</p>
+                <table th:if="${pagedList.isEmpty()==false}" class="table table-bordered white">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -41,22 +41,25 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <th:block th:each="approvedRequest : ${approvedRequestList}">
+                    <th:block th:each="request : ${pagedList}">
                         <tr>
-                            <th th:text="${approvedRequest.requestID}" scope="row">1</th>
-                            <td th:text="#{'message.capacity.'+${approvedRequest.capacity}}"></td>
-                            <td th:text="#{'message.class.'+${approvedRequest.classID}}"></td>
-                            <td th:text="${approvedRequest.checkIn}"></td>
-                            <td th:text="${approvedRequest.checkOut}"></td>
-                            <td th:text="#{'message.status.'+${approvedRequest.paymentStatus}}"></td>
-                            <td th:text="${approvedRequest.roomNumber}"></td>
-                            <td th:text="${approvedRequest.firstName}"></td>
-                            <td th:text="${approvedRequest.lastName}"></td>
+                            <th th:text="${request.requestID}" scope="row">1</th>
+                            <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
+                            <td th:text="#{'message.class.'+${request.classID}}"></td>
+                            <td th:text="${request.checkIn}"></td>
+                            <td th:text="${request.checkOut}"></td>
+                            <td th:text="#{'message.status.'+${request.paymentStatus}}"></td>
+                            <td th:text="${request.roomNumber}"></td>
+                            <td th:text="${request.firstName}"></td>
+                            <td th:text="${request.lastName}"></td>
                         </tr>
                     </th:block>
                     </tbody>
                 </table>
-                <div>
+                <div th:if="${pageNumbers.size() > 1}" class="pagination">
+                    <a th:each="pageNumber : ${pageNumbers}"
+                       th:href="@{'/approvedrequests?page='+${pageNumber}}"
+                       class="btn btn-grey-small" th:text="${pageNumber}">Number</a>
                 </div>
             </div>
             <div class="card-footer">

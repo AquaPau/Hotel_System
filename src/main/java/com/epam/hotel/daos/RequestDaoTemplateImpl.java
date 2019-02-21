@@ -38,8 +38,14 @@ public class RequestDaoTemplateImpl implements RequestDao {
             " FROM hotel.users RIGHT JOIN hotel.rooms RIGHT JOIN hotel.reservedrooms FULL JOIN hotel.requests" +
             " ON reservedrooms.requestid = requests.requestid ON rooms.roomid = reservedrooms.roomid" +
             " ON requests.userid = users.userid WHERE roomnumber NOTNULL ORDER BY requests.checkin";
-    private final String SQL_GET_REQUESTS_PAGE = "SELECT * FROM hotel.requests " +
+    private final String SQL_GET_UNAPPROVED_REQUESTS_PAGE = "SELECT * FROM hotel.requests " +
             "WHERE paymentstatus='NOBILL' ORDER BY requestid OFFSET ? LIMIT ?";
+    private final String SQL_GET_APPROVED_REQUESTS_PAGE = "SELECT hotel.requests.requestid, hotel.requests.capacity, " +
+            " hotel.requests.classid, hotel.requests.checkin, hotel.requests.checkout, hotel.requests.paymentstatus," +
+            " hotel.rooms.roomnumber, hotel.requests.userid, hotel.users.firstname, hotel.users.lastname" +
+            " FROM hotel.users RIGHT JOIN hotel.rooms RIGHT JOIN hotel.reservedrooms FULL JOIN hotel.requests" +
+            " ON reservedrooms.requestid = requests.requestid ON rooms.roomid = reservedrooms.roomid" +
+            " ON requests.userid = users.userid WHERE roomnumber NOTNULL ORDER BY requests.checkin OFFSET ? LIMIT ?";
 
 
     public RequestDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
@@ -110,9 +116,15 @@ public class RequestDaoTemplateImpl implements RequestDao {
     }
 
     @Override
+    public List<ApprovedRequestDto> getApprovedRequestsByPage(int page, int limit) {
+        int offset = (page - 1)*limit;
+        return jdbcTemplate.query(SQL_GET_APPROVED_REQUESTS_PAGE, new Object[]{offset, limit},new ApprovedRequestRowMapper());
+    }
+
+    @Override
     public List<Request> getRequestsByPage(int page, int limit) {
         int offset = (page-1)*limit;
-        return jdbcTemplate.query(SQL_GET_REQUESTS_PAGE, new Object[]{offset, limit},new RequestRowMapper());
+        return jdbcTemplate.query(SQL_GET_UNAPPROVED_REQUESTS_PAGE, new Object[]{offset, limit},new RequestRowMapper());
     }
 
     class RequestRowMapper implements RowMapper<Request> {
