@@ -141,6 +141,11 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    public List<ApprovedRequestDto> getApprovedRequestsByPage(int page, int limit) {
+        return requestDao.getApprovedRequestsByPage(page, limit);
+    }
+
+    @Override
     public boolean updatePaymentStatus(long id, PaymentStatus status) {
         return requestDao.updatePaymentStatus(id, status);
     }

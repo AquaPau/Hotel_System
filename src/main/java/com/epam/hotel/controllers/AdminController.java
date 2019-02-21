@@ -24,8 +24,7 @@ public class AdminController {
     @RequestMapping(value = "/admin", params = {"page"})
     public String adminGetRequestsByPages(@RequestParam(value = "page") int page, Model model) {
         List<RequestDto> pagedList = requestService.getRequestsByPage(page, 5);
-        model.addAttribute("requestList", allRequests());
-        model.addAttribute("pageNumbers", getPages());
+        model.addAttribute("pageNumbers", getPages("unapproved"));
         model.addAttribute("pagedList", pagedList);
         return "/admin";
     }
@@ -33,19 +32,15 @@ public class AdminController {
     @GetMapping("/admin")
     public String adminGetAllRequests(Model model) {
         List<RequestDto> pagedList = requestService.getRequestsByPage(1, 5);
-        model.addAttribute("requestList", allRequests());
-        model.addAttribute("pageNumbers", getPages());
+        model.addAttribute("pageNumbers", getPages("unapproved"));
         model.addAttribute("pagedList", pagedList);
         return "/admin";
     }
 
-    private List<RequestDto> allRequests() {
-        return requestService.getAllRequestsDto();
-    }
-
-    private List<Integer> getPages() {
-        List<RequestDto> allRequestsDtoList = requestService.getAllRequestsDto();
-        Integer numberOfPages = allRequestsDtoList.size() / 5 + 1;
+    private List<Integer> getPages(String type) {
+        Integer numberOfPages = 0;
+        if (type.equals("unapproved")) { numberOfPages = requestService.getAllRequestsDto().size()/5 + 1;}
+        else if (type.equals("approved")) { numberOfPages = requestService.getAllApprovedRequests().size()/5 + 1;}
         ArrayList<Integer> pageNumbers = new ArrayList<>();
         for (int i = 1; i <= numberOfPages; i++) {
             pageNumbers.add(i);
@@ -55,9 +50,18 @@ public class AdminController {
 
     @GetMapping("/approvedrequests")
     public String adminApprovedRequestList(Model model) {
-        List<ApprovedRequestDto> approvedRequestsList = requestService.getAllApprovedRequests();
-        model.addAttribute("approvedRequestList", approvedRequestsList);
-        return "approvedrequests";
+        List<ApprovedRequestDto> pagedList = requestService.getApprovedRequestsByPage(1,5);
+        model.addAttribute("pageNumbers", getPages("approved"));
+        model.addAttribute("pagedList", pagedList);
+        return "/approvedrequests";
+    }
+
+    @RequestMapping(value = "/approvedrequests", params = {"page"})
+    public String adminApprovedRequestsByPages(@RequestParam(value = "page") int page, Model model) {
+        List<ApprovedRequestDto> pagedList = requestService.getApprovedRequestsByPage(page,5);
+        model.addAttribute("pageNumbers", getPages("approved"));
+        model.addAttribute("pagedList", pagedList);
+        return "/approvedrequests";
     }
 
 }

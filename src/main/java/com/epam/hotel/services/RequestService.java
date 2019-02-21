@@ -32,6 +32,8 @@ public interface RequestService extends Service<Request> {
 
     List<RequestDto> getRequestDtoList(List<Request> request);
 
+    public List<ApprovedRequestDto> getApprovedRequestsByPage(int page, int limit);
+
     long getProcessedRequestByUserIdCount(long id);
 
     long getUnprocessedRequestByUserIdCount(long id);

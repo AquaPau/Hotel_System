@@ -25,8 +25,8 @@
                 <a th:href="@{/approvedrequests}" th:text="#{message.admin-page.approved}" class="btn btn-grey center-align">Approved requests</a>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${requestList.isEmpty()==true}" th:text="#{message.admin-page.no-request}">There are no active requests</p>
-                <table th:if="${requestList.isEmpty()==false}" class="table table-bordered white">
+                <p class="white" th:if="${pagedList.isEmpty()==true}" th:text="#{message.admin-page.no-request}">There are no active requests</p>
+                <table th:if="${pagedList.isEmpty()==false}" class="table table-bordered white">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
