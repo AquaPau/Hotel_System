@@ -63,6 +63,11 @@
                         </th:block>
                         </tbody>
                     </table>
+                    <div th:if="${processedRequestPages.size() > 1}" class="pagination">
+                        <a th:each="pageNumber : ${processedRequestPages}"
+                           th:href="@{'/index?pr_page='+${pageNumber}+'&ur_page='+${currentUrPage}}"
+                           class="btn btn-grey-small" th:text="${pageNumber}">Number</a>
+                    </div>
                 </div>
 
                 <p class="white"
@@ -107,6 +112,11 @@
                         </th:block>
                         </tbody>
                     </table>
+                    <div th:if="${unprocessedRequestPages.size() > 1}" class="pagination">
+                        <a th:each="pageNumber : ${unprocessedRequestPages}"
+                           th:href="@{'/index?pr_page='+${currentPrPage}+'&ur_page='+${pageNumber}}"
+                           class="btn btn-grey-small" th:text="${pageNumber}">Number</a>
+                    </div>
                     <div>
                     </div>
                     <a th:href="@{/rooms}" class="btn btn-info float-right"

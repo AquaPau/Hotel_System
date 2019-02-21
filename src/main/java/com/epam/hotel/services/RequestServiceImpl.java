@@ -92,21 +92,52 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<RequestDto> getUserRequestsDto(long id) {
         List<Request> userRequests = getUserRequests(id);
-        return userRequests.stream().map(RequestDto::new).collect(Collectors.toList());
+        return userRequests.stream()
+                .map(RequestDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<RequestDto> getAllRequestsDto() {
         List<Request> allRequests = getAll();
-        return allRequests.stream().map(RequestDto::new).
-                filter(request -> request.getPaymentStatus().equals(PaymentStatus.NOBILL.name())).
-                collect(Collectors.toList());
+        return allRequests.stream()
+                .map(RequestDto::new)
+                .filter(request -> request.getPaymentStatus().equals(PaymentStatus.NOBILL.name()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<RequestDto> getRequestsByPage(int page, int limit) {
         return requestDao.getRequestsByPage(page, limit).stream().
-                map(RequestDto::new).collect(Collectors.toList());
+                map(RequestDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Request> getPagedProcessedRequestByUserId(long id, int offset, int limit) {
+        return requestDao.getPagedProcessedRequestByUserId(id, offset, limit);
+    }
+
+    @Override
+    public List<Request> getPagedUnprocessedRequestByUserId(long id, int offset, int limit) {
+        return requestDao.getPagedUnprocessedRequestByUserId(id, offset, limit);
+    }
+
+    @Override
+    public List<RequestDto> getRequestDtoList(List<Request> request) {
+        return request.stream()
+                .map(this::getRequestDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public long getProcessedRequestByUserIdCount(long id) {
+        return requestDao.getProcessedRequestByUserIdCount(id);
+    }
+
+    @Override
+    public long getUnprocessedRequestByUserIdCount(long id) {
+        return requestDao.getUnprocessedRequestByUserIdCount(id);
     }
 
     @Override
