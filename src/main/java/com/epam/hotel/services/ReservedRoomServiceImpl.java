@@ -67,7 +67,29 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
     public List<RequestDto> getAllUnprocessedRequestDtoOfUser(User user, List<RequestDto> requestList) {
         List<ReservedRoom> ids = this.getReservationsOfUser(user);
         List<Long> collect = ids.stream().map(ReservedRoom::getRequestID).collect(Collectors.toList());
-        return requestList.stream().filter(x -> (!collect.contains(x.getRequestID()))).collect(Collectors.toList());
+        return requestList.stream()
+                .filter(x -> (!collect.contains(x.getRequestID())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProcessedRequestDto getProcessedRequestDto(Request request) {
+        long userID = request.getUserID();
+        ReservedRoom reservedRoom = getReservationsByUserId(userID).stream()
+                .filter(x -> x.getRequestID() == request.getRequestID())
+                .collect(Collectors.toSet())
+                .stream()
+                .findFirst()
+                .get();
+        Room room = roomDao.getById(reservedRoom.getRoomID());
+        return new ProcessedRequestDto(request, room, reservedRoom.getReservedRoomID());
+    }
+
+    @Override
+    public List<ProcessedRequestDto> getProcessedRequestDtoList(List<Request> requestList) {
+        return requestList.stream()
+                .map(this::getProcessedRequestDto)
+                .collect(Collectors.toList());
     }
 
     @Override
