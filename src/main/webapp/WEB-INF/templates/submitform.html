@@ -19,16 +19,16 @@
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div class="card-header">
-                <h3 id="index-header" class="text-center">Possible rooms</span></h3>
+                <h3 id="index-header" th:text="#{message.admin-page.header}"class="text-center">Administration page</span></h3>
             </div>
             <div class="card-body">
-                <p class="white">Request approved, bill was sent</p>
+                <p th:text="#{message.admin-page.approve}" class="white">Request approved</p>
 
                 <div>
                 </div>
             </div>
             <div class="card-footer">
-                <a th:href="@{/admin}" class="btn btn-info float-left">Back</a>
+                <a th:href="@{/admin}" th:text="#{message.back}" class="btn btn-info float-left">Back</a>
             </div>
         </div>
     </div>
