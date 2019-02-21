@@ -122,6 +122,26 @@ public class RequestDaoJDBCImpl implements RequestDao {
     }
 
     @Override
+    public List<Request> getPagedProcessedRequestByUserId(long id, int offset, int limit) {
+        return null;
+    }
+
+    @Override
+    public List<Request> getPagedUnprocessedRequestByUserId(long id, int offset, int limit) {
+        return null;
+    }
+
+    @Override
+    public long getProcessedRequestByUserIdCount(long id) {
+        return 0;
+    }
+
+    @Override
+    public long getUnprocessedRequestByUserIdCount(long id) {
+        return 0;
+    }
+
+    @Override
     public Request create(Request request) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             PreparedStatement preparedStatement = initRequestBody(connection, request, CREATE_NEW_REQUEST);

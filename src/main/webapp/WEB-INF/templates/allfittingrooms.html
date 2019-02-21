@@ -19,31 +19,35 @@
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div class="card-header">
-                <h3 id="index-header" class="text-center">Possible rooms</span></h3>
+                <h3 id="index-header" class="text-center" th:text="#{message.fittingrooms-page.header}">Possible
+                    rooms</span></h3>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${allfittingroomsList.isEmpty()==true}">There are no fitting rooms</p>
+                <p class="white" th:if="${allfittingroomsList.isEmpty()==true}"
+                   th:text="#{message.fittingrooms-page.nofitting}">There are no fitting rooms</p>
                 <table th:if="${allfittingroomsList.isEmpty()==false}" class="table table-bordered white">
                     <thead>
                     <tr>
-                        <th scope="col">Room number</th>
-                        <th scope="col">Class</th>
-                        <th scope="col">Capacity</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Pick Room</th>
+                        <th scope="col" th:text="#{message.fittingrooms-page.roomnumber}">Room number</th>
+                        <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                        <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                        <th scope="col" th:text="#{message.fittingrooms-page.price}">Price</th>
+                        <th scope="col" th:text="#{message.fittingrooms-page.pick}">Pick Room</th>
                     </tr>
                     </thead>
                     <tbody>
                     <th:block th:each="room : ${allfittingroomsList}">
                         <tr>
                             <th th:text="${room.roomNumber}" scope="row">1</th>
-                            <td th:text="${room.classID}"></td>
-                            <td th:text="${room.capacity}"></td>
+                            <td th:text="#{'message.capacity.'+${room.capacity}}"></td>
+                            <td th:text="#{'message.class.'+${room.classID}}"></td>
                             <td th:text="${room.price}"></td>
                             <td>
                                 <form th:action="@{/allfittingrooms/pick/}" th:object="${reservedRoom}" method="post">
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-primary btn-block"> Submit</button>
+                                        <button type="submit" class="btn btn-primary btn-block"
+                                                th:text="#{message.fittingrooms-page.button.submit}"> Submit
+                                        </button>
                                     </div>
                                     <input hidden th:field="*{requestID}"/>
                                     <input hidden id="roomID" name="roomID" th:value="${room.roomID}">
@@ -58,6 +62,17 @@
             </div>
             <div class="card-footer">
                 <a th:href="@{/admin}" class="btn btn-info float-left">Back</a>
+                <div class="text-right">
+                    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}"
+                       th:text="#{message.index-page.admin}"
+                       class="btn btn-info">Admin
+                        menu</a>
+                </div>
+                <div class="text-center">
+                    <span th:text="#{message.change-language}+': '"></span>
+                    <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
+                    <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+                </div>
             </div>
         </div>
     </div>
