@@ -14,5 +14,5 @@ public interface RoomDao extends Dao<Room> {
 
     List<Room> getAvailableRoomsInPeriodAndCapacity(Request request);
 
-
+    List<Room> getAvailableRoomsInPeriodAndCapacity(Request request, int page, int limit);
 }

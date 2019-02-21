@@ -79,9 +79,17 @@ public class RoomServiceImpl implements RoomService {
         return getAllFittingRooms(request).stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
+    @Override
+    public List<RoomDto> getAllFittingRoomsDto(Request request, int page, int limit) {
+        return getAllFittingRooms(request, page, limit).stream().map(RoomDto::new).collect(Collectors.toList());
+    }
+
+    private List<Room> getAllFittingRooms(Request request, int page, int limit) {
+        return roomDao.getAvailableRoomsInPeriodAndCapacity(request, page, limit);
+    }
+
     private List<Room> getAllFittingRooms(Request request) {
-        List<Room> receivedList = roomDao.getAvailableRoomsInPeriodAndCapacity(request);
-        return receivedList;
+        return roomDao.getAvailableRoomsInPeriodAndCapacity(request);
     }
 
 
