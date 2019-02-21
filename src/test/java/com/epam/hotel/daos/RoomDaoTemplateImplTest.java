@@ -94,5 +94,9 @@ public class RoomDaoTemplateImplTest {
         assertEquals(2, roomList.size());
     }
 
+    @Test
+    public void getAvailableRoomsInPeriodAndCapacity() {
+
+    }
 }
 

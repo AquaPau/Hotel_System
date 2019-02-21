@@ -5,6 +5,7 @@ import com.epam.hotel.model.enums.Capacity;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 import lombok.Data;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,6 +132,11 @@ public class RoomDaoJDBCImpl implements RoomDao {
 
     @Override
     public List<Request> getRequestsByRoomNumber(int roomNumber) {
+        return null;
+    }
+
+    @Override
+    public List<Room> getAvailableRoomsInPeriodAndCapacity(Request request) {
         return null;
     }
 

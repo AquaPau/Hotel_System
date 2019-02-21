@@ -63,7 +63,6 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public List<RequestDto> getAllUnprocessedRequestDtoOfUser(User user, List<RequestDto> requestList) {
         List<ReservedRoom> ids = this.getReservationsOfUser(user);
@@ -99,6 +98,7 @@ public class ReservedRoomServiceImpl implements ReservedRoomService {
         if (reservedRoom != null) return reservedRoom;
         else throw new ReservationNotExistException("There is no reserved rooms with this ID");
     }
+
 
     @Override
     public void cancelReservation(long id) {

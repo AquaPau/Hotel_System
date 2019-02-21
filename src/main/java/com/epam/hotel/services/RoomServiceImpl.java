@@ -12,20 +12,19 @@ import com.epam.hotel.model.Room;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class RoomServiceImpl implements RoomService {
 
     private final RoomDao roomDao;
+    private final ReservedRoomService reservedRoomService;
 
-    public RoomServiceImpl(RoomDao roomDao) {
+    public RoomServiceImpl(RoomDao roomDao, ReservedRoomService reservedRoomService) {
         this.roomDao = roomDao;
+        this.reservedRoomService = reservedRoomService;
     }
 
     private void roomValidation(Room room) {
@@ -77,26 +76,12 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomDto> getAllFittingRoomsDto(Request request) {
-        List<RoomDto> fittingRooms = getAllRoomsDto().stream().
-                filter(room -> room.getCapacity().equals(request.getCapacity().name())).
-                filter(room -> room.getClassID().equals(request.getClassID().name())).
-                collect(Collectors.toList());
-        List<RoomDto> bookedRooms = new ArrayList<>();
-        for (RoomDto room : fittingRooms) {
-            List<Request> getAllRequestsByRoomNumber = roomDao.getRequestsByRoomNumber(room.getRoomNumber());
-            for (Request e : getAllRequestsByRoomNumber) {
-                if (compareRequestsByTime(request, e)) bookedRooms.add(room);
-            }
-        }
-        return fittingRooms.stream().filter(room -> !bookedRooms.contains(room)).collect(Collectors.toList());
+        return getAllFittingRooms(request).stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
-    private boolean compareRequestsByTime(Request req1, Request req2) {
-        if (req1.getCheckOut().getTime() >= req2.getCheckIn().getTime()
-                && req1.getCheckOut().getTime() <= req1.getCheckOut().getTime()) { return true; }
-        if (req1.getCheckIn().getTime() >= req2.getCheckIn().getTime()
-                && req1.getCheckIn().getTime() <= req1.getCheckOut().getTime()) { return true; }
-        return false;
+    private List<Room> getAllFittingRooms(Request request) {
+        List<Room> receivedList = roomDao.getAvailableRoomsInPeriodAndCapacity(request);
+        return receivedList;
     }
 
 
