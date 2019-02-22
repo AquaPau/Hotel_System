@@ -18,12 +18,17 @@ import java.math.BigDecimal;
 public class Room implements Comparable<Room> {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long roomID;
+    @Column(name = "roomnumber")
     private int roomNumber;
     @Enumerated(EnumType.STRING)
+    @Column(name = "classid")
     private ClassID classID;
     @Enumerated(EnumType.STRING)
+    @Column(name = "capacity")
     private Capacity capacity;
+    @Column(name = "price")
     private BigDecimal price;
 
 
