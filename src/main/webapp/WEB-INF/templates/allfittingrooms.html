@@ -57,6 +57,11 @@
                     </th:block>
                     </tbody>
                 </table>
+                <div th:if="${pageNumbers.size() > 1}" class="pagination">
+                    <a th:each="pageNumber : ${pageNumbers}"
+                       th:href="@{'/getallrooms/'+ ${requestID} +'?page='+${pageNumber}}"
+                       class="btn btn-grey-small" th:text="${pageNumber}">Number</a>
+                </div>
                 <div>
                 </div>
             </div>

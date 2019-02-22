@@ -14,6 +14,8 @@ public interface RoomService extends Service<Room> {
 
     List<RoomDto> getAllFittingRoomsDto(Request request);
 
+    List<RoomDto> getAllFittingRoomsDto(Request request, int page, int limit);
+
 /*    public void addToReservedRooms(Long requestID, int roomNumber);*/
 
     RoomDto getRoomDto(Room room);

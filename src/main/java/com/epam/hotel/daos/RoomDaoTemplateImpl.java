@@ -1,12 +1,10 @@
 package com.epam.hotel.daos;
 
 import com.epam.hotel.model.Request;
-import com.epam.hotel.model.ReservedRoom;
 import com.epam.hotel.model.enums.ClassID;
 import com.epam.hotel.model.Room;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +14,6 @@ import java.util.List;
 import java.util.Objects;
 
 import com.epam.hotel.model.enums.*;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -34,7 +31,11 @@ public class RoomDaoTemplateImpl implements RoomDao {
     private final String SQL_DELETE_ROOM = "DELETE FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_GET_BY_ID = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_GET_BY_ROOM_NUMBER = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.rooms WHERE roomnumber = ?";
-    private final String GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY = "SELECT rooms.roomid AS roomid, rooms.roomnumber " +
+    private final String SQL_GET_REQUESTS_BY_ROOM_NUMBER = "SELECT hotel.requests.requestid," +
+            "  hotel.requests.userid, hotel.requests.capacity, hotel.requests.classid, hotel.requests.checkin," +
+            "  hotel.requests.checkout, hotel.requests.paymentstatus FROM hotel.reservedrooms left join hotel.requests" +
+            "  on reservedrooms.requestid = requests.requestid WHERE hotel.reservedrooms.roomid = ?";
+    private final String SQL_GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY = "SELECT rooms.roomid AS roomid, rooms.roomnumber " +
             "AS roomnumber, rooms.capacity as capacity, rooms.classid as classid, rooms.price as price " +
             "FROM hotel.rooms AS rooms FULL JOIN hotel.reservedrooms as res ON rooms.roomid = res.roomid " +
             "WHERE rooms.roomid NOT IN " +
@@ -58,6 +59,8 @@ public class RoomDaoTemplateImpl implements RoomDao {
             "           WHEN capacity = :cap3 THEN 3\n" +
             "           WHEN capacity = :cap4 THEN 4\n" +
             "           END";
+    private final String SQL_GET_FITTING_ROOMS_PAGED = SQL_GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY + "\n" +
+            "OFFSET :offset LIMIT :limit";
 
 
     public RoomDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
@@ -132,7 +135,19 @@ public class RoomDaoTemplateImpl implements RoomDao {
     public List<Room> getAvailableRoomsInPeriodAndCapacity(Request request) {
         NamedParameterJdbcTemplate tempTemplate =
                 new NamedParameterJdbcTemplate(Objects.requireNonNull(jdbcTemplate.getDataSource()));
+        MapSqlParameterSource parameters = getParametersForFittingRooms(request, -1, -1);
+        return tempTemplate.query(SQL_GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY, parameters, new RoomRowMapper());
+    }
 
+    @Override
+    public List<Room> getAvailableRoomsInPeriodAndCapacity(Request request, int page, int limit) {
+        NamedParameterJdbcTemplate tempTemplate =
+                new NamedParameterJdbcTemplate(Objects.requireNonNull(jdbcTemplate.getDataSource()));
+        MapSqlParameterSource parameters = getParametersForFittingRooms(request, page, limit);
+        return tempTemplate.query(SQL_GET_FITTING_ROOMS_PAGED, parameters, new RoomRowMapper());
+    }
+
+    private MapSqlParameterSource getParametersForFittingRooms(Request request, int page, int limit) {
         List<String> capacityList = new ArrayList<>();
         switch (request.getCapacity()) {
             case SINGLE:
@@ -177,9 +192,12 @@ public class RoomDaoTemplateImpl implements RoomDao {
         parameters.addValue("cap2", capacityOrder.get(1));
         parameters.addValue("cap3", capacityOrder.get(2));
         parameters.addValue("cap4", capacityOrder.get(3));
+        if (page >= 0) {
+            parameters.addValue("offset", (page - 1) * limit);
+            parameters.addValue("limit", limit);
+        }
 
-
-        return tempTemplate.query(GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY, parameters, new RoomRowMapper());
+        return parameters;
     }
 
     class RoomRowMapper implements RowMapper<Room> {
