@@ -34,10 +34,6 @@ public class RoomDaoTemplateImpl implements RoomDao {
     private final String SQL_DELETE_ROOM = "DELETE FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_GET_BY_ID = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.rooms WHERE roomid = ?";
     private final String SQL_GET_BY_ROOM_NUMBER = "SELECT roomid, roomnumber, classid, capacity, price FROM hotel.rooms WHERE roomnumber = ?";
-    private final String SQL_GET_REQUESTS_BY_ROOM_NUMBER = "SELECT hotel.requests.requestid," +
-            "  hotel.requests.userid, hotel.requests.capacity, hotel.requests.classid, hotel.requests.checkin," +
-            "  hotel.requests.checkout, hotel.requests.paymentstatus FROM hotel.reservedrooms left join hotel.requests" +
-            "  on reservedrooms.requestid = requests.requestid WHERE hotel.reservedrooms.roomid = ?";
     private final String GET_ROOMS_AVAILABLE_IN_PERIOD_AND_CAPACITY = "SELECT rooms.roomid AS roomid, rooms.roomnumber " +
             "AS roomnumber, rooms.capacity as capacity, rooms.classid as classid, rooms.price as price " +
             "FROM hotel.rooms AS rooms FULL JOIN hotel.reservedrooms as res ON rooms.roomid = res.roomid " +
@@ -130,11 +126,6 @@ public class RoomDaoTemplateImpl implements RoomDao {
             room = jdbcTemplate.queryForObject(SQL_GET_BY_ROOM_NUMBER, new Object[]{roomNumber}, new RoomRowMapper());
         }
         return room;
-    }
-
-    @Override
-    public List<Request> getRequestsByRoomNumber(int roomNumber) {
-        return jdbcTemplate.query(SQL_GET_REQUESTS_BY_ROOM_NUMBER, new Object[]{roomNumber}, new RequestRowMapper());
     }
 
     @Override
