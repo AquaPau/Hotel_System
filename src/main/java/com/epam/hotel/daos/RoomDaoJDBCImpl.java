@@ -131,11 +131,6 @@ public class RoomDaoJDBCImpl implements RoomDao {
     }
 
     @Override
-    public List<Request> getRequestsByRoomNumber(int roomNumber) {
-        return null;
-    }
-
-    @Override
     public List<Room> getAvailableRoomsInPeriodAndCapacity(Request request) {
         return null;
     }

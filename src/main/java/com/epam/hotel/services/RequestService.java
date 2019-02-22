@@ -2,8 +2,8 @@ package com.epam.hotel.services;
 
 import com.epam.hotel.dtos.ApprovedRequestDto;
 import com.epam.hotel.dtos.RequestDto;
-import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.model.Request;
+import com.epam.hotel.model.enums.PaymentStatus;
 
 import java.util.List;
 
@@ -22,8 +22,19 @@ public interface RequestService extends Service<Request> {
 
     boolean updatePaymentStatus(long id, PaymentStatus status);
 
-    public List<ApprovedRequestDto> getAllApprovedRequests();
+    List<ApprovedRequestDto> getAllApprovedRequests();
 
-    public List<RequestDto> getRequestsByPage(int page, int limit);
+    List<RequestDto> getRequestsByPage(int page, int limit);
 
+    List<Request> getPagedProcessedRequestByUserId(long id, int offset, int limit);
+
+    List<Request> getPagedUnprocessedRequestByUserId(long id, int offset, int limit);
+
+    List<RequestDto> getRequestDtoList(List<Request> request);
+
+    public List<ApprovedRequestDto> getApprovedRequestsByPage(int page, int limit);
+
+    long getProcessedRequestByUserIdCount(long id);
+
+    long getUnprocessedRequestByUserIdCount(long id);
 }

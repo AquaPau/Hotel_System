@@ -132,11 +132,6 @@ public class RoomDaoTemplateImpl implements RoomDao {
     }
 
     @Override
-    public List<Request> getRequestsByRoomNumber(int roomNumber) {
-        return jdbcTemplate.query(SQL_GET_REQUESTS_BY_ROOM_NUMBER, new Object[]{roomNumber}, new RequestRowMapper());
-    }
-
-    @Override
     public List<Room> getAvailableRoomsInPeriodAndCapacity(Request request) {
         NamedParameterJdbcTemplate tempTemplate =
                 new NamedParameterJdbcTemplate(Objects.requireNonNull(jdbcTemplate.getDataSource()));

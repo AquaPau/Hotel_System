@@ -32,19 +32,69 @@ public class RequestDaoTemplateImpl implements RequestDao {
     private static final String GET_REQUESTS_BY_PAYMENTSTATUS = "SELECT * FROM hotel.requests WHERE " +
             "paymentStatus = %s";
     private static final String UPDATE_BILLING_STATUS = "UPDATE hotel.requests SET paymentstatus = ? WHERE requestid = ?";
-    private final String SQL_GET_ALL_APPROVED_REQUESTS = "SELECT hotel.requests.requestid, hotel.requests.capacity, " +
+
+    private static final String SQL_GET_ALL_APPROVED_REQUESTS = "SELECT hotel.requests.requestid, hotel.requests.capacity, " +
             " hotel.requests.classid, hotel.requests.checkin, hotel.requests.checkout, hotel.requests.paymentstatus," +
             " hotel.rooms.roomnumber, hotel.requests.userid, hotel.users.firstname, hotel.users.lastname" +
             " FROM hotel.users RIGHT JOIN hotel.rooms RIGHT JOIN hotel.reservedrooms FULL JOIN hotel.requests" +
             " ON reservedrooms.requestid = requests.requestid ON rooms.roomid = reservedrooms.roomid" +
             " ON requests.userid = users.userid WHERE roomnumber NOTNULL ORDER BY requests.checkin";
-    private final String SQL_GET_REQUESTS_PAGE = "SELECT * FROM hotel.requests " +
+
+    private final String SQL_GET_UNAPPROVED_REQUESTS_PAGE = "SELECT * FROM hotel.requests " +
             "WHERE paymentstatus='NOBILL' ORDER BY requestid OFFSET ? LIMIT ?";
+
+    private final String SQL_GET_APPROVED_REQUESTS_PAGE = "SELECT hotel.requests.requestid, hotel.requests.capacity, " +
+            " hotel.requests.classid, hotel.requests.checkin, hotel.requests.checkout, hotel.requests.paymentstatus," +
+            " hotel.rooms.roomnumber, hotel.requests.userid, hotel.users.firstname, hotel.users.lastname" +
+            " FROM hotel.users RIGHT JOIN hotel.rooms RIGHT JOIN hotel.reservedrooms FULL JOIN hotel.requests" +
+            " ON reservedrooms.requestid = requests.requestid ON rooms.roomid = reservedrooms.roomid" +
+            " ON requests.userid = users.userid WHERE roomnumber NOTNULL ORDER BY requests.checkin OFFSET ? LIMIT ?";
+
+    private static final String GET_PROCESSED_REQUEST_OF_USER = "SELECT hotel.requests.requestid, hotel.requests.userid, hotel.requests.capacity, "
+            + "hotel.requests.classid, hotel.requests.checkin, hotel.requests.checkout, hotel.requests.paymentstatus "
+            + "FROM (hotel.requests LEFT JOIN hotel.users on requests.userid = users.userid) LEFT JOIN hotel.reservedrooms ON requests.requestid=reservedrooms.requestid "
+            + "WHERE users.userid = ? AND (requests.paymentstatus='BILLSENT' OR requests.paymentstatus='PAID') "
+            + "ORDER BY requests.requestid OFFSET ? LIMIT ?;";
+
+    private static final String GET_PROCESSED_REQUEST_OF_USER_COUNT = "SELECT COUNT(*)"
+            + "FROM (hotel.requests LEFT JOIN hotel.users on requests.userid = users.userid) LEFT JOIN hotel.reservedrooms ON requests.requestid=reservedrooms.requestid "
+            + "WHERE users.userid = ? AND (requests.paymentstatus='BILLSENT' OR requests.paymentstatus='PAID') ";
+
+    private static final String GET_UNPROCESSED_REQUEST_OF_USER = "SELECT hotel.requests.requestid, hotel.requests.userid, hotel.requests.capacity, "
+            + "hotel.requests.classid, hotel.requests.checkin, hotel.requests.checkout, hotel.requests.paymentstatus "
+            + "FROM (hotel.requests LEFT JOIN hotel.users on requests.userid = users.userid) LEFT JOIN hotel.reservedrooms ON requests.requestid=reservedrooms.requestid "
+            + "WHERE users.userid = ? AND requests.paymentstatus='NOBILL' "
+            + "ORDER BY requests.requestid OFFSET ? LIMIT ?;";
+
+    private static final String GET_UNPROCESSED_REQUEST_OF_USER_COUNT = "SELECT COUNT(*)"
+            + "FROM (hotel.requests LEFT JOIN hotel.users on requests.userid = users.userid) LEFT JOIN hotel.reservedrooms ON requests.requestid=reservedrooms.requestid "
+            + "WHERE users.userid = ? AND requests.paymentstatus='NOBILL' ";
 
 
     public RequestDaoTemplateImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
+    @Override
+    public List<Request> getPagedProcessedRequestByUserId(long id, int offset, int limit) {
+        return jdbcTemplate.query(GET_PROCESSED_REQUEST_OF_USER, new Object[]{id, offset, limit}, new RequestRowMapper());
+    }
+
+    @Override
+    public long getProcessedRequestByUserIdCount(long id) {
+        return jdbcTemplate.queryForObject(GET_PROCESSED_REQUEST_OF_USER_COUNT, new Object[]{id}, Long.class);
+    }
+
+    @Override
+    public List<Request> getPagedUnprocessedRequestByUserId(long id, int offset, int limit) {
+        return jdbcTemplate.query(GET_UNPROCESSED_REQUEST_OF_USER, new Object[]{id, offset, limit}, new RequestRowMapper());
+    }
+
+    @Override
+    public long getUnprocessedRequestByUserIdCount(long id) {
+        return jdbcTemplate.queryForObject(GET_UNPROCESSED_REQUEST_OF_USER_COUNT, new Object[]{id}, Long.class);
+    }
+
 
     @Override
     public List<Request> getUserRequests(long id) {
@@ -100,8 +150,9 @@ public class RequestDaoTemplateImpl implements RequestDao {
     @Override
     public Request getById(long id) {
         Request result = jdbcTemplate.queryForObject(GET_REQUEST_BY_ID, new Object[]{id}, new RequestRowMapper());
-        if (result != null) { return result; }
-        else return null;
+        if (result != null) {
+            return result;
+        } else return null;
     }
 
     @Override
@@ -110,9 +161,15 @@ public class RequestDaoTemplateImpl implements RequestDao {
     }
 
     @Override
+    public List<ApprovedRequestDto> getApprovedRequestsByPage(int page, int limit) {
+        int offset = (page - 1)*limit;
+        return jdbcTemplate.query(SQL_GET_APPROVED_REQUESTS_PAGE, new Object[]{offset, limit},new ApprovedRequestRowMapper());
+    }
+
+    @Override
     public List<Request> getRequestsByPage(int page, int limit) {
-        int offset = (page-1)*limit;
-        return jdbcTemplate.query(SQL_GET_REQUESTS_PAGE, new Object[]{offset, limit},new RequestRowMapper());
+        int offset = (page - 1) * limit;
+        return jdbcTemplate.query(SQL_GET_UNAPPROVED_REQUESTS_PAGE, new Object[]{offset, limit},new RequestRowMapper());
     }
 
     class RequestRowMapper implements RowMapper<Request> {
