@@ -1,37 +1,31 @@
 package com.epam.hotel.model;
 
 import com.epam.hotel.model.enums.*;
-import lombok.Data;
+import lombok.*;
+import org.springframework.data.annotation.Persistent;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@Data
+@Builder
+@Persistent
+@Setter
+@Getter
+@NoArgsConstructor
+@RequiredArgsConstructor
+
 public class Room implements Comparable<Room> {
 
+    @Id
     private long roomID;
     private int roomNumber;
+    @Enumerated(EnumType.STRING)
     private ClassID classID;
+    @Enumerated(EnumType.STRING)
     private Capacity capacity;
     private BigDecimal price;
 
-    public Room() {
-    }
-
-    public Room(int num, ClassID classID, Capacity cap, BigDecimal price) {
-        this.roomNumber = num;
-        this.classID = classID;
-        this.capacity = cap;
-        this.price = price;
-    }
-
-    public Room(long id, int num, ClassID classID, Capacity cap, BigDecimal price) {
-        this.roomID = id;
-        this.roomNumber = num;
-        this.classID = classID;
-        this.capacity = cap;
-        this.price = price;
-    }
 
     @Override
     public int compareTo(@NotNull Room room) {
@@ -39,5 +33,7 @@ public class Room implements Comparable<Room> {
         else if (this.roomID < room.getRoomID()) return -1;
         return 1;
     }
+
+
 }
 
