@@ -25,15 +25,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("static/**").permitAll()
                 .antMatchers("/language").permitAll()
                 .antMatchers("/", "/index").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/admin*").hasAnyRole("ADMIN")
-
+                .antMatchers("/admin*").hasRole("ADMIN")
                 .and()
 
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
-
                 .and()
+
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
@@ -46,7 +45,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(new BCryptPasswordEncoder(11));
-
-
     }
+
 }

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class LanguageController {
 
-
         @GetMapping("/language")
         public String initView(HttpServletRequest request) {
             String referer = request.getHeader("Referer");
