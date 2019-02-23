@@ -57,7 +57,7 @@
                         </div>
                         <input id="checkIn" name="checkIn" autocomplete="off" class="form-control datepicker"
                                placeholder="Check in" type="text"
-                               th:field="*{checkIn}">
+                               th:value="${#dates.format(request.checkIn,'MM/dd/yyyy')}">
                         <p hidden id="checkIn-error" class="error text-center"
                            th:text="#{message.request-page.error.checkin}">Check in error</p>
                     </div>
@@ -70,7 +70,7 @@
                         </div>
                         <input id="checkOut" name="checkOut" autocomplete="off" class="form-control datepicker"
                                placeholder="Check out" type="text"
-                               th:field="*{checkOut}" th:value="${#dates.format(checkOut,'MM/dd/yyyy')}">
+                               th:value="${#dates.format(request.checkOut,'MM/dd/yyyy')}">
                         <p hidden id="checkOut-error" class="error text-center"
                            th:text="#{message.request-page.error.checkout}">Check out error</p>
                     </div>
