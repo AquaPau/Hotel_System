@@ -23,14 +23,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("static/**").permitAll()
                 .antMatchers("/language").permitAll()
-                .antMatchers("/", "/index").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/", "/index", "/request*").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin*").hasRole("ADMIN")
                 .and()
 
                 .formLogin()
                 .loginPage("/login")
+                .defaultSuccessUrl("/index")
                 .permitAll()
-                .successForwardUrl("/index")
                 .and()
 
                 .logout()

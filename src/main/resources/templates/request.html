@@ -3,13 +3,13 @@
 <meta charset="UTF-8">
 <head>
     <title th:text="#{message.title}"></title>
-    <link rel="shortcut icon" type="image/x-icon" th:href="@{../images/favicon.ico}"/>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.ico}"/>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
           integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" th:href="@{../css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
@@ -70,7 +70,7 @@
                         </div>
                         <input id="checkOut" name="checkOut" autocomplete="off" class="form-control datepicker"
                                placeholder="Check out" type="text"
-                               th:field="*{checkOut}">
+                               th:field="*{checkOut}" th:value="${#dates.format(checkOut,'MM/dd/yyyy')}">
                         <p hidden id="checkOut-error" class="error text-center"
                            th:text="#{message.request-page.error.checkout}">Check out error</p>
                     </div>
@@ -101,6 +101,6 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script th:src="@{../js/hotel.js}"></script>
+<script th:src="@{/js/hotel.js}"></script>
 </body>
 </html>
