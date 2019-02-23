@@ -13,8 +13,10 @@ public class ReservedRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservedroomid")
     private long reservedRoomID;
+
     @Column(name = "roomid")
     private long roomID;
+
     @Column(name = "requestid")
     private long requestID;
 

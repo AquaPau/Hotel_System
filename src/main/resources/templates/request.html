@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<head>
+    <title th:text="#{message.title}"></title>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/resources/images/favicon.ico}"/>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style.css}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+<body>
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card">
+            <article class="card-body mx-auto" style="max-width: 400px;">
+                <div>
+                    <h3 class="text-center" th:text="#{'message.request-page.header.'+${header}}"></h3>
+                </div>
+                <form onsubmit="return calendarValidate()" th:object="${request}" th:action="@{/request/save}"
+                      method="post">
+
+                    <p class="white" th:text="#{message.request-page.select.capacity}">Select capacity:</p>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-bed"></i> </span>
+                        </div>
+                        <select th:field="*{capacity}" class="form-control" id="selCapacity">
+                            <option th:each="capacityValue : ${T(com.epam.hotel.model.enums.Capacity).values()}"
+                                    th:value="${capacityValue.name()}"
+                                    th:text="#{'message.capacity.'+${capacityValue.name()}}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <p class="white" th:text="#{message.request-page.select.class}">Select class:</p>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-piggy-bank"></i> </span>
+                        </div>
+
+                        <select th:field="*{classID}" class="form-control" id="selClass">
+                            <option th:each="classIdValue : ${T(com.epam.hotel.model.enums.ClassID).values()}"
+                                    th:value="${classIdValue.name()}"
+                                    th:text="#{'message.class.'+${classIdValue.name()}}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <p class="white" th:text="#{message.request-page.select.checkin}">Select check in date:</p>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-calendar-alt"></i> </span>
+                        </div>
+                        <input id="checkIn" autocomplete="off" name="checkin" class="form-control datepicker"
+                               placeholder="Check in" type="text"
+                               th:field="*{checkIn}">
+                        <p hidden id="checkIn-error" class="error text-center"
+                           th:text="#{message.request-page.error.checkin}">Check in error</p>
+                    </div>
+
+
+                    <p class="white" th:text="#{message.request-page.select.checkout}">Select check out date:</p>
+                    <div id="checkout" class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-calendar-alt"></i> </span>
+                        </div>
+                        <input id="checkOut" autocomplete="off" name="checkout" class="form-control datepicker"
+                               placeholder="Check out" type="text"
+                               th:field="*{checkOut}">
+                        <p hidden id="checkOut-error" class="error text-center"
+                           th:text="#{message.request-page.error.checkout}">Check out error</p>
+                    </div>
+
+
+                    <input hidden class="form-control" type="text" th:field="*{requestID}"/>
+                    <input hidden class="form-control" type="text" th:field="*{userID}"/>
+                    <input hidden class="form-control" type="text" th:field="*{paymentStatus}"/>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block" th:text="#{'message.'+${buttonName}}"></button>
+                    </div>
+                </form>
+                <div class="center-align">
+                    <a onclick="back()" class="btn btn-dark" th:text="#{message.back}">Back</a>
+                </div>
+            </article>
+            <div class="text-center">
+                <span th:text="#{message.change-language}+': '"></span>
+                <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
+                <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script th:src="@{/resources/js/hotel.js}"></script>
+</body>
+</html>

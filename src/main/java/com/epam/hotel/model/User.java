@@ -1,34 +1,30 @@
 package com.epam.hotel.model;
 
 import com.epam.hotel.model.enums.Permission;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Persistent;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Data
-@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userid")
-    private long id;
-    @NotNull
-    @Column(name = "login")
+    private long userID;
+
     private String login;
-    @NotNull
-    @Column(name = "password")
     private String password;
-    @NotNull
-    @Column(name = "permission")
+
+    @Enumerated(EnumType.STRING)
     private Permission permission;
-    @NotNull
-    @Column(name = "firstname")
-    private String firstName;
-    @NotNull
-    @Column(name = "lastname")
-    private String lastName;
+
+    private String firstname;
+    private String lastname;
+
 }
