@@ -10,18 +10,17 @@ import java.math.BigDecimal;
 
 @Data
 @Entity
-@Table(name = "rooms")
 public class Room implements Comparable<Room> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long roomID;
+    private long id;
 
-    @Column(name = "roomnumber")
-    private int roomNumber;
+    @Column(name = "number")
+    private int number;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "classid")
+    @Column(name = "class")
     private ClassID classID;
 
     @Enumerated(EnumType.STRING)
@@ -31,8 +30,8 @@ public class Room implements Comparable<Room> {
 
     @Override
     public int compareTo(@NotNull Room room) {
-        if (this.roomID == room.getRoomID()) return 0;
-        else if (this.roomID < room.getRoomID()) return -1;
+        if (this.id == room.id) return 0;
+        else if (this.id < room.id) return -1;
         return 1;
     }
 

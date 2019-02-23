@@ -103,6 +103,4 @@ function back() {
     window.history.back();
 }
 
-$(function () {
-    $(".datepicker").datepicker();
-});
+$(".datepicker").datepicker({dateFormat: 'mm/dd/yy'});

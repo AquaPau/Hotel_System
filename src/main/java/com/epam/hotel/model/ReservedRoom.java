@@ -6,18 +6,16 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "reservedrooms")
 public class ReservedRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "reservedroomid")
-    private long reservedRoomID;
+    private long id;
 
-    @Column(name = "roomid")
-    private long roomID;
+    @Column(name = "room_id")
+    private long roomId;
 
-    @Column(name = "requestid")
-    private long requestID;
+    @Column(name = "request_id")
+    private long requestId;
 
 }

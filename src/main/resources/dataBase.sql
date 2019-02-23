@@ -1,39 +1,45 @@
-CREATE DATABASE Hotel;
+CREATE DATABASE hotel;
 CREATE SCHEMA IF NOT EXISTS hotel;
 
-CREATE TABLE IF NOT EXISTS hotel.Users
+CREATE TABLE IF NOT EXISTS hotel.user
 (
-  userID     BIGSERIAL PRIMARY KEY,
+  id         BIGSERIAL PRIMARY KEY,
   login      VARCHAR(50)  NOT NULL UNIQUE,
   password   VARCHAR(100) NOT NULL,
   permission VARCHAR(5) DEFAULT 'USER' CHECK (permission in ('USER', 'ADMIN')),
-  firstName  VARCHAR(255) NOT NULL,
-  lastName   VARCHAR(255) NOT NULL
+  firstname  VARCHAR(255) NOT NULL,
+  lastname   VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS hotel.Rooms
+CREATE TABLE IF NOT EXISTS hotel.request
 (
-  roomID     BIGSERIAL PRIMARY KEY,
-  roomNumber INT            NOT NULL UNIQUE,
-  classID    VARCHAR(10) DEFAULT 'STANDARD' CHECK (classID IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')),
-  capacity   VARCHAR(10) DEFAULT 'SINGLE' CHECK (capacity IN ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD')),
-  price      DECIMAL(19, 4) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS hotel.Requests
-(
-  requestID     BIGSERIAL PRIMARY KEY,
-  userID        BIGINT REFERENCES hotel.Users (userid),
+  id            BIGSERIAL PRIMARY KEY,
   capacity      VARCHAR(10) DEFAULT 'SINGLE' CHECK (capacity IN ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD')),
-  classID       VARCHAR(10) DEFAULT 'STANDARD' CHECK (classID IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')),
-  checkIn       TIMESTAMP NOT NULL,
-  checkOut      TIMESTAMP NOT NULL,
-  paymentStatus VARCHAR(10) DEFAULT 'NOBILL' CHECK (paymentStatus IN ('PAID', 'BILLSENT', 'NOBILL'))
+  class         VARCHAR(10) DEFAULT 'STANDARD' CHECK (class IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')),
+  checkin       TIMESTAMP NOT NULL,
+  checkout      TIMESTAMP NOT NULL,
+  paymentstatus VARCHAR(10) DEFAULT 'NOBILL' CHECK (paymentstatus IN ('PAID', 'BILLSENT', 'NOBILL'))
 );
 
-CREATE TABLE IF NOT EXISTS hotel.ReservedRooms
+
+CREATE TABLE IF NOT EXISTS hotel.room
 (
-  reservedRoomID BIGSERIAL PRIMARY KEY,
-  roomID         BIGSERIAL REFERENCES hotel.Rooms (roomID),
-  requestID      BIGINT REFERENCES hotel.Requests (requestID)
+  id       BIGSERIAL PRIMARY KEY,
+  number   INT            NOT NULL UNIQUE,
+  class    VARCHAR(10) DEFAULT 'STANDARD' CHECK (class IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')),
+  capacity VARCHAR(10) DEFAULT 'SINGLE' CHECK (capacity IN ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD')),
+  price    DECIMAL(19, 4) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS hotel.user_requests
+(
+  user_id    BIGINT REFERENCES hotel.user (id),
+  requests_id BIGINT REFERENCES hotel.request (id)
+);
+
+CREATE TABLE IF NOT EXISTS hotel.reserved_room
+(
+  id         BIGSERIAL PRIMARY KEY,
+  room_id    BIGSERIAL REFERENCES hotel.room (id),
+  request_id BIGINT REFERENCES hotel.request (id)
 );

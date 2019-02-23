@@ -1,6 +1,7 @@
 package com.epam.hotel.controllers;
 
 import com.epam.hotel.model.User;
+import com.epam.hotel.model.enums.Permission;
 import com.epam.hotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ public class SecurityController {
         return "login";
     }
 
-
     @GetMapping("/register")
     public String registration(Model model) {
         model.addAttribute("user", new User());
@@ -29,8 +29,8 @@ public class SecurityController {
     }
 
     @PostMapping("/register")
-    public String saveOrUpdate(@ModelAttribute("user") User user) {
-        userService.saveUser(user);
+    public String createUser(@ModelAttribute("user") User user) {
+        userService.save(user);
         return "redirect:/login";
     }
 
