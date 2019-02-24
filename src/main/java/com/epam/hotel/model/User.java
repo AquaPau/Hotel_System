@@ -1,20 +1,17 @@
 package com.epam.hotel.model;
 
 import com.epam.hotel.model.enums.Permission;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Persistent;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
- public class User {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +20,12 @@ import java.util.Set;
     private String login;
     private String password;
 
-    @JoinTable
-    @OneToMany
-    private Set<Request> requests;
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Request> requests = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Permission permission;
@@ -35,5 +35,16 @@ import java.util.Set;
 
     @Column(name = "lastname")
     private String lastName;
+
+
+    public void addRequest(Request request) {
+        requests.add(request);
+        request.setUser(this);
+    }
+
+    public void removeRequest(Request request) {
+        requests.remove(request);
+        request.setUser(null);
+    }
 
 }

@@ -2,8 +2,10 @@ package com.epam.hotel.controllers;
 
 import com.epam.hotel.model.Request;
 import com.epam.hotel.model.User;
+import com.epam.hotel.model.enums.PaymentStatus;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.UserService;
+import com.epam.hotel.utils.DateHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,10 @@ public class RequestController {
     @GetMapping("/request/new")
     public String createRequestForm(Model model) {
         Request request = new Request();
+        request.setCheckIn(DateHelper.getTodayPlusDays(1));
+        request.setCheckOut(DateHelper.getTodayPlusDays(8));
+        request.setPaymentStatus(PaymentStatus.NOBILL);
+
         model.addAttribute("request", request);
         model.addAttribute("header", "create");
         model.addAttribute("buttonName", "create");
@@ -34,8 +40,7 @@ public class RequestController {
     @PostMapping("request/save")
     public String createRequest(@ModelAttribute("request") Request request, Principal principal) {
         User user = userService.findByLogin(principal.getName());
-        Request save = requestService.save(request);
-        user.getRequests().add(save);
+        user.addRequest(request);
         userService.save(user);
         return "redirect:/index";
     }
@@ -49,10 +54,12 @@ public class RequestController {
         return "request";
     }
 
-
     @GetMapping("request/delete/{id}")
-    public String deleteRequest(@PathVariable String id) {
-        requestService.deleteById(new Long(id));
+    public String deleteRequest(@PathVariable String id, Principal principal) {
+        User user = userService.findByLogin(principal.getName());
+        Request request = requestService.findById(new Long(id));
+        user.removeRequest(request);
+        userService.save(user);
         return "redirect:/index";
     }
 
@@ -63,6 +70,5 @@ public class RequestController {
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
    */
-
 
 }

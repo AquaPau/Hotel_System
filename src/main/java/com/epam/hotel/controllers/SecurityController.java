@@ -1,7 +1,6 @@
 package com.epam.hotel.controllers;
 
 import com.epam.hotel.model.User;
-import com.epam.hotel.model.enums.Permission;
 import com.epam.hotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
