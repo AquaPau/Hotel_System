@@ -68,7 +68,7 @@
                             <li class="page-item" th:classappend="${processedRequests.isFirst()} ? disabled">
                                 <a class="page-link"
                                    th:href="@{/index(pr_page=${processedRequests.number},ur_page=${unprocessedRequests.number}+1)}"
-                                   tabindex="-1"><<
+                                   tabindex="-1"><
                                 </a>
                             </li>
                             <li th:each="pageNumber : ${processedPageNumbers}" class="page-item"
@@ -81,7 +81,7 @@
                             <li class="page-item" th:classappend="${processedRequests.isLast()} ? disabled">
                                 <a class="page-link"
                                    th:href="@{/index(pr_page=${processedRequests.number}+2,ur_page=${unprocessedRequests.number}+1)}"
-                                >>>
+                                >>
                                 </a>
                             </li>
                         </ul>
@@ -133,7 +133,7 @@
                             <li class="page-item" th:classappend="${unprocessedRequests.isFirst()} ? disabled">
                                 <a class="page-link"
                                    th:href="@{/index(ur_page=${unprocessedRequests.number},pr_page=${processedRequests.number}+1)}"
-                                   tabindex="-1"><<
+                                   tabindex="-1"><
                                 </a>
                             </li>
                             <li th:each="pageNumber : ${unprocessedPageNumbers}" class="page-item"
@@ -146,7 +146,7 @@
                             <li class="page-item" th:classappend="${unprocessedRequests.isLast()} ? disabled">
                                 <a class="page-link"
                                    th:href="@{/index(ur_page=${unprocessedRequests.number}+2,pr_page=${processedRequests.number}+1)}"
-                                >>>
+                                >>
                                 </a>
                             </li>
                         </ul>

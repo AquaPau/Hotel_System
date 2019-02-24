@@ -10,10 +10,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface RequestRepository extends JpaRepository<Request, Long> {
 
-    @Query("select r from Request r where (r.reservation is not null and r.user = :#{#user}) order by r.id")
+    @Query("select r from Request r left join r.reservation s where (s.request=r and r.user = :#{#user}) order by r.id")
     Page<Request> findAllProcessedRequestsByUser(@Param("user") User user, Pageable pageable);
 
-    @Query("select r from Request r where (r.reservation is null and r.user = :#{#user}) order by r.id")
+    @Query("select r from Request r left join r.reservation s where (s.request is null and r.user = :#{#user}) order by r.id")
     Page<Request> findAllUnprocessedRequestsByUser(@Param("user") User user, Pageable pageable);
 
 }

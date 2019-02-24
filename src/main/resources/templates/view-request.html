@@ -19,8 +19,8 @@
     <div class="warning-msg">
         <h3 class="text-center" th:text="#{message.view-request.confirm-message}">confirm-message</h3>
         <a id="pay-confirm" class="btn btn-success float-left"
-           th:text="#{message.pay}+': $'+${request.id}"
-           th:href="@{'/request/pay/'+${request.id}}">pay</a>
+           th:text="#{message.pay}+': $'+${request.reservation.totalPrice}"
+           th:href="@{'/reservation/pay/'+${request.id}}">pay</a>
 
         <a id="pay-cancel" onclick="showPaymentMessage(false)" class="btn btn-danger float-right"
            th:text="#{message.cancel}">cancel</a>
@@ -67,19 +67,19 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td th:text="${request.room.number}"></td>
-                        <td th:text="#{'message.capacity.'+${request.room.capacity}}"></td>
-                        <td th:text="#{'message.class.'+${request.room.classID}}"></td>
-                        <td th:text="#{'message.status.'+${request.paymentStatus}}"></td>
+                        <td th:text="${request.reservation.room.number}"></td>
+                        <td th:text="#{'message.capacity.'+${request.reservation.room.capacity}}"></td>
+                        <td th:text="#{'message.class.'+${request.reservation.room.classID}}"></td>
+                        <td th:text="#{'message.status.'+${request.reservation.paymentStatus}}"></td>
                     </tr>
                     </tbody>
                 </table>
-                <div class="reserv-buttons" th:if="${request.paymentStatus.name()=='BILLSENT'}">
+                <div class="reserv-buttons" th:if="${request.reservation.paymentStatus.name()=='BILLSENT'}">
                     <a th:href="@{'/reservation/cancel/'+${request.id}}"
                        th:text="#{message.cancel}"
                        class="btn btn-danger float-right">cancel</a>
                     <a onclick="showPaymentMessage(true)" class="btn login_btn float-right"
-                       th:text="#{message.pay}+': $'+${request.id}">pay</a>
+                       th:text="#{message.pay}+': $'+${request.reservation.totalPrice}">pay</a>
                 </div>
                 <div class="card-footer">
 
