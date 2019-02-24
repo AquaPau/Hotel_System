@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS hotel.request
 (
   id            BIGSERIAL PRIMARY KEY,
   user_id       BIGINT REFERENCES hotel.user (id),
-  room_id    BIGINT REFERENCES hotel.room (id),
+  room_id       BIGINT REFERENCES hotel.room (id),
   capacity      VARCHAR(10) DEFAULT 'SINGLE' CHECK (capacity IN ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD')),
   class         VARCHAR(10) DEFAULT 'STANDARD' CHECK (class IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')),
   checkin       TIMESTAMP NOT NULL,
