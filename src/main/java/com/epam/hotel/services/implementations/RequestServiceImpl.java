@@ -1,10 +1,14 @@
 package com.epam.hotel.services.implementations;
 
 import com.epam.hotel.model.Request;
+import com.epam.hotel.model.User;
 import com.epam.hotel.repositories.RequestRepository;
 import com.epam.hotel.services.RequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,4 +43,16 @@ public class RequestServiceImpl implements RequestService {
     public void deleteById(Long id) {
         requestRepository.deleteById(id);
     }
+
+    @Override
+    public Page<Request> getPagedUnprocessedRequestByUser(User user, int page, int size) {
+        return requestRepository.findAllByUserAndRoomNull(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    }
+
+    @Override
+    public Page<Request> getPagedProcessedRequestByUser(User user, int page, int size) {
+        return requestRepository.findAllByUserAndRoomNotNull(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    }
+
+
 }

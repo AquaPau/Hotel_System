@@ -11,17 +11,6 @@ CREATE TABLE IF NOT EXISTS hotel.user
   lastname   VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS hotel.request
-(
-  id            BIGSERIAL PRIMARY KEY,
-  user_id       BIGINT REFERENCES hotel.user (id),
-  capacity      VARCHAR(10) DEFAULT 'SINGLE' CHECK (capacity IN ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD')),
-  class         VARCHAR(10) DEFAULT 'STANDARD' CHECK (class IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')),
-  checkin       TIMESTAMP NOT NULL,
-  checkout      TIMESTAMP NOT NULL,
-  paymentstatus VARCHAR(10) DEFAULT 'NOBILL' CHECK (paymentstatus IN ('PAID', 'BILLSENT', 'NOBILL'))
-);
-
 CREATE TABLE IF NOT EXISTS hotel.room
 (
   id       BIGSERIAL PRIMARY KEY,
@@ -31,9 +20,14 @@ CREATE TABLE IF NOT EXISTS hotel.room
   price    DECIMAL(19, 4) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS hotel.reserved_room
+CREATE TABLE IF NOT EXISTS hotel.request
 (
-  id         BIGSERIAL PRIMARY KEY,
-  room_id    BIGSERIAL REFERENCES hotel.room (id),
-  request_id BIGINT REFERENCES hotel.request (id)
+  id            BIGSERIAL PRIMARY KEY,
+  user_id       BIGINT REFERENCES hotel.user (id),
+  room_id    BIGINT REFERENCES hotel.room (id),
+  capacity      VARCHAR(10) DEFAULT 'SINGLE' CHECK (capacity IN ('SINGLE', 'DOUBLE', 'TRIPLE', 'QUAD')),
+  class         VARCHAR(10) DEFAULT 'STANDARD' CHECK (class IN ('ECONOMY', 'STANDARD', 'FAMILY', 'LUX')),
+  checkin       TIMESTAMP NOT NULL,
+  checkout      TIMESTAMP NOT NULL,
+  paymentstatus VARCHAR(10) DEFAULT 'NOBILL' CHECK (paymentstatus IN ('PAID', 'BILLSENT', 'NOBILL'))
 );

@@ -36,7 +36,6 @@ public class User {
     @Column(name = "lastname")
     private String lastName;
 
-
     public void addRequest(Request request) {
         requests.add(request);
         request.setUser(this);

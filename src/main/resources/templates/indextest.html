@@ -43,9 +43,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <th:block th:each="request : ${user.requests}">
+                        <th:block th:each="request : ${unprocessedRequests}">
                             <tr>
-                                <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
+                                <td th:text="#{'message.capacity.'+*{capacity}}"></td>
                                 <td th:text="#{'message.class.'+${request.classID}}"></td>
                                 <td th:text="${#dates.format(request.checkIn,'MM/dd/yyyy')}"></td>
                                 <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
