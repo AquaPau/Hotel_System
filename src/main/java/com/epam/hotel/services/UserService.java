@@ -1,6 +1,6 @@
 package com.epam.hotel.services;
 
-import com.epam.hotel.model.User;
+import com.epam.hotel.domains.User;
 
 import java.util.List;
 

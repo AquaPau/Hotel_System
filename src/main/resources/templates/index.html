@@ -50,10 +50,10 @@
                                 <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
                                 <td>
                                     <a th:text="#{message.view}"
-                                       th:href="@{'/reservation/view/'+${request.id}}"
+                                       th:href="@{'/request/view/'+${request.id}}"
                                        class="btn btn-info float-left">view</a>
                                 </td>
-                                <td th:text="#{'message.status.'+${request.paymentStatus}}"></td>
+                                <td th:text="#{'message.status.'+${request.reservation.paymentStatus}}"></td>
                                 <td>
                                     <a th:href="@{'/reservation/cancel/'+${request.id}}"
                                        th:text="#{message.cancel}"

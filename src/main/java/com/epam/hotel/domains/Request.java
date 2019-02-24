@@ -1,8 +1,7 @@
-package com.epam.hotel.model;
+package com.epam.hotel.domains;
 
-import com.epam.hotel.model.enums.Capacity;
-import com.epam.hotel.model.enums.ClassID;
-import com.epam.hotel.model.enums.PaymentStatus;
+import com.epam.hotel.domains.enums.Capacity;
+import com.epam.hotel.domains.enums.ClassID;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,10 +19,6 @@ public class Request {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
-
     @Enumerated(EnumType.STRING)
     private Capacity capacity;
 
@@ -31,16 +26,17 @@ public class Request {
     @Column(name = "class")
     private ClassID classID;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "paymentstatus")
-    private PaymentStatus paymentStatus;
-
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "checkin")
     private Date checkIn;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "checkout")
     private Date checkOut;
+
+    @OneToOne(
+            mappedBy = "request",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Reservation reservation;
 
 }

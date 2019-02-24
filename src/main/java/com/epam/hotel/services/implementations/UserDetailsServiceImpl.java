@@ -1,6 +1,6 @@
 package com.epam.hotel.services.implementations;
 
-import com.epam.hotel.model.User;
+import com.epam.hotel.domains.User;
 import com.epam.hotel.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

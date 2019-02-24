@@ -1,4 +1,4 @@
-package com.epam.hotel.model.enums;
+package com.epam.hotel.domains.enums;
 
 public enum Permission {
     ADMIN, USER

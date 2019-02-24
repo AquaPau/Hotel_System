@@ -35,7 +35,7 @@
                         </div>
 
                         <select th:field="*{classID}" class="form-control" id="selClass">
-                            <option th:each="classIDValue : ${T(com.epam.hotel.model.enums.ClassID).values()}"
+                            <option th:each="classIDValue : ${T(com.epam.hotel.domains.enums.ClassID).values()}"
                                     th:value="${classIDValue.name()}"
                                     th:text="#{'message.class.'+ ${classIDValue.name()}}">
                             </option>
@@ -49,7 +49,7 @@
                         </div>
                         <select th:field="*{capacity}" class="form-control" id="selCapacity">
 
-                            <option th:each="capacityValue : ${T(com.epam.hotel.model.enums.Capacity).values()}"
+                            <option th:each="capacityValue : ${T(com.epam.hotel.domains.enums.Capacity).values()}"
                                     th:value="${capacityValue.name()}"
                                     th:text="#{'message.capacity.' + ${capacityValue.name()}}">
                             </option>

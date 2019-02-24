@@ -1,6 +1,6 @@
-package com.epam.hotel.model;
+package com.epam.hotel.domains;
 
-import com.epam.hotel.model.enums.Permission;
+import com.epam.hotel.domains.enums.Permission;
 import lombok.Getter;
 import lombok.Setter;
 

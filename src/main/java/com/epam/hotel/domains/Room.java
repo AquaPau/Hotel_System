@@ -1,7 +1,7 @@
-package com.epam.hotel.model;
+package com.epam.hotel.domains;
 
-import com.epam.hotel.model.enums.Capacity;
-import com.epam.hotel.model.enums.ClassID;
+import com.epam.hotel.domains.enums.Capacity;
+import com.epam.hotel.domains.enums.ClassID;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,29 +30,20 @@ public class Room implements Comparable<Room> {
     @Enumerated(EnumType.STRING)
     private Capacity capacity;
 
-    private BigDecimal price;
-
     @OneToMany(
             mappedBy = "room",
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
-    private List<Request> requests = new ArrayList<>();
+    private List<Reservation> reservations = new ArrayList<>();
+
+    private BigDecimal price;
 
     @Override
     public int compareTo(@NotNull Room room) {
         if (this.id == room.id) return 0;
         else if (this.id < room.id) return -1;
         return 1;
-    }
-
-    public void addRequest(Request request) {
-        requests.add(request);
-        request.setRoom(this);
-    }
-
-    public void removeRequest(Request request) {
-        requests.remove(request);
-        request.setRoom(null);
     }
 
 }

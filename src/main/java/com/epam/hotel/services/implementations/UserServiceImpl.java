@@ -1,7 +1,7 @@
 package com.epam.hotel.services.implementations;
 
-import com.epam.hotel.model.User;
-import com.epam.hotel.model.enums.Permission;
+import com.epam.hotel.domains.User;
+import com.epam.hotel.domains.enums.Permission;
 import com.epam.hotel.repositories.UserRepository;
 import com.epam.hotel.services.UserService;
 import com.epam.hotel.utils.Encoder;

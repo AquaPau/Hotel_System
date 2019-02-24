@@ -1,8 +1,7 @@
 package com.epam.hotel.controllers;
 
-import com.epam.hotel.model.Request;
-import com.epam.hotel.model.User;
-import com.epam.hotel.model.enums.PaymentStatus;
+import com.epam.hotel.domains.Request;
+import com.epam.hotel.domains.User;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.UserService;
 import com.epam.hotel.utils.DateHelper;
@@ -29,7 +28,6 @@ public class RequestController {
         Request request = new Request();
         request.setCheckIn(DateHelper.getTodayPlusDays(1));
         request.setCheckOut(DateHelper.getTodayPlusDays(8));
-        request.setPaymentStatus(PaymentStatus.NOBILL);
 
         model.addAttribute("request", request);
         model.addAttribute("header", "create");
@@ -62,6 +60,16 @@ public class RequestController {
         userService.save(user);
         return "redirect:/index";
     }
+
+    @GetMapping("request/view/{id}")
+    public String viewRequest(@PathVariable String id, Principal principal, Model model) {
+        User user = userService.findByLogin(principal.getName());
+        Request request = requestService.findById(new Long(id));
+        model.addAttribute("request", request);
+        return "view-request";
+    }
+
+
 
     /*
     @GetMapping("request/pay/{id}")

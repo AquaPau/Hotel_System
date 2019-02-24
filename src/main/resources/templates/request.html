@@ -29,7 +29,7 @@
                             <span class="input-group-text"> <i class="fa fa-bed"></i> </span>
                         </div>
                         <select th:field="*{capacity}" class="form-control" id="selCapacity">
-                            <option th:each="capacityValue : ${T(com.epam.hotel.model.enums.Capacity).values()}"
+                            <option th:each="capacityValue : ${T(com.epam.hotel.domains.enums.Capacity).values()}"
                                     th:value="${capacityValue.name()}"
                                     th:text="#{'message.capacity.'+${capacityValue.name()}}">
                             </option>
@@ -43,7 +43,7 @@
                         </div>
 
                         <select th:field="*{classID}" class="form-control" id="selClass">
-                            <option th:each="classIdValue : ${T(com.epam.hotel.model.enums.ClassID).values()}"
+                            <option th:each="classIdValue : ${T(com.epam.hotel.domains.enums.ClassID).values()}"
                                     th:value="${classIdValue.name()}"
                                     th:text="#{'message.class.'+${classIdValue.name()}}">
                             </option>
@@ -74,11 +74,7 @@
                         <p hidden id="checkOut-error" class="error text-center"
                            th:text="#{message.request-page.error.checkout}">Check out error</p>
                     </div>
-
-
                     <input hidden class="form-control" type="text" th:field="*{id}"/>
-                    <input hidden class="form-control" type="text" th:field="*{paymentStatus}"/>
-
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block"
                                 th:text="#{'message.'+${buttonName}}"></button>

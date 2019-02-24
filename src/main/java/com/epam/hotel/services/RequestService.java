@@ -1,7 +1,7 @@
 package com.epam.hotel.services;
 
-import com.epam.hotel.model.Request;
-import com.epam.hotel.model.User;
+import com.epam.hotel.domains.Request;
+import com.epam.hotel.domains.User;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

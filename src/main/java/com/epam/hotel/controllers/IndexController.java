@@ -1,7 +1,7 @@
 package com.epam.hotel.controllers;
 
-import com.epam.hotel.model.Request;
-import com.epam.hotel.model.User;
+import com.epam.hotel.domains.Request;
+import com.epam.hotel.domains.User;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +41,9 @@ public class IndexController {
         }
 
         User user = userService.findByLogin(principal.getName());
-        Page<Request> unprocessedRequests = requestService.getPagedUnprocessedRequestByUser(user, ur_page, limit);
+
         Page<Request> processedRequests = requestService.getPagedProcessedRequestByUser(user, pr_page, limit);
+        Page<Request> unprocessedRequests = requestService.getPagedUnprocessedRequestByUser(user, ur_page, limit);
 
         int totalPages = unprocessedRequests.getTotalPages();
         if (totalPages > 0) {

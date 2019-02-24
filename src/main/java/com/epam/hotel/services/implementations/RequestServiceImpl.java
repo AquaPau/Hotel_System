@@ -1,7 +1,7 @@
 package com.epam.hotel.services.implementations;
 
-import com.epam.hotel.model.Request;
-import com.epam.hotel.model.User;
+import com.epam.hotel.domains.Request;
+import com.epam.hotel.domains.User;
 import com.epam.hotel.repositories.RequestRepository;
 import com.epam.hotel.services.RequestService;
 import lombok.RequiredArgsConstructor;
@@ -46,12 +46,12 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public Page<Request> getPagedUnprocessedRequestByUser(User user, int page, int size) {
-        return requestRepository.findAllByUserAndRoomNull(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+        return requestRepository.findAllUnprocessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
     @Override
     public Page<Request> getPagedProcessedRequestByUser(User user, int page, int size) {
-        return requestRepository.findAllByUserAndRoomNotNull(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+        return requestRepository.findAllProcessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
 
