@@ -11,11 +11,19 @@ html, body {
     color: #ff5a5a !important;
 }
 
-.pagination {
-    display: inline-block;
-    text-align: center;
-    width: 100%;
+.page-item {
+
 }
+
+.page-link {
+    background-color: #a0a0a063 !important;
+    color: #FFF;
+}
+
+.disabled a {
+    color: #868a8e !important;
+}
+
 
 .paid {
     color: #00ff6a;
