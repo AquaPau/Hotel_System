@@ -6,7 +6,6 @@ import com.epam.hotel.model.enums.PaymentStatus;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Calendar;
 import java.util.Date;
 
 @Data
@@ -16,6 +15,10 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Enumerated(EnumType.STRING)
     private Capacity capacity;

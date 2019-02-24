@@ -1,4 +1,4 @@
-package com.epam.hotel.configurations;
+package com.epam.hotel.controllers;
 
 import com.epam.hotel.model.User;
 import com.epam.hotel.services.UserService;
@@ -20,7 +20,7 @@ public class IndexController {
     public String index(Model model, Principal principal) {
         User user = userService.findByLogin(principal.getName());
         model.addAttribute("user", user);
-
         return "indextest";
     }
+
 }
