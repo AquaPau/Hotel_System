@@ -39,4 +39,11 @@ public class Request {
     )
     private Reservation reservation;
 
+    @OneToOne(
+            mappedBy = "request",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private DenyMessage denyMessage;
+
 }

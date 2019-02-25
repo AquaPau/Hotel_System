@@ -21,11 +21,14 @@
             <div class="card-header">
                 <h3 id="index-header" class="text-center"
                     th:text="#{message.admin-page.header}">Administration page</span></h3>
-                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-yellow center-align">Pending requests</a>
-                <a th:href="@{/approvedrequests}" th:text="#{message.admin-page.approved}" class="btn btn-grey center-align">Approved requests</a>
+                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-yellow center-align">Pending
+                    requests</a>
+                <a th:href="@{/approvedrequests}" th:text="#{message.admin-page.approved}"
+                   class="btn btn-grey center-align">Approved requests</a>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-request}">There are no active requests</p>
+                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-request}">
+                    There are no active requests</p>
                 <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
                     <thead>
                     <tr>
@@ -35,7 +38,7 @@
                         <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
                         <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
                         <th scope="col" th:text="#{message.find}">Find</th>
-                        <th scope="col" th:text="#{message.delete}">Delete</th>
+                        <th scope="col" th:text="#{message.delete}">Deny</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -48,12 +51,29 @@
                             <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
                             <td>
                                 <a th:href="@{'/getallrooms/'+${request.id}}" th:text="#{message.find}"
-                                   class="btn btn-dark float-left" >Find</a>
+                                   class="btn btn-dark float-left">Find</a>
                             </td>
                             <td>
-                                <a th:href="@{'/request/delete/'+${request.id}}" th:text="#{message.delete}"
-                                   class="btn btn-dark float-left">Delete</a>
+                                <a onclick="showDenyPopup(true)" class="btn login_btn float-right"
+                                   th:text="#{message.deny}">deny</a>
+                                <div hidden>
+                                    <form th:action="@{/admin/deny}" th:object="${request.denyMessage}" method="post">
+                                        <div class="form-group">
+
+                                            <input th:field="*{message}" type="text">
+                                            <button type="submit" class="btn btn-primary btn-block"
+                                                    th:text="#{message.deny}"> Deny
+                                            </button>
+                                            <a onclick="showDenyPopup(false)" class="btn login_btn float-right"
+                                               th:text="#{message.cancel}">Cancel</a>
+                                        </div>
+                                        <input hidden name="request" id="request" th:value="${request}"/>
+                                    </form>
+                                </div>
+
                             </td>
+
+
                         </tr>
                     </th:block>
                     </tbody>
@@ -83,8 +103,10 @@
                 </nav>
             </div>
             <div class="card-footer">
-                <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User menu</a>
-                <a th:href="@{/roomseditor}" th:text="#{message.admin-page.editrooms}" class="btn btn-dark float-right">Edit rooms</a>
+                <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User
+                    menu</a>
+                <a th:href="@{/roomseditor}" th:text="#{message.admin-page.editrooms}" class="btn btn-dark float-right">Edit
+                    rooms</a>
                 <div class="text-center">
                     <span th:text="#{message.change-language}+': '"></span>
                     <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>

@@ -12,7 +12,7 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
           integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 </head>
 <body>
 <div class="container">
@@ -25,8 +25,8 @@
                 <a th:href="@{/approvedrequests}" th:text="#{message.admin-page.approved}" class="btn btn-yellow center-align">Approved requests</a>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${pagedList.isEmpty()==true}" th:text="#{message.admin-page.no-request}">There are no approved requests</p>
-                <table th:if="${pagedList.isEmpty()==false}" class="table table-bordered white">
+                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-request}">There are no approved requests</p>
+                <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -41,26 +41,46 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <th:block th:each="request : ${pagedList}">
+                    <th:block th:each="reservation : ${pagedList}">
                         <tr>
-                            <th th:text="${request.requestID}" scope="row">1</th>
-                            <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
-                            <td th:text="#{'message.class.'+${request.classID}}"></td>
-                            <td th:text="${request.checkIn}"></td>
-                            <td th:text="${request.checkOut}"></td>
-                            <td th:text="#{'message.status.'+${request.status}}"></td>
-                            <td th:text="${request.roomNumber}"></td>
-                            <td th:text="${request.firstName}"></td>
-                            <td th:text="${request.lastName}"></td>
+                            <th th:text="${reservation.request.id}" scope="row">1</th>
+                            <td th:text="#{'message.capacity.'+${reservation.request.capacity}}"></td>
+                            <td th:text="#{'message.class.'+${reservation.request.classID}}"></td>
+                            <td th:text="${#dates.format(reservation.request.checkIn,'MM/dd/yyyy')}"></td>
+                            <td th:text="${#dates.format(reservation.request.checkOut,'MM/dd/yyyy')}"></td>
+                            <td th:text="#{'message.status.'+${reservation.status}}"></td>
+                            <td th:text="${reservation.room.number}"></td>
+                            <td th:text="${reservation.request.user.firstName}"></td>
+                            <td th:text="${reservation.request.user.lastName}"></td>
                         </tr>
                     </th:block>
                     </tbody>
                 </table>
-                <div th:if="${pageNumbers.size() > 1}" class="pagination">
-                    <a th:each="pageNumber : ${pageNumbers}"
-                       th:href="@{'/approvedrequests?page='+${pageNumber}}"
-                       class="btn btn-grey-small" th:text="${pageNumber}">Number</a>
-                </div>
+
+                <nav th:if="${pagedList.totalPages > 0}">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${pagedList.isFirst()} ? disabled">
+                            <a class="page-link"
+                               th:href="@{/admin(page=${pagedList.number})}"
+                               tabindex="-1"><
+                            </a>
+                        </li>
+                        <li th:each="pageNumber : ${pageNumbers}" class="page-item"
+                            th:classappend="${pageNumber==pagedList.number + 1} ? disabled">
+                            <a class="page-link"
+                               th:href="@{/admin(page=${pageNumber})}"
+                               th:text="${pageNumber}">
+                            </a>
+                        </li>
+                        <li class="page-item" th:classappend="${pagedList.isLast()} ? disabled">
+                            <a class="page-link"
+                               th:href="@{/admin(page=${pagedList.number}+2)}"
+                            >>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
             </div>
             <div class="card-footer">
                 <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User menu</a>

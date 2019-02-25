@@ -38,3 +38,10 @@ CREATE TABLE IF NOT EXISTS hotel.reservation
   total_price DECIMAL(10, 2) NOT NULL,
   PRIMARY KEY (request_id, room_id)
 );
+
+CREATE TABLE IF NOT EXISTS hotel.deny_message
+(
+  id        BIGSERIAL PRIMARY KEY,
+  request_id  BIGINT REFERENCES hotel.request (id),
+  message VARCHAR(255)
+);
