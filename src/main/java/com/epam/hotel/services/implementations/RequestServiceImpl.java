@@ -54,5 +54,10 @@ public class RequestServiceImpl implements RequestService {
         return requestRepository.findAllProcessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
+    @Override
+    public Page<Request> getPagedUnprocessedRequest(int page, int size) {
+        return requestRepository.findAllUnprocessedRequests(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    }
+
 
 }
