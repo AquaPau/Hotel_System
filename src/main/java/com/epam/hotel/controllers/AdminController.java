@@ -31,6 +31,7 @@ public class AdminController {
         if (limit == null || limit < 1) { limit = 5; }
 
         Page<Request> unapprovedRequests = requestService.getPagedUnprocessedRequest(page, limit);
+        System.out.println(unapprovedRequests.getTotalPages());
 
         int totalPages = unapprovedRequests.getTotalPages();
         if (totalPages > 0) {

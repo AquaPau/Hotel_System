@@ -34,7 +34,6 @@
                         <th scope="col" th:text="#{message.hotel.class}">Class</th>
                         <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
                         <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
-                        <th scope="col" th:text="#{message.hotel.status}">Payment status</th>
                         <th scope="col" th:text="#{message.find}">Find</th>
                         <th scope="col" th:text="#{message.delete}">Delete</th>
                     </tr>
@@ -42,18 +41,17 @@
                     <tbody>
                     <th:block th:each="request : ${pagedList}">
                         <tr>
-                            <th th:text="${request.requestID}" scope="row">1</th>
+                            <th th:text="${request.id}" scope="row">1</th>
                             <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
                             <td th:text="#{'message.class.'+${request.classID}}"></td>
                             <td th:text="${#dates.format(request.checkIn,'MM/dd/yyyy')}"></td>
                             <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
-                            <td th:text="#{'message.status.'+${request.status}}"></td>
                             <td>
-                                <a th:href="@{'/getallrooms/'+${request.requestID}}" th:text="#{message.find}"
+                                <a th:href="@{'/getallrooms/'+${request.id}}" th:text="#{message.find}"
                                    class="btn btn-dark float-left" >Find</a>
                             </td>
                             <td>
-                                <a th:href="@{'/request/delete/'+${request.requestID}}" th:text="#{message.delete}"
+                                <a th:href="@{'/request/delete/'+${request.id}}" th:text="#{message.delete}"
                                    class="btn btn-dark float-left">Delete</a>
                             </td>
                         </tr>
