@@ -30,10 +30,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Permission permission;
 
-    @Column(name = "firstname")
     private String firstName;
-
-    @Column(name = "lastname")
     private String lastName;
 
     public void addRequest(Request request) {
