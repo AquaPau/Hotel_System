@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS hotel.request
 
 CREATE TABLE IF NOT EXISTS hotel.reservation
 (
-  request_id     BIGINT REFERENCES hotel.request (id),
-  room_id        BIGINT REFERENCES hotel.room (id),
-  payment_status VARCHAR(10) DEFAULT 'BILLSENT' CHECK (payment_status IN ('BILLSENT', 'PAID')),
-  total_price    DECIMAL(10, 2) NOT NULL,
+  request_id  BIGINT REFERENCES hotel.request (id),
+  room_id     BIGINT REFERENCES hotel.room (id),
+  status      VARCHAR(10) DEFAULT 'BILLSENT' CHECK (status IN ('BILLSENT', 'PAID', 'DENIED', 'CANCELLED')),
+  total_price DECIMAL(10, 2) NOT NULL,
   PRIMARY KEY (request_id, room_id)
 );

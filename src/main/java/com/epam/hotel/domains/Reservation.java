@@ -1,6 +1,6 @@
 package com.epam.hotel.domains;
 
-import com.epam.hotel.domains.enums.PaymentStatus;
+import com.epam.hotel.domains.enums.Status;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,7 +23,7 @@ public class Reservation {
     private Room room;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
+    private Status status;
 
     private BigDecimal totalPrice;
 }

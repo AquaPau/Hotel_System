@@ -69,14 +69,4 @@ public class RequestController {
         return "view-request";
     }
 
-
-
-    /*
-    @GetMapping("request/pay/{id}")
-    public String payRequest(@PathVariable String id, HttpServletRequest request) {
-        requestService.updatePaymentStatus(new Long(id), PaymentStatus.PAID);
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
-   */
-
 }

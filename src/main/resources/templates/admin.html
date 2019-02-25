@@ -47,7 +47,7 @@
                             <td th:text="#{'message.class.'+${request.classID}}"></td>
                             <td th:text="${request.checkIn}"></td>
                             <td th:text="${request.checkOut}"></td>
-                            <td th:text="#{'message.status.'+${request.paymentStatus}}"></td>
+                            <td th:text="#{'message.status.'+${request.status}}"></td>
                             <td>
                                 <a th:href="@{'/getallrooms/'+${request.requestID}}" th:text="#{message.find}"
                                    class="btn btn-dark float-left" >Find</a>
