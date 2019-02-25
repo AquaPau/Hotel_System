@@ -16,7 +16,7 @@ public class DenyMessage {
     private long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "request_id", updatable = false, insertable = false)
+    @JoinColumn(name = "request_id")
     Request request;
 
     String message;

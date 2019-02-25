@@ -1,8 +1,10 @@
 package com.epam.hotel.services.implementations;
 
+import com.epam.hotel.domains.DenyMessage;
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.User;
 import com.epam.hotel.repositories.RequestRepository;
+import com.epam.hotel.services.DenyMessageService;
 import com.epam.hotel.services.RequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
+    private final DenyMessageService denyMessageService;
 
     @Override
     public List<Request> findAll() {
@@ -36,6 +39,12 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public Request save(Request request) {
+        if (request.getDenyMessage() == null) {
+            DenyMessage denyMessage = new DenyMessage();
+            denyMessage.setRequest(request);
+            denyMessage.setMessage("");
+            denyMessageService.save(denyMessage);
+        }
         return requestRepository.save(request);
     }
 

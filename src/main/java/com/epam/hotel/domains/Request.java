@@ -46,4 +46,10 @@ public class Request {
     )
     private DenyMessage denyMessage;
 
+    public void createDenyMessage() {
+        DenyMessage denyMessage = new DenyMessage();
+        denyMessage.setRequest(this);
+        denyMessage.setMessage("");
+        this.setDenyMessage(denyMessage);
+    }
 }

@@ -18,4 +18,6 @@ public class DenyMessageServiceImpl implements DenyMessageService {
         return denyMessageRepository.save(message);
     }
 
+
+
 }

@@ -56,10 +56,9 @@
                             <td>
                                 <a onclick="showDenyPopup(true)" class="btn login_btn float-right"
                                    th:text="#{message.deny}">deny</a>
-                                <div hidden>
-                                    <form th:action="@{/admin/deny}" th:object="${request.denyMessage}" method="post">
-                                        <div class="form-group">
-
+                                <div th:with="denyMessage = ${request.denyMessage}">
+                                    <form th:action="@{/admin/deny}" th:object="${denyMessage}" method="post">
+                                        <div  class="form-group">
                                             <input th:field="*{message}" type="text">
                                             <button type="submit" class="btn btn-primary btn-block"
                                                     th:text="#{message.deny}"> Deny
@@ -67,7 +66,7 @@
                                             <a onclick="showDenyPopup(false)" class="btn login_btn float-right"
                                                th:text="#{message.cancel}">Cancel</a>
                                         </div>
-                                        <input hidden name="request" id="request" th:value="${request}"/>
+                                        <input hidden name="request" id="request" th:value="${request.denyMessage.message}"/>
                                     </form>
                                 </div>
 
