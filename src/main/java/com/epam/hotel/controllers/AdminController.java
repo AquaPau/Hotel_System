@@ -3,6 +3,8 @@ package com.epam.hotel.controllers;
 import com.epam.hotel.domains.DenyMessage;
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
+import com.epam.hotel.domains.ReservationId;
+import com.epam.hotel.domains.enums.Status;
 import com.epam.hotel.services.DenyMessageService;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.ReservationService;
@@ -73,6 +75,9 @@ public class AdminController {
     public String denyRequest(@ModelAttribute("denymessage") DenyMessage denyMessage) {
         DenyMessage message = denyMessageService.findById(denyMessage.getId());
         message.setMessage(denyMessage.getMessage());
+        Reservation reservation = new Reservation(message.getRequest().getId(), 1);
+        reservation.setStatus(Status.DENIED);
+        message.getRequest().setReservation(reservation);
         requestService.save(message.getRequest());
         return "redirect:/admin";
     }

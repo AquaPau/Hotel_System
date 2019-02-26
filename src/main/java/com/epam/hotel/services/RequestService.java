@@ -20,6 +20,6 @@ public interface RequestService {
 
     Page<Request> getPagedProcessedRequestByUser(User user, int page, int size);
 
-    public Page<Request> getPagedUnprocessedRequest(int page, int size);
+    Page<Request> getPagedUnprocessedRequest(int page, int size);
 
 }
