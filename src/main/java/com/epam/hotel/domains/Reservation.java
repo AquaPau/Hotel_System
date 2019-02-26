@@ -28,9 +28,10 @@ public class Reservation {
 
     private BigDecimal totalPrice;
 
-    public Reservation(long requestid, long roomid) {
-        this.id = new ReservationId(requestid, roomid);
+    public Reservation(Request request, long roomid) {
+        this.id = new ReservationId(request.getId(), roomid);
         this.totalPrice = BigDecimal.valueOf(0);
+        this.request = request;
     }
 
 }

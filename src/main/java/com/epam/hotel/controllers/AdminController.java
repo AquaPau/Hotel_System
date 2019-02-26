@@ -75,7 +75,7 @@ public class AdminController {
     public String denyRequest(@ModelAttribute("denymessage") DenyMessage denyMessage) {
         DenyMessage message = denyMessageService.findById(denyMessage.getId());
         message.setMessage(denyMessage.getMessage());
-        Reservation reservation = new Reservation(message.getRequest().getId(), 1);
+        Reservation reservation = new Reservation(message.getRequest(), 1);
         reservation.setStatus(Status.DENIED);
         message.getRequest().setReservation(reservation);
         requestService.save(message.getRequest());
