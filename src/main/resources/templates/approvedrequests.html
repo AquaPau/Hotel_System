@@ -23,6 +23,7 @@
                     th:text="#{message.admin-page.header}">Administration page</span></h3>
                 <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-grey center-align">Pending requests</a>
                 <a th:href="@{/approvedrequests}" th:text="#{message.admin-page.approved}" class="btn btn-yellow center-align">Approved requests</a>
+                <a th:href="@{/deniedrequests}" th:text="#{message.admin-page.denied}" class="btn btn-grey center-align">Denied requests</a>
             </div>
             <div class="card-body">
                 <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-request}">There are no approved requests</p>
@@ -61,20 +62,20 @@
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${pagedList.isFirst()} ? disabled">
                             <a class="page-link"
-                               th:href="@{/admin(page=${pagedList.number})}"
+                               th:href="@{/approvedrequests(page=${pagedList.number})}"
                                tabindex="-1"><
                             </a>
                         </li>
                         <li th:each="pageNumber : ${pageNumbers}" class="page-item"
                             th:classappend="${pageNumber==pagedList.number + 1} ? disabled">
                             <a class="page-link"
-                               th:href="@{/admin(page=${pageNumber})}"
+                               th:href="@{/approvedrequests(page=${pageNumber})}"
                                th:text="${pageNumber}">
                             </a>
                         </li>
                         <li class="page-item" th:classappend="${pagedList.isLast()} ? disabled">
                             <a class="page-link"
-                               th:href="@{/admin(page=${pagedList.number}+2)}"
+                               th:href="@{/approvedrequests(page=${pagedList.number}+2)}"
                             >>
                             </a>
                         </li>

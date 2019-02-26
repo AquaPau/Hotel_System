@@ -18,4 +18,6 @@ public interface ReservationService {
 
     Page<Reservation> getAllReservationsPaged(int page, int size);
 
+    Page<Reservation> getAllDeniedReservationsPaged(int page, int size);
+
 }

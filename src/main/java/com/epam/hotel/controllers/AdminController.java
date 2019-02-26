@@ -71,6 +71,25 @@ public class AdminController {
         return "/approvedrequests";
     }
 
+    @GetMapping({"/deniedrequests"})
+    public String deniedrequests(Model model, Principal principal,
+                                   @RequestParam(value = "page", required = false) Integer page,
+                                   @RequestParam(value = "limit", required = false) Integer limit) {
+
+        if (page == null || page < 1) { page = 1; }
+        if (limit == null || limit < 1) { limit = 5; }
+
+        Page<Reservation> deniedRequests = reservationService.getAllDeniedReservationsPaged(page, limit);
+        System.out.println(deniedRequests.getTotalPages());
+
+        if (deniedRequests.getTotalPages() > 0) {
+            model.addAttribute("pageNumbers", PaginationHelper.getPageNumber(deniedRequests));
+        }
+
+        model.addAttribute("pagedList", deniedRequests);
+        return "/deniedrequests";
+    }
+
     @PostMapping("admin/deny")
     public String denyRequest(@ModelAttribute("denymessage") DenyMessage denyMessage) {
         DenyMessage message = denyMessageService.findById(denyMessage.getId());

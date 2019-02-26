@@ -21,10 +21,9 @@
             <div class="card-header">
                 <h3 id="index-header" class="text-center"
                     th:text="#{message.admin-page.header}">Administration page</span></h3>
-                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-yellow center-align">Pending
-                    requests</a>
-                <a th:href="@{/approvedrequests}" th:text="#{message.admin-page.approved}"
-                   class="btn btn-grey center-align">Approved requests</a>
+                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-yellow center-align">Pending requests</a>
+                <a th:href="@{/approvedrequests}" th:text="#{message.admin-page.approved}" class="btn btn-grey center-align">Approved requests</a>
+                <a th:href="@{/deniedrequests}" th:text="#{message.admin-page.denied}" class="btn btn-grey center-align">Denied requests</a>
             </div>
             <div class="card-body">
                 <p class="white" th:unless="${pagedList.hasContent()}" th:text="#{message.admin-page.no-request}">
