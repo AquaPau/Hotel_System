@@ -3,7 +3,7 @@ package com.epam.hotel.controllers;
 import com.epam.hotel.domains.DenyMessage;
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
-import com.epam.hotel.domains.ReservationId;
+import com.epam.hotel.domains.User;
 import com.epam.hotel.domains.enums.Status;
 import com.epam.hotel.services.DenyMessageService;
 import com.epam.hotel.services.RequestService;
@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -32,6 +29,7 @@ public class AdminController {
     private final RequestService requestService;
     private final ReservationService reservationService;
     private final DenyMessageService denyMessageService;
+    private final UserService userService;
 
     @GetMapping({"/admin"})
     public String index(Model model, Principal principal,
@@ -99,6 +97,25 @@ public class AdminController {
         message.getRequest().setReservation(reservation);
         requestService.save(message.getRequest());
         return "redirect:/admin";
+    }
+
+    @GetMapping({"/users"})
+    public String users(Model model, Principal principal,
+                                 @RequestParam(value = "page", required = false) Integer page,
+                                 @RequestParam(value = "limit", required = false) Integer limit) {
+
+        if (page == null || page < 1) { page = 1; }
+        if (limit == null || limit < 1) { limit = 8; }
+
+        Page<User> userList = userService.getAllUsersPaged(page, limit);
+        System.out.println(userList.getTotalPages());
+
+        if (userList.getTotalPages() > 0) {
+            model.addAttribute("pageNumbers", PaginationHelper.getPageNumber(userList));
+        }
+
+        model.addAttribute("pagedList", userList);
+        return "/users";
     }
 
 }
