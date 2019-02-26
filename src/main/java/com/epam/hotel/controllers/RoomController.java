@@ -25,7 +25,7 @@ public class RoomController {
     private final RequestService requestService;
     private final RoomService roomService;
 
-    @GetMapping("/admin/rooms/new")
+    @GetMapping("/rooms/new")
     public String createRoomForm(Model model) {
         Room room = new Room();
         model.addAttribute("room", room);
@@ -34,13 +34,13 @@ public class RoomController {
         return "rooms";
     }
 
-    @PostMapping("/admin/rooms/save")
+    @PostMapping("/rooms/save")
     public String createRoom(@ModelAttribute("room") Room room) {
         roomService.save(room);
         return "redirect:/rooms";
     }
 
-    @GetMapping("/admin/rooms/edit/{id}")
+    @GetMapping("/rooms/edit/{id}")
     public String editRoom(@PathVariable String id, Model model) {
         Room room = roomService.findById(new Long(id));
         model.addAttribute("room", room);
@@ -49,7 +49,7 @@ public class RoomController {
         return "rooms";
     }
 
-    @GetMapping("/admin/rooms/delete/{id}")
+    @GetMapping("/rooms/delete/{id}")
     public String deleteRoom(@PathVariable String id) {
         roomService.deleteById(new Long(id));
         return "redirect:/rooms";
