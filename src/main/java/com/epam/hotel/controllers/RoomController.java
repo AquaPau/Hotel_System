@@ -37,7 +37,7 @@ public class RoomController {
     @PostMapping("/admin/rooms/save")
     public String createRoom(@ModelAttribute("room") Room room) {
         roomService.save(room);
-        return "redirect:/roomseditor";
+        return "redirect:/rooms";
     }
 
     @GetMapping("/admin/rooms/edit/{id}")
@@ -52,7 +52,7 @@ public class RoomController {
     @GetMapping("/admin/rooms/delete/{id}")
     public String deleteRoom(@PathVariable String id) {
         roomService.deleteById(new Long(id));
-        return "redirect:/roomseditor";
+        return "redirect:/rooms";
     }
 
     @GetMapping("/rooms")
@@ -75,10 +75,10 @@ public class RoomController {
         }
         model.addAttribute("roomsList", roomList);
 
-        return "redirect:/rooms";
+        return "roomsList";
     }
 
-    @RequestMapping(value = "/admin/suitable_rooms/{id}", params = {"page"})
+    /*@RequestMapping(value = "/admin/suitable_rooms/{id}", params = {"page"})
     public String getAllFittingRoomsPaged(@PathVariable String id,
                                           @RequestParam(value = "page", required = false) Integer page,
                                           @RequestParam(value = "limit", required = false) Integer limit, Model model) {
@@ -102,7 +102,7 @@ public class RoomController {
         model.addAttribute("requestID", id);
         model.addAttribute("reservedRoom", reservation);
         return "allfittingrooms";
-    }
+    }*/
 
     @ExceptionHandler(RoomNumberAlreadyExistsException.class)
     public String existingRoomException(Model model) {

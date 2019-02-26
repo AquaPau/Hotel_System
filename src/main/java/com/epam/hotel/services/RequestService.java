@@ -20,4 +20,8 @@ public interface RequestService {
 
     Page<Request> getPagedProcessedRequestByUser(User user, int page, int size);
 
+    /*List<Request> getAllProceccedRequestList();
+
+    List<Request> filterRequestListByRequest(Request request, List<Request> requests);*/
+
 }
