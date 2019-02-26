@@ -27,7 +27,7 @@
                    class="btn btn-grey center-align">Approved requests</a>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-request}">
+                <p class="white" th:unless="${pagedList.hasContent()}" th:text="#{message.admin-page.no-request}">
                     There are no active requests</p>
                 <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
                     <thead>
@@ -66,8 +66,8 @@
                                             <a onclick="showDenyPopup(false)" class="btn login_btn float-right"
                                                th:text="#{message.cancel}">Cancel</a>
                                         </div>
-                                        <input hidden name="request" id="request"
-                                               th:value="${request}"/>
+                                        <input hidden name="id" id="id"
+                                               th:value="${request.denyMessage.id}"/>
 
                                     </form>
                                 </div>

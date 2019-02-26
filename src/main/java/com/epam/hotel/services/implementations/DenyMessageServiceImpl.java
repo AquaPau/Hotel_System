@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class DenyMessageServiceImpl implements DenyMessageService {
@@ -18,6 +20,14 @@ public class DenyMessageServiceImpl implements DenyMessageService {
         return denyMessageRepository.save(message);
     }
 
+    @Override
+    public DenyMessage findById(long id) {
+        Optional<DenyMessage> messageOptional = denyMessageRepository.findById(id);
+        if (!messageOptional.isPresent()) {
+            throw new RuntimeException("Deny message not found");
+        }
+        return messageOptional.get();
+    }
 
 
 }

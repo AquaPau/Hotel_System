@@ -6,4 +6,5 @@ public interface DenyMessageService {
 
     DenyMessage save(DenyMessage message);
 
+    DenyMessage findById(long id);
 }

@@ -71,8 +71,10 @@ public class AdminController {
 
     @PostMapping("admin/deny")
     public String denyRequest(@ModelAttribute("denymessage") DenyMessage denyMessage) {
-        denyMessageService.save(denyMessage);
-        return "/admin";
+        DenyMessage message = denyMessageService.findById(denyMessage.getId());
+        message.setMessage(denyMessage.getMessage());
+        requestService.save(message.getRequest());
+        return "redirect:/admin";
     }
 
 }
