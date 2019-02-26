@@ -12,18 +12,19 @@ html, body {
 }
 
 .page-item {
-
+    background-color: rgba(0, 0, 0, 0.15) !important;
 }
 
 .page-link {
-    background-color: #a0a0a063 !important;
+    background-color: rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid #dee2e647 !important;
     color: #FFF;
 }
 
 .disabled a {
-    color: #868a8e !important;
+    border: 1px solid #dee2e647 !important;
+    color: rgba(134, 138, 142, 0.61) !important;
 }
-
 
 .paid {
     color: #00ff6a;

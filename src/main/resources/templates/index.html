@@ -159,7 +159,7 @@
             </div>
             <div class="card-footer">
                 <div class="text-center">
-                    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}"
+                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}"
                        th:text="#{message.index-page.admin}"
                        class="btn btn-info">Admin
                         menu</a>
