@@ -58,30 +58,4 @@ public class RoomServiceImpl implements RoomService {
     public Page<Room> findAllRoomsPaged(int page, int limit) {
         return roomRepository.findAll(PageRequest.of(page - 1, limit, Sort.Direction.ASC, "id"));
     }
-
-
-    /*@Override
-    public Page<Room> findPagedAllFittingRooms(Request request, int page, int limit) {
-        List<Room> rooms = findAllRoomsAvailableForRequest(request);
-        PageRequest
-    }
-
-    public List<Room> findAllRoomsAvailableForRequest(Request request) {
-        List<Request> filteredRequests = requestService.filterRequestListByRequest(request, requestService.getAllProceccedRequestList());
-        List<Room> collect = filteredRequests.stream()
-                .map(x -> x.getReservation().getRoom())
-                .collect(Collectors.toList());
-        collect.addAll(findAllAvailableRooms());
-        return collect;
-    }
-
-
-
-    @Override
-    public List<Room> findAllAvailableRooms() {
-        return findAll().stream()
-                .filter(x -> x.getReservations().isEmpty())
-                .collect(Collectors.toList());
-    }
-*/
 }
