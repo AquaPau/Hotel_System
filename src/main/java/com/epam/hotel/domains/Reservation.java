@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 public class Reservation {
 
     @EmbeddedId
@@ -26,5 +27,12 @@ public class Reservation {
     private Status status;
 
     private BigDecimal totalPrice;
+
+    public Reservation(Request request, long roomid) {
+        this.id = new ReservationId(request.getId(), roomid);
+        this.totalPrice = BigDecimal.valueOf(0);
+        this.request = request;
+    }
+
 }
 
