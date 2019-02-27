@@ -37,6 +37,10 @@ html, body {
     color: #00ff6a;
 }
 
+#index-header {
+    max-width: 590px;
+}
+
 .warning-msg {
     background-color: rgba(0, 0, 0, 0.7) !important;
     width: 500px;
