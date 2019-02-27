@@ -96,15 +96,15 @@ public class AdminController {
         return "users";
     }
 
-    @GetMapping("/users/delete/{id}")
+    @GetMapping("admin/users/delete/{id}")
     public String deleteUser(@PathVariable String id, Principal principal) {
         userService.deleteById(Long.valueOf(id));
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 
-    @GetMapping("/users/block/{id}")
+    @GetMapping("admin/users/block/{id}")
     public String blockUser(@PathVariable String id, Principal principal) {
         userService.changeUserBlockForId(Long.valueOf(id));
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 }

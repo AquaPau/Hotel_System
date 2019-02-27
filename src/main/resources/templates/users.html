@@ -46,13 +46,13 @@
                             <td th:text="${user.lastName}"></td>
                             <td>
                                 <a th:if="${user.permission.toString()=='USER'}"
-                                   th:href="@{'/users/block/'+${user.id}}"
+                                   th:href="@{'users/block/'+${user.id}}"
                                    th:text="#{'message.blockstatus.'+${user.block.toString()}}"
                                    class="btn btn-dark">Block</a>
                             </td>
                             <td>
                                 <a th:if="${user.permission.toString()=='USER'}"
-                                   th:href="@{'/users/delete/'+${user.id}}"
+                                   th:href="@{'users/delete/'+${user.id}}"
                                    th:text="#{message.delete}"
                                    class="btn btn-dark">Delete</a>
                             </td>
@@ -65,20 +65,20 @@
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${pagedList.isFirst()} ? disabled">
                             <a class="page-link"
-                               th:href="@{/users(page=${pagedList.number})}"
+                               th:href="@{users(page=${pagedList.number})}"
                                tabindex="-1"><
                             </a>
                         </li>
                         <li th:each="pageNumber : ${pageNumbers}" class="page-item"
                             th:classappend="${pageNumber==pagedList.number + 1} ? disabled">
                             <a class="page-link"
-                               th:href="@{/users(page=${pageNumber})}"
+                               th:href="@{users(page=${pageNumber})}"
                                th:text="${pageNumber}">
                             </a>
                         </li>
                         <li class="page-item" th:classappend="${pagedList.isLast()} ? disabled">
                             <a class="page-link"
-                               th:href="@{/users(page=${pagedList.number}+2)}"
+                               th:href="@{users(page=${pagedList.number}+2)}"
                             >>
                             </a>
                         </li>

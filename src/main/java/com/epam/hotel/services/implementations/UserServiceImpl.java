@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
     public User save(User user) {
         if (user.getId() == 0) {
             user.setPermission(Permission.USER);
+            user.setBlock(BlockStatus.UNBLOCKED);
             user.setPassword(Encoder.encode(user.getPassword()));
         }
         return userRepository.save(user);
