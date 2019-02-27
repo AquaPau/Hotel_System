@@ -42,9 +42,9 @@ public class IndexController {
 
         User user = userService.findByLogin(principal.getName());
 
-        Page<Request> processedRequests = requestService.getPagedProcessedRequestByUser(user, pr_page, limit);
-        Page<Request> unprocessedRequests = requestService.getPagedUnprocessedRequestByUser(user, ur_page, limit);
-        //Page<Request> deniedRequests = requestService.getPagedDeniedRequestsByUser(user, ur_page, limit);
+        Page<Request> processedRequests = requestService.getPagedProcessedRequestsByUser(user, pr_page, limit);
+        Page<Request> unprocessedRequests = requestService.getPagedUnprocessedRequestsByUser(user, ur_page, limit);
+        Page<Request> deniedRequests = requestService.getPagedDeniedRequestsByUser(user, ur_page, limit);
 
         int totalPages = unprocessedRequests.getTotalPages();
         if (totalPages > 0) {
@@ -65,7 +65,7 @@ public class IndexController {
         model.addAttribute("user", user);
         model.addAttribute("processedRequests", processedRequests);
         model.addAttribute("unprocessedRequests", unprocessedRequests);
-       // model.addAttribute("deniedRequests", deniedRequests);
+        model.addAttribute("deniedRequests", deniedRequests);
         return "index";
     }
 

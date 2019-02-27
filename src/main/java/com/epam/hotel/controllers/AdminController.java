@@ -42,7 +42,7 @@ public class AdminController {
             limit = 5;
         }
 
-        Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequest(page, limit);
+        Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequests(page, limit);
 
         if (unapprovedRequests.getTotalPages() > 0) {
             model.addAttribute("pageNumbers", PaginationHelper.getPageNumber(unapprovedRequests));

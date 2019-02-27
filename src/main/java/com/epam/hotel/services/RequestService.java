@@ -17,17 +17,17 @@ public interface RequestService {
     void deleteById(Long id);
 
 
-    Page<Request> getPagedUnprocessedRequestByUser(User user, int page, int size);
+    Page<Request> getPagedUnprocessedRequestsByUser(User user, int page, int size);
 
-    Page<Request> getPagedProcessedRequestByUser(User user, int page, int size);
+    Page<Request> getPagedProcessedRequestsByUser(User user, int page, int size);
 
     Page<Request> getPagedDeniedRequestsByUser(User user, int page, int size);
 
 
 
-    Page<Request> getAllPagedUnprocessedRequest(int page, int size);
+    Page<Request> getAllPagedUnprocessedRequests(int page, int size);
 
-    Page<Request> getAllPagedProcessedRequest(int page, int size);
+    Page<Request> getAllPagedProcessedRequests(int page, int size);
 
     Page<Request> getAllPagedDeniedRequests(int page, int size);
 

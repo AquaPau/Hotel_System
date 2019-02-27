@@ -12,25 +12,30 @@ import org.springframework.data.repository.query.Param;
 
 public interface RequestRepository extends JpaRepository<Request, Long> {
 
+    // unprocessed requests by user
+    @Query("select r from Request r left join r.reservation s where (s.request is null and r.user = :#{#user} and r.deniedRequest.reason is null) order by r.id")
+    Page<Request> findUnprocessedRequestsByUser(@Param("user") User user, Pageable pageable);
+
     // processed requests by user
     @Query("select r from Request r left join r.reservation s where (s.request=r and r.user = :#{#user}) order by r.id")
-    Page<Request> findProcessedRequestsByUser(User user, Pageable pageable);
-
-    // unprocessed requests by user
-    @Query("select r from Request r left join r.reservation s where (s.request is null and r.user = :#{#user}) order by r.id")
-    Page<Request> findUnprocessedRequestsByUser(User user, Pageable pageable);
+    Page<Request> getProcessedRequestsByUser(@Param("user") User user, Pageable pageable);
 
     // denied requests by user
-    Page<Request> findAllByUserAndDeniedRequestReasonIsNotNull(User user, Pageable pageable);
+    @Query("select r from Request r left join r.deniedRequest s where (s.request=r and s.reason is not null and r.user = :#{#user}) order by r.id")
+    Page<Request> findDeniedRequestsByUser(@Param("user") User user, Pageable pageable);
 
-
-    // all unprocessed requests
-    Page<Request> findAllByReservationIsNullAndDeniedRequestReasonIsNull(Pageable pageable);
-
-    // all denied requests
-    Page<Request> findAllByDeniedRequestReasonIsNotNull(PageRequest id);
 
     // all processed requests
-    Page<Request> findAllByReservationIsNotNull(Pageable pageable);
+    @Query("select r from Request r left join r.reservation s where (s.request=r) order by r.id")
+    Page<Request> findAllProcessedRequests(Pageable pageable);
+
+    // all unprocessed requests
+    @Query("select r from Request r left join r.reservation s where (s.request is null and r.deniedRequest.reason is null) order by r.id")
+    Page<Request> findAllUnprocessedRequests(Pageable pageable);
+
+    // all denied requests
+    @Query("select r from Request r left join r.deniedRequest s where (s.request=r and s.reason is not null) order by r.id")
+    Page<Request> findAllDeniedRequests(PageRequest id);
+
 
 }
