@@ -14,9 +14,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import static com.epam.hotel.utils.PaginationHelper.*;
 
 import java.security.Principal;
+
+import static com.epam.hotel.utils.PaginationHelper.*;
 
 @Controller
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -94,4 +95,15 @@ public class AdminController {
         return "users";
     }
 
+    @GetMapping("admin/users/delete/{id}")
+    public String deleteUser(@PathVariable String id, Principal principal) {
+        userService.deleteById(Long.valueOf(id));
+        return "redirect:/admin/users";
+    }
+
+    @GetMapping("admin/users/block/{id}")
+    public String blockUser(@PathVariable String id, Principal principal) {
+        userService.changeUserBlockForId(Long.valueOf(id));
+        return "redirect:/admin/users";
+    }
 }
