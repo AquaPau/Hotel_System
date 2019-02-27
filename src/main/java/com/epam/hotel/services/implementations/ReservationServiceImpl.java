@@ -1,5 +1,6 @@
 package com.epam.hotel.services.implementations;
 
+import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
 import com.epam.hotel.domains.ReservationId;
 import com.epam.hotel.repositories.ReservationRepository;
@@ -39,6 +40,11 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public void deleteById(ReservationId id) {
         reservationRepository.deleteById(id);
+    }
+
+    @Override
+    public List <Reservation> findAllReservationOfThePeriod(Request request) {
+        return reservationRepository.findAllReservationOfThePeriod(request.getCheckIn(), request.getCheckOut());
     }
 
 }

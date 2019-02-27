@@ -19,11 +19,7 @@ public interface RoomService {
     Room save(Room room);
 
     Page<Room> findAllRoomsPaged(int page, int limit);
-/*
-    Page<Room> findAllFittingRooms(Request request, int page, int limit);*/
 
-   /* Page<Room> findPagedAllFittingRooms(Request request, int page, int limit);
-
-    List<Room> findAllAvailableRooms();*/
+    Page<Room> findAllRoomsAvailableForRequest(Request request, int page, int limit);
 
 }

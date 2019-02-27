@@ -1,5 +1,6 @@
 package com.epam.hotel.services;
 
+import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
 import com.epam.hotel.domains.ReservationId;
 
@@ -14,5 +15,7 @@ public interface ReservationService {
     Reservation save(Reservation reservation);
 
     void deleteById(ReservationId id);
+
+    List <Reservation> findAllReservationOfThePeriod(Request request);
 
 }

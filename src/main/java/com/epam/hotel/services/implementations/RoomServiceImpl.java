@@ -12,6 +12,7 @@ import com.epam.hotel.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
-    private RequestService requestService;
-    private ReservationService reservationService;
+    private final RequestService requestService;
+    private final ReservationService reservationService;
 
     @Override
     public List<Room> findAll() {
@@ -57,5 +58,15 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Page<Room> findAllRoomsPaged(int page, int limit) {
         return roomRepository.findAll(PageRequest.of(page - 1, limit, Sort.Direction.ASC, "id"));
+    }
+
+    @Override
+    public Page<Room> findAllRoomsAvailableForRequest(Request request, int page, int limit) {
+        List<Room> nonEmptyRooms = reservationService.findAllReservationOfThePeriod(request).
+                stream().map(Reservation::getRoom).collect(Collectors.toList());
+        List<Room> suitableRooms = roomRepository.findAll().stream().filter(x ->
+                !nonEmptyRooms.contains(x)).collect(Collectors.toList());
+        return new PageImpl<>(suitableRooms, PageRequest.of(page - 1, limit, Sort.Direction.ASC, "id"),
+                suitableRooms.size());
     }
 }

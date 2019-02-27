@@ -84,5 +84,29 @@ public class RoomController {
         return "error";
     }
 
-
+    @RequestMapping(value = "/admin/suitable_rooms/{id}", params = {"page"})
+    public String getAllFittingRoomsPaged(@PathVariable String id,
+                                          @RequestParam(value = "page", required = false) Integer page,
+                                          @RequestParam(value = "limit", required = false) Integer limit, Model model) {
+        if (page == null || page < 1) {
+            page = 1;
+        }
+        if (limit == null || limit < 1) {
+            limit = 7;
+        }
+        Request request = requestService.findById(new Long(id));
+        Page<Room> roomList = roomService.findAllRoomsAvailableForRequest(request, page, limit);
+        Reservation reservation = new Reservation();//need attention!!
+        int totalPages = roomList.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+        model.addAttribute("allfittingroomsList", roomList);
+        model.addAttribute("requestID", id);
+        model.addAttribute("reservedRoom", reservation);
+        return "allfittingrooms";
+    }
 }
