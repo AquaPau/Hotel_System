@@ -9,6 +9,7 @@ import com.epam.hotel.services.DenyMessageService;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.ReservationService;
 import com.epam.hotel.services.UserService;
+import com.epam.hotel.utils.PaginationHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
