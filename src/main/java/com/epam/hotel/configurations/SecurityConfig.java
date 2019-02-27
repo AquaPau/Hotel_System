@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("static/**").permitAll()
                 .antMatchers("/language").permitAll()
-                .antMatchers("/", "/index", "/request*").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/", "/index", "/request*","/rooms").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin*").hasRole("ADMIN")
                 .antMatchers("/rooms/*").hasRole("ADMIN")
                 .and()

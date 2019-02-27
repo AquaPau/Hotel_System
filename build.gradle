@@ -20,6 +20,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+	compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
