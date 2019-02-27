@@ -1,6 +1,7 @@
 html, body {
     color: #d0d0d0 !important;
-    background-image: url('../images/bg.jpg');
+    background-image: url('/images/bg.jpg');
+    background-attachment: fixed;
     background-size: cover;
     background-repeat: no-repeat;
     height: 100%;
@@ -16,12 +17,14 @@ html, body {
 }
 
 .page-link {
-    background-color: #a0a0a063 !important;
+    background-color: #00000063 !important;
+    border: 1px solid #dee2e694 !important;
     color: #FFF;
 }
 
 .disabled a {
-    color: #868a8e !important;
+    color: #868a8e82 !important;
+    border: 1px solid #dee2e647 !important;
 }
 
 
@@ -135,6 +138,10 @@ h3 {
     position: absolute;
 }
 
+.deny-btn{
+    width:75px;
+}
+
 .container {
     height: 100%;
     align-content: center;
@@ -155,11 +162,15 @@ h3 {
 
 table {
     text-align: center !important;
+}
 
+.button-deny{
+    width: 200px;
 }
 
 .table td {
     vertical-align: middle !important;
+    transition: 1s;
 }
 
 .social_icon span {

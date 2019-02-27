@@ -95,6 +95,11 @@ function validateLoginPage() {
     }
 }
 
+function showDenyPopup(flag, id) {
+    showElement($('#deny-div-' + id), flag);
+    showElement($('#deny-a-' + id), !flag);
+}
+
 function showPaymentMessage(flag) {
     showElement($('#payment'), flag);
 }
