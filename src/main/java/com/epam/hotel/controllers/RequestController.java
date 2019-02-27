@@ -1,9 +1,7 @@
 package com.epam.hotel.controllers;
 
-import com.epam.hotel.domains.DenyMessage;
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.User;
-import com.epam.hotel.services.DenyMessageService;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.UserService;
 import com.epam.hotel.utils.DateHelper;
@@ -41,8 +39,8 @@ public class RequestController {
     @PostMapping("request/save")
     public String createRequest(@ModelAttribute("request") Request request, Principal principal) {
         User user = userService.findByLogin(principal.getName());
-        if (request.getDenyMessage() == null) {
-            request.createDenyMessage();
+        if (request.getDeniedRequest() == null) {
+            request.createDeniedRequest();
         }
         user.addRequest(request);
         userService.save(user);

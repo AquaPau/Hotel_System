@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class DenyMessage {
+public class DeniedRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,6 @@ public class DenyMessage {
     @JoinColumn(name = "request_id")
     Request request;
 
-    String message;
+    String reason;
 
 }

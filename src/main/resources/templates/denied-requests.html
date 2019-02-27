@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -20,13 +19,17 @@
         <div class="card">
             <div class="card-header">
                 <h3 id="index-header" class="text-center"
-                    th:text="#{message.admin-page.header}">Administration page</span></h3>
-                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-grey center-align">Pending requests</a>
-                <a th:href="@{/approvedrequests}" th:text="#{message.admin-page.approved}" class="btn btn-grey center-align">Approved requests</a>
-                <a th:href="@{/deniedrequests}" th:text="#{message.admin-page.denied}" class="btn btn-yellow center-align">Denied requests</a>
+                    th:text="#{message.admin-page.header}">Administration page</h3>
+                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-grey center-align">Pending
+                    requests</a>
+                <a th:href="@{/admin/approved-requests}" th:text="#{message.admin-page.approved}"
+                   class="btn btn-grey center-align">Approved requests</a>
+                <a th:href="@{/admin/denied-requests}" th:text="#{message.admin-page.denied}"
+                   class="btn btn-yellow center-align">Denied requests</a>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-request}">There are no approved requests</p>
+                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-request}">
+                    There are no approved requests</p>
                 <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
                     <thead>
                     <tr>
@@ -35,20 +38,18 @@
                         <th scope="col" th:text="#{message.hotel.class}">Class</th>
                         <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
                         <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
-                        <th scope="col" th:text="#{message.hotel.status}">Payment status</th>
                         <th scope="col" th:text="#{message.hotel.reason}">Reason of denial</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <th:block th:each="reservation : ${pagedList}">
+                    <th:block th:each="request : ${pagedList}">
                         <tr>
-                            <th th:text="${reservation.request.id}" scope="row">1</th>
-                            <td th:text="#{'message.capacity.'+${reservation.request.capacity}}"></td>
-                            <td th:text="#{'message.class.'+${reservation.request.classID}}"></td>
-                            <td th:text="${#dates.format(reservation.request.checkIn,'MM/dd/yyyy')}"></td>
-                            <td th:text="${#dates.format(reservation.request.checkOut,'MM/dd/yyyy')}"></td>
-                            <td th:text="#{'message.status.'+${reservation.status}}"></td>
-                            <td th:text="${reservation.request.denyMessage.message}"></td>
+                            <th th:text="${request.id}" scope="row">1</th>
+                            <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
+                            <td th:text="#{'message.class.'+${request.classID}}"></td>
+                            <td th:text="${#dates.format(request.checkIn,'MM/dd/yyyy')}"></td>
+                            <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
+                            <td th:text="${request.deniedRequest.reason}"></td>
                         </tr>
                     </th:block>
                     </tbody>
@@ -80,8 +81,10 @@
 
             </div>
             <div class="card-footer">
-                <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User menu</a>
-                <a th:href="@{/roomseditor}" th:text="#{message.admin-page.editrooms}" class="btn btn-dark float-right">Edit rooms</a>
+                <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User
+                    menu</a>
+                <a th:href="@{/roomseditor}" th:text="#{message.admin-page.editrooms}" class="btn btn-dark float-right">Edit
+                    rooms</a>
                 <div class="text-center">
                     <span th:text="#{message.change-language}+': '"></span>
                     <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
@@ -93,7 +96,7 @@
 </div>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script th:src="@{resources/js/hotel.js}"></script>
+<script th:src="@{/js/hotel.js}"></script>
 
 </body>
 </html>

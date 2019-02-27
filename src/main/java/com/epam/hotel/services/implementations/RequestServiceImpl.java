@@ -1,6 +1,6 @@
 package com.epam.hotel.services.implementations;
 
-import com.epam.hotel.domains.DenyMessage;
+import com.epam.hotel.domains.DeniedRequest;
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.User;
 import com.epam.hotel.repositories.RequestRepository;
@@ -39,11 +39,11 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public Request save(Request request) {
-        if (request.getDenyMessage() == null) {
-            DenyMessage denyMessage = new DenyMessage();
-            denyMessage.setRequest(request);
-            denyMessage.setMessage("");
-            denyMessageService.save(denyMessage);
+        if (request.getDeniedRequest() == null) {
+            DeniedRequest deniedRequest = new DeniedRequest();
+            deniedRequest.setRequest(request);
+            deniedRequest.setReason("");
+            denyMessageService.save(deniedRequest);
         }
         return requestRepository.save(request);
     }
@@ -53,20 +53,39 @@ public class RequestServiceImpl implements RequestService {
         requestRepository.deleteById(id);
     }
 
+
     @Override
     public Page<Request> getPagedUnprocessedRequestByUser(User user, int page, int size) {
-        return requestRepository.findAllUnprocessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+        return requestRepository.findUnprocessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
     @Override
     public Page<Request> getPagedProcessedRequestByUser(User user, int page, int size) {
-        return requestRepository.findAllProcessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+        return requestRepository.findProcessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
     @Override
-    public Page<Request> getPagedUnprocessedRequest(int page, int size) {
-        return requestRepository.findAllUnprocessedRequests(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    public Page<Request> getPagedDeniedRequestsByUser(User user, int page, int size) {
+        return requestRepository.findAllByUserAndDeniedRequestReasonIsNotNull(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
+
+
+    @Override
+    public Page<Request> getAllPagedUnprocessedRequest(int page, int size) {
+        return requestRepository.findAllByReservationIsNullAndDeniedRequestReasonIsNull(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    }
+
+    @Override
+    public Page<Request> getAllPagedProcessedRequest(int page, int size) {
+        return requestRepository.findAllByReservationIsNotNull(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    }
+
+    @Override
+    public Page<Request> getAllPagedDeniedRequests(int page, int size) {
+        return requestRepository.findAllByDeniedRequestReasonIsNotNull(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    }
+
+
 
 
 }

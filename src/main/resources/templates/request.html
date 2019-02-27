@@ -75,7 +75,7 @@
                            th:text="#{message.request-page.error.checkout}">Check out error</p>
                     </div>
                     <input hidden class="form-control" type="text" th:field="*{id}"/>
-                    <input hidden class="form-control" type="text" th:field="*{denyMessage}"/>
+                    <input hidden class="form-control" type="text" th:field="*{deniedRequest}"/>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block"
                                 th:text="#{'message.'+${buttonName}}"></button>

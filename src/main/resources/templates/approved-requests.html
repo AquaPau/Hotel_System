@@ -20,13 +20,17 @@
         <div class="card">
             <div class="card-header">
                 <h3 id="index-header" class="text-center"
-                    th:text="#{message.admin-page.header}">Administration page</span></h3>
-                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-grey center-align">Pending requests</a>
-                <a th:href="@{/approvedrequests}" th:text="#{message.admin-page.approved}" class="btn btn-yellow center-align">Approved requests</a>
-                <a th:href="@{/deniedrequests}" th:text="#{message.admin-page.denied}" class="btn btn-grey center-align">Denied requests</a>
+                    th:text="#{message.admin-page.header}">Administration page</h3>
+                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-grey center-align">Pending
+                    requests</a>
+                <a th:href="@{/admin/approved-requests}" th:text="#{message.admin-page.approved}"
+                   class="btn btn-yellow center-align">Approved requests</a>
+                <a th:href="@{/admin/denied-requests}" th:text="#{message.admin-page.denied}"
+                   class="btn btn-grey center-align">Denied requests</a>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-request}">There are no approved requests</p>
+                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-request}">
+                    There are no approved requests</p>
                 <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
                     <thead>
                     <tr>
@@ -84,8 +88,10 @@
 
             </div>
             <div class="card-footer">
-                <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User menu</a>
-                <a th:href="@{/roomseditor}" th:text="#{message.admin-page.editrooms}" class="btn btn-dark float-right">Edit rooms</a>
+                <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User
+                    menu</a>
+                <a th:href="@{/roomseditor}" th:text="#{message.admin-page.editrooms}" class="btn btn-dark float-right">Edit
+                    rooms</a>
                 <div class="text-center">
                     <span th:text="#{message.change-language}+': '"></span>
                     <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>

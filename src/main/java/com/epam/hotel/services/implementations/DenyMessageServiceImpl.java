@@ -1,6 +1,6 @@
 package com.epam.hotel.services.implementations;
 
-import com.epam.hotel.domains.DenyMessage;
+import com.epam.hotel.domains.DeniedRequest;
 import com.epam.hotel.repositories.DenyMessageRepository;
 import com.epam.hotel.services.DenyMessageService;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +16,15 @@ public class DenyMessageServiceImpl implements DenyMessageService {
     private final DenyMessageRepository denyMessageRepository;
 
     @Override
-    public DenyMessage save(DenyMessage message) {
+    public DeniedRequest save(DeniedRequest message) {
         return denyMessageRepository.save(message);
     }
 
     @Override
-    public DenyMessage findById(long id) {
-        Optional<DenyMessage> messageOptional = denyMessageRepository.findById(id);
+    public DeniedRequest findById(long id) {
+        Optional<DeniedRequest> messageOptional = denyMessageRepository.findById(id);
         if (!messageOptional.isPresent()) {
-            throw new RuntimeException("Deny message not found");
+            throw new RuntimeException("Deny reason not found");
         }
         return messageOptional.get();
     }

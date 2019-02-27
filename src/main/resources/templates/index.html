@@ -88,6 +88,71 @@
                     </nav>
                 </div>
 
+
+
+             <!--   <div th:if="${deniedRequests.hasContent()}">
+                    <p class="white" th:text="#{message.status.DENIED}"> Denied requests:</p>
+                    <table class="table table-bordered white">
+                        <thead>
+                        <tr>
+                            <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                            <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                            <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
+                            <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
+                              <th scope="col" th:text="#{message.hotel.status}">Status</th>
+                            <th scope="col" th:text="#{message.cancel}">Cancel</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="request : ${deniedRequests}">
+                            <tr>
+                                <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
+                                <td th:text="#{'message.class.'+${request.classID}}"></td>
+                                <td th:text="${#dates.format(request.checkIn,'MM/dd/yyyy')}"></td>
+                                <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
+                                <td>
+                                    <a th:text="#{message.view}"
+                                       th:href="@{'/request/view/'+${request.id}}"
+                                       class="btn btn-info float-left">view</a>
+                                </td>
+                                <td th:text="#{message.status.DENIED}"></td>
+                                <td>
+                                    <a th:href="@{'/request/delete/'+${request.id}}"
+                                       th:text="#{message.delete}"
+                                       class="btn btn-danger float-left">cancel</a>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                    <nav th:if="${processedRequests.totalPages > 0}">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${processedRequests.isFirst()} ? disabled">
+                                <a class="page-link"
+                                   th:href="@{/index(pr_page=${processedRequests.number},ur_page=${unprocessedRequests.number}+1)}"
+                                   tabindex="-1"><
+                                </a>
+                            </li>
+                            <li th:each="pageNumber : ${processedPageNumbers}" class="page-item"
+                                th:classappend="${pageNumber==processedRequests.number + 1} ? disabled">
+                                <a class="page-link"
+                                   th:href="@{/index(pr_page=${pageNumber},ur_page=${unprocessedRequests.number}+1)}"
+                                   th:text="${pageNumber}">
+                                </a>
+                            </li>
+                            <li class="page-item" th:classappend="${processedRequests.isLast()} ? disabled">
+                                <a class="page-link"
+                                   th:href="@{/index(pr_page=${processedRequests.number}+2,ur_page=${unprocessedRequests.number}+1)}"
+                                >>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+-->
+
+
+
                 <p class="white"
                    th:if="${processedRequests.hasContent() && unprocessedRequests.hasContent()==false}"
                    th:text="#{message.index-page.no-unprocessed-request}">no unprocessed</p>

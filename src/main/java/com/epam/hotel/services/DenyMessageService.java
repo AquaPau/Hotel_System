@@ -1,10 +1,10 @@
 package com.epam.hotel.services;
 
-import com.epam.hotel.domains.DenyMessage;
+import com.epam.hotel.domains.DeniedRequest;
 
 public interface DenyMessageService {
 
-    DenyMessage save(DenyMessage message);
+    DeniedRequest save(DeniedRequest message);
 
-    DenyMessage findById(long id);
+    DeniedRequest findById(long id);
 }

@@ -44,12 +44,11 @@ public class Request {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private DenyMessage denyMessage;
+    private DeniedRequest deniedRequest;
 
-    public void createDenyMessage() {
-        DenyMessage denyMessage = new DenyMessage();
-        denyMessage.setRequest(this);
-        denyMessage.setMessage("");
-        this.setDenyMessage(denyMessage);
+    public void createDeniedRequest() {
+        DeniedRequest deniedRequest = new DeniedRequest();
+        deniedRequest.setRequest(this);
+        this.setDeniedRequest(deniedRequest);
     }
 }
