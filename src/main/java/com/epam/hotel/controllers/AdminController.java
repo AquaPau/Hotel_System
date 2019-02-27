@@ -4,22 +4,20 @@ import com.epam.hotel.domains.DeniedRequest;
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
 import com.epam.hotel.domains.User;
-import com.epam.hotel.domains.enums.Status;
 import com.epam.hotel.services.DenyMessageService;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.ReservationService;
 import com.epam.hotel.services.UserService;
-import com.epam.hotel.utils.PaginationHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import static com.epam.hotel.utils.PaginationHelper.*;
-import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+
+import static com.epam.hotel.utils.PaginationHelper.*;
 
 @Controller
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
