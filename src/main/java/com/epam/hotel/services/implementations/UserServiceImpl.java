@@ -65,16 +65,16 @@ public class UserServiceImpl implements UserService {
     public Page<User> getAllUsersPaged(int page, int size) { return userRepository.findAll(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id")); }
 
     @Override
-    public void blockById(Long id) {
+    public void changeUserBlockForId(Long id) {
         User user = userRepository.getOne(id);
-        user.setBlock(BlockStatus.BLOCKED);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void unblockById(Long id) {
-        User user = userRepository.getOne(id);
-        user.setBlock(BlockStatus.UNBLOCKED);
+        switch (user.getBlock()) {
+            case BLOCKED:
+                user.setBlock(BlockStatus.UNBLOCKED);
+                break;
+            case UNBLOCKED:
+                user.setBlock(BlockStatus.BLOCKED);
+                break;
+        }
         userRepository.save(user);
     }
 

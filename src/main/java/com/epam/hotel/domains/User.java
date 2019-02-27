@@ -48,4 +48,13 @@ public class User {
         request.setUser(null);
     }
 
+    public boolean isNotBlocked(){
+        switch (block) {
+            default:
+            case BLOCKED:
+                return false;
+            case UNBLOCKED:
+                return true;
+        }
+    }
 }

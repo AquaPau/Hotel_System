@@ -19,7 +19,6 @@ public interface UserService {
 
     Page<User> getAllUsersPaged(int page, int size);
 
-    void blockById(Long id);
+    void changeUserBlockForId(Long id);
 
-    void unblockById(Long id);
 }

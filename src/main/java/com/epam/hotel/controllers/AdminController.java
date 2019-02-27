@@ -4,7 +4,6 @@ import com.epam.hotel.domains.DeniedRequest;
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
 import com.epam.hotel.domains.User;
-import com.epam.hotel.domains.enums.BlockStatus;
 import com.epam.hotel.domains.enums.Status;
 import com.epam.hotel.services.DenyMessageService;
 import com.epam.hotel.services.RequestService;
@@ -103,13 +102,9 @@ public class AdminController {
         return "redirect:/users";
     }
 
-    @GetMapping("/users/{blockStatus}/{id}")
-    public String blockUser(@PathVariable String blockStatus, @PathVariable String id, Principal principal) {
-        if(BlockStatus.valueOf(blockStatus) == BlockStatus.BLOCKED){
-            userService.unblockById(Long.valueOf(id));
-        } else{
-            userService.blockById(Long.valueOf(id));
-        }
+    @GetMapping("/users/block/{id}")
+    public String blockUser(@PathVariable String id, Principal principal) {
+        userService.changeUserBlockForId(Long.valueOf(id));
         return "redirect:/users";
     }
 }

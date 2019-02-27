@@ -32,8 +32,8 @@
                         <th scope="col" th:text="#{message.hotel.permission}">Permission</th>
                         <th scope="col" th:text="#{message.hotel.firstname}">Name</th>
                         <th scope="col" th:text="#{message.hotel.lastname}">Last name</th>
-                        <th scope="col" th:text="#{message.delete}">Delete</th>
                         <th scope="col" th:text="#{message.block}">Block</th>
+                        <th scope="col" th:text="#{message.delete}">Delete</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -46,15 +46,15 @@
                             <td th:text="${user.lastName}"></td>
                             <td>
                                 <a th:if="${user.permission.toString()=='USER'}"
-                                   th:href="@{'/users/delete/'+${user.id}}"
-                                   th:text="#{message.delete}"
-                                   class="btn btn-dark">Delete</a>
+                                   th:href="@{'/users/block/'+${user.id}}"
+                                   th:text="#{'message.blockstatus.'+${user.block.toString()}}"
+                                   class="btn btn-dark">Block</a>
                             </td>
                             <td>
                                 <a th:if="${user.permission.toString()=='USER'}"
-                                   th:href="@{'/users/'+${user.block}+'/'+${user.id}}"
-                                   th:text="#{'message.blockstatus.'+${user.block.toString()}}"
-                                   class="btn btn-dark">Block</a>
+                                   th:href="@{'/users/delete/'+${user.id}}"
+                                   th:text="#{message.delete}"
+                                   class="btn btn-dark">Delete</a>
                             </td>
                         </tr>
                     </th:block>
