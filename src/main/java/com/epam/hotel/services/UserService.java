@@ -17,6 +17,9 @@ public interface UserService {
 
     User findByLogin(String login);
 
-    public Page<User> getAllUsersPaged(int page, int size);
+    Page<User> getAllUsersPaged(int page, int size);
 
+    void blockById(Long id);
+
+    void unblockById(Long id);
 }

@@ -1,10 +1,12 @@
 package com.epam.hotel.domains;
 
+import com.epam.hotel.domains.enums.BlockStatus;
 import com.epam.hotel.domains.enums.Permission;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,9 @@ public class User {
 
     private String firstName;
     private String lastName;
+
+    @Enumerated(EnumType.STRING)
+    private BlockStatus block;
 
     public void addRequest(Request request) {
         requests.add(request);

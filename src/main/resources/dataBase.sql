@@ -1,4 +1,4 @@
-CREATE DATABASE hotel;
+
 CREATE SCHEMA IF NOT EXISTS hotel;
 
 CREATE TABLE IF NOT EXISTS hotel.user
@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS hotel.user
   password   VARCHAR(100) NOT NULL,
   permission VARCHAR(5) DEFAULT 'USER' CHECK (permission in ('USER', 'ADMIN')),
   first_name VARCHAR(255) NOT NULL,
-  last_name  VARCHAR(255) NOT NULL
+  last_name  VARCHAR(255) NOT NULL,
+  block      VARCHAR(9) NOT NULL DEFAULT 'UNBLOCKED' CHECK (block in ('BLOCKED', 'UNBLOCKED'))
 );
 
 CREATE TABLE IF NOT EXISTS hotel.room

@@ -4,6 +4,8 @@ import com.epam.hotel.domains.DeniedRequest;
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
 import com.epam.hotel.domains.User;
+import com.epam.hotel.domains.enums.BlockStatus;
+import com.epam.hotel.domains.enums.Status;
 import com.epam.hotel.services.DenyMessageService;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.ReservationService;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import static com.epam.hotel.utils.PaginationHelper.*;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -94,4 +97,19 @@ public class AdminController {
         return "users";
     }
 
+    @GetMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable String id, Principal principal) {
+        userService.deleteById(Long.valueOf(id));
+        return "redirect:/users";
+    }
+
+    @GetMapping("/users/{blockStatus}/{id}")
+    public String blockUser(@PathVariable String blockStatus, @PathVariable String id, Principal principal) {
+        if(BlockStatus.valueOf(blockStatus) == BlockStatus.BLOCKED){
+            userService.unblockById(Long.valueOf(id));
+        } else{
+            userService.blockById(Long.valueOf(id));
+        }
+        return "redirect:/users";
+    }
 }
