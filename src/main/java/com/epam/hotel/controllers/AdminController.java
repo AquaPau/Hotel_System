@@ -8,16 +8,13 @@ import com.epam.hotel.services.DenyMessageService;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.ReservationService;
 import com.epam.hotel.services.UserService;
-import com.epam.hotel.utils.PaginationHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import static com.epam.hotel.utils.PaginationHelper.*;
 
 import java.security.Principal;
 
@@ -35,18 +32,11 @@ public class AdminController {
                         @RequestParam(value = "page", required = false) Integer page,
                         @RequestParam(value = "limit", required = false) Integer limit) {
 
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (limit == null || limit < 1) {
-            limit = 5;
-        }
-
+        page = getPage(page);
+        limit = getLimit(limit, 5);
         Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequests(page, limit);
-
-        if (unapprovedRequests.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", PaginationHelper.getPageNumber(unapprovedRequests));
-        }
+        if (unapprovedRequests.getTotalPages() > 0)
+            model.addAttribute("pageNumbers", getPageNumber(unapprovedRequests));
 
         model.addAttribute("pagedList", unapprovedRequests);
         return "admin";
@@ -57,19 +47,11 @@ public class AdminController {
                                    @RequestParam(value = "page", required = false) Integer page,
                                    @RequestParam(value = "limit", required = false) Integer limit) {
 
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (limit == null || limit < 1) {
-            limit = 5;
-        }
-
+        page = getPage(page);
+        limit = getLimit(limit, 5);
         Page<Reservation> approvedRequests = reservationService.getAllReservationsPaged(page, limit);
         System.out.println(approvedRequests.getTotalPages());
-
-        if (approvedRequests.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", PaginationHelper.getPageNumber(approvedRequests));
-        }
+        if (approvedRequests.getTotalPages() > 0) model.addAttribute("pageNumbers", getPageNumber(approvedRequests));
 
         model.addAttribute("pagedList", approvedRequests);
         return "approved-requests";
@@ -80,18 +62,10 @@ public class AdminController {
                                  @RequestParam(value = "page", required = false) Integer page,
                                  @RequestParam(value = "limit", required = false) Integer limit) {
 
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (limit == null || limit < 1) {
-            limit = 5;
-        }
-
+        page = getPage(page);
+        limit = getLimit(limit, 5);
         Page<Request> deniedRequests = requestService.getAllPagedDeniedRequests(page, limit);
-
-        if (deniedRequests.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", PaginationHelper.getPageNumber(deniedRequests));
-        }
+        if (deniedRequests.getTotalPages() > 0) model.addAttribute("pageNumbers", getPageNumber(deniedRequests));
 
         model.addAttribute("pagedList", deniedRequests);
         return "denied-requests";
@@ -110,19 +84,11 @@ public class AdminController {
                         @RequestParam(value = "page", required = false) Integer page,
                         @RequestParam(value = "limit", required = false) Integer limit) {
 
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (limit == null || limit < 1) {
-            limit = 8;
-        }
-
+        page = getPage(page);
+        limit = getLimit(limit, 8);
         Page<User> userList = userService.getAllUsersPaged(page, limit);
         System.out.println(userList.getTotalPages());
-
-        if (userList.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", PaginationHelper.getPageNumber(userList));
-        }
+        if (userList.getTotalPages() > 0) model.addAttribute("pageNumbers", getPageNumber(userList));
 
         model.addAttribute("pagedList", userList);
         return "users";
