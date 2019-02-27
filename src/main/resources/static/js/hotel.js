@@ -41,6 +41,46 @@ function validate(elem, matcher, error) {
     }
 }
 
+function setActive(id) {
+    $('.menu-btn').removeClass("menu-active");
+    $('#' + id).addClass('menu-active');
+}
+
+function userMenuNavigation(id) {
+    setActive(id);
+    showElement($('.index-table'), false);
+    switch (id) {
+        case 'menu-rending':
+            showElement($('#unprocessed-requests'), true);
+            break;
+        case 'menu-approved':
+            showElement($('#processed-requests'), true);
+            break;
+        case 'menu-denied':
+            showElement($('#denied-requests'), true);
+            break;
+    }
+}
+
+function indexUrls() {
+    var href = window.location.href.toString();
+    if (href.includes('index')) {
+        if (href.includes('ur_page')) {
+            userMenuNavigation('menu-rending');
+            return
+        }
+        if (href.includes('pr_page')) {
+            userMenuNavigation('menu-approved');
+            return
+        }
+        if (href.includes('dr_page')) {
+            userMenuNavigation('menu-denied');
+            return
+        }
+        userMenuNavigation('menu-rending');
+    }
+}
+
 function setFieldErrorColor(elem, flag) {
     if (flag) {
         elem.css({border: '2px solid #ff5a5a', backgroundColor: '#ffc6c6'});

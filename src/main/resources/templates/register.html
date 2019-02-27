@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 <head>
@@ -15,9 +15,9 @@
 
 <div class="container">
     <div class="d-flex justify-content-center h-100">
-        <div class="card">
+        <div class="card-login">
             <article class="card-body mx-auto" style="max-width: 400px;">
-                <div class="card-header">
+                <div>
                     <h3 class="text-center" th:text="#{message.register-page.header}">Create Account</h3>
                 </div>
                 <form name="sign-in-form" th:object="${user}" th:action="@{/register}"
@@ -80,19 +80,23 @@
                         Confirm error</p>
 
                     <div class="login-input-group form-group">
-                        <button type="submit" class="btn btn-primary btn-block"
+                        <button type="submit" class="btn btn-primary btn-block create-account"
                                 th:text="#{message.register-page.create-button}"> Create account
                         </button>
                     </div>
                     <div class="d-flex justify-content-center ">
                         <p th:text="#{message.register-page.have-account}">Have an account?</p>
-                        <a href="/login" th:text="#{message.register-page.login-link}">Log In</a>
+                        <a class="login-link" href="/login" th:text="#{message.register-page.login-link}">Log In</a>
                     </div>
                 </form>
                 <div class="text-center">
                     <span th:text="#{message.change-language}+': '"></span>
-                    <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
-                    <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+                    <a th:href="@{'/language?lang=en'}">
+                        <img width="35px" th:src="@{/images/en.png}" th:alt="#{message.locale.en}">
+                    </a> <span> /</span>
+                    <a th:href="@{'/language?lang=ru'}">
+                        <img width="35px" th:src="@{/images/ru.png}" th:alt="#{message.locale.ru}">
+                    </a>
                 </div>
             </article>
         </div>
