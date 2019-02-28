@@ -2,24 +2,18 @@ package com.epam.hotel.services.implementations;
 
 import com.epam.hotel.domains.DeniedRequest;
 import com.epam.hotel.domains.Request;
-import com.epam.hotel.domains.Reservation;
 import com.epam.hotel.domains.User;
-import com.epam.hotel.domains.enums.Status;
 import com.epam.hotel.repositories.RequestRepository;
 import com.epam.hotel.services.DenyMessageService;
 import com.epam.hotel.services.RequestService;
-import com.epam.hotel.services.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
