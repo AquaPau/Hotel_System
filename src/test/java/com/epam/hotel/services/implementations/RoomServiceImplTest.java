@@ -23,12 +23,15 @@ class RoomServiceImplTest {
     @Mock
     RoomRepository roomRepository;
 
+    @Mock
+    ReservationServiceImpl reservationService;
+
     RoomServiceImpl roomServiceImpl;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        roomServiceImpl = new RoomServiceImpl(roomRepository);
+        roomServiceImpl = new RoomServiceImpl(roomRepository, reservationService);
     }
 
     @Test
