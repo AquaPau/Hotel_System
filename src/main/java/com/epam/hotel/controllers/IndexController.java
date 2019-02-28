@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
+import static com.epam.hotel.utils.PaginationHelper.*;
 
 @Controller
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -28,45 +27,36 @@ public class IndexController {
     public String index(Model model, Principal principal,
                         @RequestParam(value = "ur_page", required = false) Integer ur_page,
                         @RequestParam(value = "pr_page", required = false) Integer pr_page,
+                        @RequestParam(value = "dr_page", required = false) Integer dr_page,
                         @RequestParam(value = "limit", required = false) Integer limit) {
 
-        if (ur_page == null || ur_page < 1) {
-            ur_page = 1;
-        }
-        if (pr_page == null || pr_page < 1) {
-            pr_page = 1;
-        }
-        if (limit == null || limit < 1) {
-            limit = 3;
-        }
+        ur_page = getPage(ur_page);
+        pr_page = getPage(pr_page);
+        dr_page = getPage(dr_page);
+        limit = getLimit(limit, 5);
 
         User user = userService.findByLogin(principal.getName());
 
-        Page<Request> processedRequests = requestService.getPagedProcessedRequestByUser(user, pr_page, limit);
-        Page<Request> unprocessedRequests = requestService.getPagedUnprocessedRequestByUser(user, ur_page, limit);
+        Page<Request> processedRequests = requestService.getPagedProcessedRequestsByUser(user, pr_page, limit);
+        Page<Request> unprocessedRequests = requestService.getPagedUnprocessedRequestsByUser(user, ur_page, limit);
+        Page<Request> deniedRequests = requestService.getPagedDeniedRequestsByUser(user, dr_page, limit);
 
-        int totalPages = unprocessedRequests.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("unprocessedPageNumbers", pageNumbers);
+        if (unprocessedRequests.getTotalPages() > 0) {
+            model.addAttribute("unprocessedPageNumbers", getPageNumbers(unprocessedRequests));
         }
-
-        totalPages = processedRequests.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("processedPageNumbers", pageNumbers);
+        if (processedRequests.getTotalPages() > 0) {
+            model.addAttribute("processedPageNumbers", getPageNumbers(processedRequests));
+        }
+        if (deniedRequests.getTotalPages() > 0) {
+            model.addAttribute("deniedPageNumbers", getPageNumbers(deniedRequests));
         }
 
         model.addAttribute("user", user);
         model.addAttribute("processedRequests", processedRequests);
         model.addAttribute("unprocessedRequests", unprocessedRequests);
+        model.addAttribute("deniedRequests", deniedRequests);
         return "index";
     }
-
 
 
 }

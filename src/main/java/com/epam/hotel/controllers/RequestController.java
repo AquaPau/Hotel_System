@@ -26,6 +26,7 @@ public class RequestController {
     @GetMapping("/request/new")
     public String createRequestForm(Model model) {
         Request request = new Request();
+
         request.setCheckIn(DateHelper.getTodayPlusDays(1));
         request.setCheckOut(DateHelper.getTodayPlusDays(8));
 
@@ -38,6 +39,9 @@ public class RequestController {
     @PostMapping("request/save")
     public String createRequest(@ModelAttribute("request") Request request, Principal principal) {
         User user = userService.findByLogin(principal.getName());
+        if (request.getDeniedRequest() == null) {
+            request.createDeniedRequest();
+        }
         user.addRequest(request);
         userService.save(user);
         return "redirect:/index";

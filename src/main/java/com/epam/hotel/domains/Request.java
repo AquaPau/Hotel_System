@@ -39,4 +39,16 @@ public class Request {
     )
     private Reservation reservation;
 
+    @OneToOne(
+            mappedBy = "request",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private DeniedRequest deniedRequest;
+
+    public void createDeniedRequest() {
+        DeniedRequest deniedRequest = new DeniedRequest();
+        deniedRequest.setRequest(this);
+        this.setDeniedRequest(deniedRequest);
+    }
 }

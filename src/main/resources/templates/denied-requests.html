@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -21,16 +20,16 @@
             <div class="card-header">
                 <h3 id="index-header" class="text-center"
                     th:text="#{message.admin-page.header}">Administration page</h3>
-                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-yellow center-align">Pending
+                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-grey center-align">Pending
                     requests</a>
                 <a th:href="@{/admin/approved-requests}" th:text="#{message.admin-page.approved}"
                    class="btn btn-grey center-align">Approved requests</a>
                 <a th:href="@{/admin/denied-requests}" th:text="#{message.admin-page.denied}"
-                   class="btn btn-grey center-align">Denied requests</a>
+                   class="btn btn-yellow center-align">Denied requests</a>
             </div>
             <div class="card-body">
-                <p class="white" th:unless="${pagedList.hasContent()}" th:text="#{message.admin-page.no-request}">
-                    There are no active requests</p>
+                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-request}">
+                    There are no approved requests</p>
                 <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
                     <thead>
                     <tr>
@@ -39,81 +38,53 @@
                         <th scope="col" th:text="#{message.hotel.class}">Class</th>
                         <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
                         <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
-                        <th scope="col" th:text="#{message.find}">Find</th>
-                        <th scope="col" th:text="#{message.deny}">Deny</th>
+                        <th scope="col" th:text="#{message.hotel.reason}">Reason of denial</th>
                     </tr>
                     </thead>
                     <tbody>
                     <th:block th:each="request : ${pagedList}">
                         <tr>
-                            <td th:text="${request.id}" scope="row">1</td>
+                            <th th:text="${request.id}" scope="row">1</th>
                             <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
                             <td th:text="#{'message.class.'+${request.classID}}"></td>
                             <td th:text="${#dates.format(request.checkIn,'MM/dd/yyyy')}"></td>
                             <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
-                            <td>
-                                <a th:href="@{'admin/suitable-rooms/'+${request.id}}" th:text="#{message.find}"
-                                   class="btn btn-success float-center">Find</a>
-                            </td>
-                            <td>
-                                <a th:id="'deny-a-'+${request.id}" th:onclick="'showDenyPopup(true,'+${request.id}+')'"
-                                   class="btn button-deny  btn-warning float-center"
-                                   th:text="#{message.deny}">deny</a>
-                                <div th:id="'deny-div-'+${request.id}" hidden
-                                     th:with="deniedRequest = ${request.deniedRequest}">
-                                    <form method="post" th:action="@{/admin/deny}" th:object="${deniedRequest}">
-                                        <div class="form-group">
-                                            <input id="reason" name="reason" th:value="${request.deniedRequest.reason}"
-                                                   type="text" th:placeholder="#{message.admin-page.enter-reason}">
-                                            <div>
-                                                <button type="submit" class="btn btn-danger deny-btn"
-                                                        th:text="#{message.deny}"> Deny
-                                                </button>
-                                                <a th:onclick="'showDenyPopup(false,'+${request.id}+')'"
-                                                   class="btn deny-btn btn-info float-center"
-                                                   th:text="#{message.cancel}">Cancel</a>
-                                            </div>
-                                            <input hidden name="id" id="id"
-                                                   th:value="${request.deniedRequest.id}"/>
-
-                                    </form>
-                                </div>
-                            </td>
+                            <td th:text="${request.deniedRequest.reason}"></td>
                         </tr>
                     </th:block>
                     </tbody>
                 </table>
+
                 <nav th:if="${pagedList.totalPages > 0}">
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${pagedList.isFirst()} ? disabled">
                             <a class="page-link"
-                               th:href="@{/admin(page=${pagedList.number})}"
+                               th:href="@{/deniedrequests(page=${pagedList.number})}"
                                tabindex="-1"><
                             </a>
                         </li>
                         <li th:each="pageNumber : ${pageNumbers}" class="page-item"
                             th:classappend="${pageNumber==pagedList.number + 1} ? disabled">
                             <a class="page-link"
-                               th:href="@{/admin(page=${pageNumber})}"
+                               th:href="@{/deniedrequests(page=${pageNumber})}"
                                th:text="${pageNumber}">
                             </a>
                         </li>
                         <li class="page-item" th:classappend="${pagedList.isLast()} ? disabled">
                             <a class="page-link"
-                               th:href="@{/admin(page=${pagedList.number}+2)}"
+                               th:href="@{/deniedrequests(page=${pagedList.number}+2)}"
                             >>
                             </a>
                         </li>
                     </ul>
                 </nav>
+
             </div>
             <div class="card-footer">
                 <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User
                     menu</a>
-                <a th:href="@{/rooms}" th:text="#{message.admin-page.editrooms}" class="btn btn-dark float-right">Edit
+                <a th:href="@{/roomseditor}" th:text="#{message.admin-page.editrooms}" class="btn btn-dark float-right">Edit
                     rooms</a>
-                <a th:href="@{/admin/users}" th:text="#{message.admin-page.usersmenu}" class="btn btn-dark float-right">Edit
-                    users</a>
                 <div class="text-center">
                     <span th:text="#{message.change-language}+': '"></span>
                     <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
@@ -125,7 +96,7 @@
 </div>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script th:src="@{js/hotel.js}"></script>
+<script th:src="@{/js/hotel.js}"></script>
 
 </body>
 </html>

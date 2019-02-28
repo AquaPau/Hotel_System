@@ -7,6 +7,9 @@ import com.epam.hotel.repositories.ReservationRepository;
 import com.epam.hotel.services.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +43,16 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public void deleteById(ReservationId id) {
         reservationRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Reservation> getAllReservationsPaged(int page, int size) {
+        return reservationRepository.findAllApprovedReservations(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    }
+
+    @Override
+    public Page<Reservation> getAllDeniedReservationsPaged(int page, int size) {
+        return reservationRepository.findAllDeniedReservations(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
     @Override

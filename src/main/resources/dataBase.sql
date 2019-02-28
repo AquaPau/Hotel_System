@@ -1,4 +1,4 @@
-CREATE DATABASE hotel;
+
 CREATE SCHEMA IF NOT EXISTS hotel;
 
 CREATE TABLE IF NOT EXISTS hotel.user
@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS hotel.user
   password   VARCHAR(100) NOT NULL,
   permission VARCHAR(5) DEFAULT 'USER' CHECK (permission in ('USER', 'ADMIN')),
   first_name VARCHAR(255) NOT NULL,
-  last_name  VARCHAR(255) NOT NULL
+  last_name  VARCHAR(255) NOT NULL,
+  block      VARCHAR(9) NOT NULL DEFAULT 'UNBLOCKED' CHECK (block in ('BLOCKED', 'UNBLOCKED'))
 );
 
 CREATE TABLE IF NOT EXISTS hotel.room
@@ -34,7 +35,14 @@ CREATE TABLE IF NOT EXISTS hotel.reservation
 (
   request_id  BIGINT REFERENCES hotel.request (id),
   room_id     BIGINT REFERENCES hotel.room (id),
-  status      VARCHAR(10) DEFAULT 'BILLSENT' CHECK (status IN ('BILLSENT', 'PAID', 'DENIED', 'CANCELLED')),
+  status      VARCHAR(10) DEFAULT 'BILLSENT' CHECK (status IN ('BILLSENT', 'PAID', 'CANCELLED')),
   total_price DECIMAL(10, 2) NOT NULL,
   PRIMARY KEY (request_id, room_id)
+);
+
+CREATE TABLE IF NOT EXISTS hotel.denied_request
+(
+  id         BIGSERIAL PRIMARY KEY,
+  request_id BIGINT REFERENCES hotel.request (id),
+  reason     VARCHAR(255) DEFAULT ''
 );
