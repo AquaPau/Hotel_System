@@ -103,17 +103,10 @@
             <div class="card-footer">
                 <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User
                     menu</a>
-                <a th:href="@{/roomseditor}" th:text="#{message.admin-page.editrooms}" class="btn btn-dark float-right">Edit
+                <a th:href="@{/rooms}" th:text="#{message.admin-page.editrooms}" class="btn btn-dark float-right">Edit
                     rooms</a>
-                <div class="text-center">
-                    <span th:text="#{message.change-language}+': '"></span>
-                    <a th:href="@{'/language?lang=en'}">
-                        <img width="35px" th:src="@{/images/en.png}" th:alt="#{message.locale.en}">
-                    </a> <span> /</span>
-                    <a th:href="@{'/language?lang=ru'}">
-                        <img width="35px" th:src="@{/images/ru.png}" th:alt="#{message.locale.ru}">
-                    </a>
-                </div>
+                <a th:href="@{/admin/users}" th:text="#{message.admin-page.usersmenu}" class="btn btn-dark float-right">Edit
+                    users</a>
             </div>
         </div>
     </div>
