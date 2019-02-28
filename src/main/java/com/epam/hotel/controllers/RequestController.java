@@ -4,7 +4,7 @@ import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.User;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.UserService;
-import com.epam.hotel.utils.DateHelper;
+import com.epam.hotel.utils.BookingHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,8 +27,8 @@ public class RequestController {
     public String createRequestForm(Model model) {
         Request request = new Request();
 
-        request.setCheckIn(DateHelper.getTodayPlusDays(1));
-        request.setCheckOut(DateHelper.getTodayPlusDays(8));
+        request.setCheckIn(BookingHelper.getTodayPlusDays(1));
+        request.setCheckOut(BookingHelper.getTodayPlusDays(8));
 
         model.addAttribute("request", request);
         model.addAttribute("header", "create");
@@ -66,8 +66,7 @@ public class RequestController {
     }
 
     @GetMapping("request/view/{id}")
-    public String viewRequest(@PathVariable String id, Principal principal, Model model) {
-        User user = userService.findByLogin(principal.getName());
+    public String viewRequest(@PathVariable String id, Model model) {
         Request request = requestService.findById(new Long(id));
         model.addAttribute("request", request);
         return "view-request";

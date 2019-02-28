@@ -12,7 +12,7 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
           integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 </head>
 <body>
 <div class="container">
@@ -23,9 +23,9 @@
                     rooms</span></h3>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${allfittingroomsList.isEmpty()==true}"
+                <p class="white" th:if="${roomsList.isEmpty()}"
                    th:text="#{message.fittingrooms-page.nofitting}">There are no fitting rooms</p>
-                <table th:if="${allfittingroomsList.isEmpty()==false}" class="table table-bordered white">
+                <table th:unless="${roomsList.isEmpty()}" class="table table-bordered white">
                     <thead>
                     <tr>
                         <th scope="col" th:text="#{message.fittingrooms-page.roomnumber}">Room number</th>
@@ -36,34 +36,28 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <th:block th:each="room : ${allfittingroomsList}">
+                    <th:block th:each="room : ${roomsList}">
                         <tr>
-                            <th th:text="${room.roomNumber}" scope="row">1</th>
+                            <th th:text="${room.number}" scope="row">1</th>
                             <td th:text="#{'message.capacity.'+${room.capacity}}"></td>
                             <td th:text="#{'message.class.'+${room.classID}}"></td>
                             <td th:text="${room.price}"></td>
                             <td>
-                                <form th:action="@{/allfittingrooms/pick/}" th:object="${reservedRoom}" method="post">
+                                <form th:action="@{/admin/suitable-rooms/pick}" th:object="${reservation}" method="post">
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary btn-block"
                                                 th:text="#{message.fittingrooms-page.button.submit}"> Submit
                                         </button>
                                     </div>
-                                    <input hidden th:field="*{requestID}"/>
-                                    <input hidden id="roomID" name="roomID" th:value="${room.roomID}">
+                                    <input hidden id="roomId" name="roomId" th:value="${room.id}">
+                                    <input hidden id="requestId" name="requestId" th:value="${requestId}">
                                 </form>
                             </td>
                         </tr>
                     </th:block>
                     </tbody>
                 </table>
-                <div th:if="${pageNumbers.size() > 1}" class="pagination">
-                    <a th:each="pageNumber : ${pageNumbers}"
-                       th:href="@{'/getallrooms/'+ ${requestID} +'?page='+${pageNumber}}"
-                       class="btn btn-grey-small" th:text="${pageNumber}">Number</a>
-                </div>
-                <div>
-                </div>
+
             </div>
             <div class="card-footer">
                 <a th:href="@{/admin}" class="btn btn-info float-left">Back</a>
@@ -84,7 +78,7 @@
 </div>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script th:src="@{resources/js/hotel.js}"></script>
+<script th:src="@{/js/hotel.js}"></script>
 
 
 </body>
