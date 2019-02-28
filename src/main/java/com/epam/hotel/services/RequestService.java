@@ -31,8 +31,4 @@ public interface RequestService {
 
     Page<Request> getAllPagedDeniedRequests(int page, int size);
 
-    /*List<Request> getAllProceccedRequestList();
-
-    List<Request> filterRequestListByRequest(Request request, List<Request> requests);*/
-
 }
