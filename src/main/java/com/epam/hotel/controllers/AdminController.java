@@ -103,14 +103,17 @@ public class AdminController {
     }
 
     @GetMapping("admin/users/delete/{id}")
-    public String deleteUser(@PathVariable String id) {
+    public String deleteUser(@PathVariable String id,
+                             @RequestParam(value = "page", required = false) Integer page) {
+
         userService.deleteById(Long.valueOf(id));
-        return "redirect:/admin/users";
+        return "redirect:/admin/users?page="+page;
     }
 
     @GetMapping("admin/users/block/{id}")
-    public String blockUser(@PathVariable String id) {
+    public String blockUser(@PathVariable String id,
+                            @RequestParam(value = "page", required = false) Integer page) {
         userService.changeUserBlockForId(Long.valueOf(id));
-        return "redirect:/admin/users";
+        return "redirect:/admin/users?page="+page;
     }
 }
