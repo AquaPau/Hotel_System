@@ -19,13 +19,16 @@ class ReservationServiceImplTest {
     @Mock
     ReservationRepository reservationRepository;
 
+    @Mock
+    RequestServiceImpl requestService;
+
     private ReservationServiceImpl reservationService;
 
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        reservationService = new ReservationServiceImpl(reservationRepository);
+        reservationService = new ReservationServiceImpl(reservationRepository,requestService);
     }
 
     @Test
