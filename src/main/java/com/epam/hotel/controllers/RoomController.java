@@ -2,9 +2,12 @@ package com.epam.hotel.controllers;
 
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
+import com.epam.hotel.domains.ReservationId;
 import com.epam.hotel.domains.Room;
+import com.epam.hotel.domains.enums.Status;
 import com.epam.hotel.exceptions.RoomNumberAlreadyExistsException;
 import com.epam.hotel.services.RequestService;
+import com.epam.hotel.services.ReservationService;
 import com.epam.hotel.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-
 import static com.epam.hotel.utils.PaginationHelper.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -26,6 +24,7 @@ public class RoomController {
 
     private final RequestService requestService;
     private final RoomService roomService;
+    private final ReservationService reservationService;
 
     @GetMapping("/rooms/new")
     public String createRoomForm(Model model) {
@@ -79,25 +78,37 @@ public class RoomController {
         return "error";
     }
 
-    @RequestMapping(value = "/admin/suitable_rooms/{id}", params = {"page"})
-    public String getAllFittingRoomsPaged(@PathVariable String id,
-                                          @RequestParam(value = "page", required = false) Integer page,
-                                          @RequestParam(value = "limit", required = false) Integer limit, Model model) {
+    @GetMapping("/admin/suitable-rooms/{id}")
+    public String getSuitableRoomsForRequest(@PathVariable String id,
+                                             @RequestParam(value = "page", required = false) Integer page,
+                                             @RequestParam(value = "limit", required = false) Integer limit,
+                                             Model model) {
         page = getPage(page);
         limit = getLimit(limit, 7);
 
         Request request = requestService.findById(new Long(id));
-        Reservation reservation = new Reservation();//need attention!!
+        Reservation reservation = new Reservation();
+        request.addReservation(reservation);
 
         Page<Room> roomList = roomService.findAllRoomsAvailableForRequest(request, page, limit);
         if (roomList.getTotalPages() > 0) {
             model.addAttribute("pageNumbers", getPageNumbers(roomList));
         }
 
-        model.addAttribute("allfittingroomsList", roomList);
-        model.addAttribute("requestID", id);
-        model.addAttribute("reservedRoom", reservation);
-        return "allfittingrooms";
+        model.addAttribute("requestId", request.getId());
+        model.addAttribute("roomsList", roomList);
+        model.addAttribute("reservation", new ReservationId());
+
+
+        return "suitable-rooms";
+    }
+
+    @PostMapping("/admin/suitable-rooms/pick")
+    public String getSuitableRoomsForRequest(@ModelAttribute("reservation") ReservationId reservationId) {
+        Reservation reservation = new Reservation(reservationId);
+        reservation.setStatus(Status.BILLSENT);
+        reservationService.save(reservation);
+        return "redirect:/admin";
     }
 
 }

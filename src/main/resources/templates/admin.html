@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -29,9 +28,9 @@
                    class="btn btn-grey center-align">Denied requests</a>
             </div>
             <div class="card-body">
-                <p class="white" th:unless="${pagedList.hasContent()}" th:text="#{message.admin-page.no-request}">
+                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-request}">
                     There are no active requests</p>
-                <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
+                <table th:if="${pagedList.hasContent()==true}" class="table table-bordered white">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -52,7 +51,7 @@
                             <td th:text="${#dates.format(request.checkIn,'MM/dd/yyyy')}"></td>
                             <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
                             <td>
-                                <a th:href="@{'admin/suitable-rooms/'+${request.id}}" th:text="#{message.find}"
+                                <a th:href="@{'/admin/suitable-rooms/'+${request.id}}" th:text="#{message.find}"
                                    class="btn btn-success float-center">Find</a>
                             </td>
                             <td>
@@ -62,20 +61,18 @@
                                 <div th:id="'deny-div-'+${request.id}" hidden
                                      th:with="deniedRequest = ${request.deniedRequest}">
                                     <form method="post" th:action="@{/admin/deny}" th:object="${deniedRequest}">
-                                        <div class="form-group">
-                                            <input id="reason" name="reason" th:value="${request.deniedRequest.reason}"
-                                                   type="text" th:placeholder="#{message.admin-page.enter-reason}">
-                                            <div>
-                                                <button type="submit" class="btn btn-danger deny-btn"
-                                                        th:text="#{message.deny}"> Deny
-                                                </button>
-                                                <a th:onclick="'showDenyPopup(false,'+${request.id}+')'"
-                                                   class="btn deny-btn btn-info float-center"
-                                                   th:text="#{message.cancel}">Cancel</a>
-                                            </div>
-                                            <input hidden name="id" id="id"
-                                                   th:value="${request.deniedRequest.id}"/>
-
+                                        <input id="reason" name="reason" th:value="${request.deniedRequest.reason}"
+                                               type="text" th:placeholder="#{message.admin-page.enter-reason}">
+                                        <div>
+                                            <button type="submit" class="btn btn-danger deny-btn"
+                                                    th:text="#{message.deny}"> Deny
+                                            </button>
+                                            <a th:onclick="'showDenyPopup(false,'+${request.id}+')'"
+                                               class="btn deny-btn btn-info float-center"
+                                               th:text="#{message.cancel}">Cancel</a>
+                                        </div>
+                                        <input hidden name="id" id="id"
+                                               th:value="${request.deniedRequest.id}"/>
                                     </form>
                                 </div>
                             </td>
