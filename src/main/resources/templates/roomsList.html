@@ -68,20 +68,20 @@
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${roomsList.isFirst()} ? disabled">
                             <a class="page-link"
-                               th:href="@{/index(page=${roomsList.number})}"
+                               th:href="@{/rooms(page=${roomsList.number})}"
                                tabindex="-1"><
                             </a>
                         </li>
                         <li th:each="pageNumber : ${pageNumbers}" class="page-item"
                             th:classappend="${pageNumber==roomsList.number + 1} ? disabled">
                             <a class="page-link"
-                               th:href="@{/index(page=${pageNumber})}"
+                               th:href="@{/rooms(page=${pageNumber})}"
                                th:text="${pageNumber}">
                             </a>
                         </li>
                         <li class="page-item" th:classappend="${roomsList.isLast()} ? disabled">
                             <a class="page-link"
-                               th:href="@{/index(page=${roomsList.number}+2)}"
+                               th:href="@{/rooms(page=${roomsList.number}+2)}"
                             >>
                             </a>
                         </li>
