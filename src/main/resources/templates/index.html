@@ -19,21 +19,15 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-            <div th:insert="~{fragments/common-fragments :: header}"></div>
+            <div th:insert="~{fragments/common :: header}"></div>
             <div class="card-body">
-                <div th:insert="~{fragments/user-fragments :: userpanel}"></div>
-                <div th:insert="~{fragments/user-fragments :: usertables}"></div>
-                <div th:insert="~{fragments/request :: request}"></div>-->
+                <div th:insert="~{fragments/user :: userpanel}"></div>
+                <div th:insert="~{fragments/user :: usertables}"></div>
             </div>
-
-
-<!--            <div th:insert="~{fragments/user-fragments :: rooms}"></div>
-
-            <div th:insert="~{fragments/common-fragments :: footer}"></div>
+            <div th:insert="~{fragments/common :: footer}"></div>
         </div>
     </div>
 </div>
-
 </body>
 </html>
 

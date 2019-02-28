@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
+import static com.epam.hotel.utils.ControllerHelper.addUserCommonElements;
 import static com.epam.hotel.utils.PaginationHelper.*;
 
 @Controller
@@ -51,10 +52,10 @@ public class IndexController {
             model.addAttribute("deniedPageNumbers", getPageNumbers(deniedRequests));
         }
 
-        model.addAttribute("user", user);
-        model.addAttribute("processedRequests", processedRequests);
+                model.addAttribute("processedRequests", processedRequests);
         model.addAttribute("unprocessedRequests", unprocessedRequests);
         model.addAttribute("deniedRequests", deniedRequests);
+        addUserCommonElements(model,user,requestService);
         return "index";
     }
 

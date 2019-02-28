@@ -10,20 +10,20 @@
         <a id="menu-rending" onclick="userMenuNavigation(this.id)"
            class="btn menu-btn center-align">
             <span th:text="#{message.index-page.your-requests}">Pending</span>
-            <span th:unless="${unprocessedRequests.totalElements==0}"
-                  th:text="'('+${unprocessedRequests.totalElements}+')'">1</span>
+            <span th:unless="${unprocessedCount==0}"
+                  th:text="'('+${unprocessedCount}+')'">1</span>
         </a>
         <a id="menu-approved" onclick="userMenuNavigation(this.id)"
            class="btn menu-btn btn-info center-align"> <span th:text="#{message.index-page.processed-requests}">Processed</span>
-            <span th:unless="${processedRequests.totalElements==0}"
-                  th:text="'('+${processedRequests.totalElements}+')'">1
+            <span th:unless="${processedCount==0}"
+                  th:text="'('+${processedCount}+')'">1
                     </span>
         </a>
         <a id="menu-denied" onclick="userMenuNavigation(this.id)"
            class="btn menu-btn btn-info center-align">
             <span th:text="#{message.admin-page.denied}">Denied</span>
-            <span th:unless="${deniedRequests.totalElements==0}"
-                  th:text="'('+${deniedRequests.totalElements}+')'">1</span>
+            <span th:unless="${deniedCount==0}"
+                  th:text="'('+${deniedCount}+')'">1</span>
         </a>
         <a id="menu-rooms" th:href="@{/rooms}"
            class="btn menu-btn btn-info center-align"

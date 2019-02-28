@@ -90,7 +90,20 @@ public class RequestServiceImpl implements RequestService {
         return requestRepository.findAllDeniedRequests(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
+    @Override
+    public long countDeniedRequestByUser(User user) {
+        return requestRepository.countDeniedRequestByUser(user);
+    }
 
+    @Override
+    public long countProcessedRequestByUser(User user) {
+        return requestRepository.countProcessedRequestByUser(user);
+    }
+
+    @Override
+    public long countUnprocessedRequestByUser(User user) {
+        return requestRepository.countUnprocessedRequestByUser(user);
+    }
 
 
 }
