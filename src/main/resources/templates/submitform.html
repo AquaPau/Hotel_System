@@ -31,6 +31,17 @@
                 <a th:href="@{/admin}" th:text="#{message.back}" class="btn btn-info float-left">Back</a>
             </div>
         </div>
+        <div class="card-footer">
+            <div class="text-center">
+                <span th:text="#{message.change-language}+': '"></span>
+                <a th:href="@{'/language?lang=en'}">
+                    <img width="35px" th:src="@{/images/en.png}" th:alt="#{message.locale.en}">
+                </a> <span> /</span>
+                <a th:href="@{'/language?lang=ru'}">
+                    <img width="35px" th:src="@{/images/ru.png}" th:alt="#{message.locale.ru}">
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>

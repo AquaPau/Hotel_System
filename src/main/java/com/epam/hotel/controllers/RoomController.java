@@ -4,8 +4,10 @@ import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
 import com.epam.hotel.domains.ReservationId;
 import com.epam.hotel.domains.Room;
+import com.epam.hotel.domains.enums.Status;
 import com.epam.hotel.exceptions.RoomNumberAlreadyExistsException;
 import com.epam.hotel.services.RequestService;
+import com.epam.hotel.services.ReservationService;
 import com.epam.hotel.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import static com.epam.hotel.utils.PaginationHelper.*;
 
 @Controller
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -24,6 +24,7 @@ public class RoomController {
 
     private final RequestService requestService;
     private final RoomService roomService;
+    private final ReservationService reservationService;
 
     @GetMapping("/rooms/new")
     public String createRoomForm(Model model) {
@@ -58,23 +59,16 @@ public class RoomController {
     @GetMapping("/rooms")
     public String roomsTable(@RequestParam(value = "page", required = false) Integer page,
                              @RequestParam(value = "limit", required = false) Integer limit, Model model) {
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (limit == null || limit < 1) {
-            limit = 7;
-        }
+
+        page = getPage(page);
+        limit = getLimit(limit, 7);
 
         Page<Room> roomList = roomService.findAllRoomsPaged(page, limit);
-        int totalPages = roomList.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
+        if (roomList.getTotalPages() > 0) {
+            model.addAttribute("pageNumbers", getPageNumbers(roomList));
         }
-        model.addAttribute("roomsList", roomList);
 
+        model.addAttribute("roomsList", roomList);
         return "roomsList";
     }
 
@@ -84,5 +78,37 @@ public class RoomController {
         return "error";
     }
 
+    @GetMapping("/admin/suitable-rooms/{id}")
+    public String getSuitableRoomsForRequest(@PathVariable String id,
+                                             @RequestParam(value = "page", required = false) Integer page,
+                                             @RequestParam(value = "limit", required = false) Integer limit,
+                                             Model model) {
+        page = getPage(page);
+        limit = getLimit(limit, 7);
+
+        Request request = requestService.findById(new Long(id));
+        Reservation reservation = new Reservation();
+        request.addReservation(reservation);
+
+        Page<Room> roomList = roomService.findAllRoomsAvailableForRequest(request, page, limit);
+        if (roomList.getTotalPages() > 0) {
+            model.addAttribute("pageNumbers", getPageNumbers(roomList));
+        }
+
+        model.addAttribute("requestId", request.getId());
+        model.addAttribute("roomsList", roomList);
+        model.addAttribute("reservation", new ReservationId());
+
+
+        return "suitable-rooms";
+    }
+
+    @PostMapping("/admin/suitable-rooms/pick")
+    public String getSuitableRoomsForRequest(@ModelAttribute("reservation") ReservationId reservationId) {
+        Reservation reservation = new Reservation(reservationId);
+        reservation.setStatus(Status.BILLSENT);
+        reservationService.save(reservation);
+        return "redirect:/admin";
+    }
 
 }

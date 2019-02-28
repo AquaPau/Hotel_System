@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -18,9 +17,28 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-            <div class="card-header">
+
+            <div id="header" class="card-header card-header-flex">
                 <h3 id="index-header" class="text-center"
                     th:text="#{message.admin-page.header}">Administration page</h3>
+                <div class="card-header-flex">
+                    <div class="language">
+                        <span th:text="#{message.change-language}+': '"></span>
+                        <a th:href="@{'/language?lang=en'}">
+                            <img width="35px" th:src="@{/images/en.png}" th:alt="#{message.locale.en}">
+                        </a> <span> /</span>
+                        <a th:href="@{'/language?lang=ru'}">
+                            <img width="35px" th:src="@{/images/ru.png}" th:alt="#{message.locale.ru}">
+                        </a>
+                    </div>
+                    <form name="logoutForm" th:action="@{/logout}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <input type="submit" class="btn header-button btn-dark" th:value="#{message.signout}"/>
+                    </form>
+                </div>
+            </div>
+
+            <div>
                 <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-yellow center-align">Pending
                     requests</a>
                 <a th:href="@{/admin/approved-requests}" th:text="#{message.admin-page.approved}"
@@ -29,9 +47,9 @@
                    class="btn btn-grey center-align">Denied requests</a>
             </div>
             <div class="card-body">
-                <p class="white" th:unless="${pagedList.hasContent()}" th:text="#{message.admin-page.no-request}">
+                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-request}">
                     There are no active requests</p>
-                <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
+                <table th:if="${pagedList.hasContent()==true}" class="table table-bordered white">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -52,7 +70,7 @@
                             <td th:text="${#dates.format(request.checkIn,'MM/dd/yyyy')}"></td>
                             <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
                             <td>
-                                <a th:href="@{'admin/suitable-rooms/'+${request.id}}" th:text="#{message.find}"
+                                <a th:href="@{'/admin/suitable-rooms/'+${request.id}}" th:text="#{message.find}"
                                    class="btn btn-success float-center">Find</a>
                             </td>
                             <td>
@@ -62,20 +80,18 @@
                                 <div th:id="'deny-div-'+${request.id}" hidden
                                      th:with="deniedRequest = ${request.deniedRequest}">
                                     <form method="post" th:action="@{/admin/deny}" th:object="${deniedRequest}">
-                                        <div class="form-group">
-                                            <input id="reason" name="reason" th:value="${request.deniedRequest.reason}"
-                                                   type="text" th:placeholder="#{message.admin-page.enter-reason}">
-                                            <div>
-                                                <button type="submit" class="btn btn-danger deny-btn"
-                                                        th:text="#{message.deny}"> Deny
-                                                </button>
-                                                <a th:onclick="'showDenyPopup(false,'+${request.id}+')'"
-                                                   class="btn deny-btn btn-info float-center"
-                                                   th:text="#{message.cancel}">Cancel</a>
-                                            </div>
-                                            <input hidden name="id" id="id"
-                                                   th:value="${request.deniedRequest.id}"/>
-
+                                        <input id="reason" name="reason" th:value="${request.deniedRequest.reason}"
+                                               type="text" th:placeholder="#{message.admin-page.enter-reason}">
+                                        <div>
+                                            <button type="submit" class="btn btn-danger deny-btn"
+                                                    th:text="#{message.deny}"> Deny
+                                            </button>
+                                            <a th:onclick="'showDenyPopup(false,'+${request.id}+')'"
+                                               class="btn deny-btn btn-info float-center"
+                                               th:text="#{message.cancel}">Cancel</a>
+                                        </div>
+                                        <input hidden name="id" id="id"
+                                               th:value="${request.deniedRequest.id}"/>
                                     </form>
                                 </div>
                             </td>
@@ -114,11 +130,6 @@
                     rooms</a>
                 <a th:href="@{/admin/users}" th:text="#{message.admin-page.usersmenu}" class="btn btn-dark float-right">Edit
                     users</a>
-                <div class="text-center">
-                    <span th:text="#{message.change-language}+': '"></span>
-                    <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
-                    <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
-                </div>
             </div>
         </div>
     </div>

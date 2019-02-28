@@ -91,8 +91,12 @@
             </article>
             <div class="text-center">
                 <span th:text="#{message.change-language}+': '"></span>
-                <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
-                <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+                <a th:href="@{'/language?lang=en'}">
+                    <img width="35px" th:src="@{/images/en.png}" th:alt="#{message.locale.en}">
+                </a> <span> /</span>
+                <a th:href="@{'/language?lang=ru'}">
+                    <img width="35px" th:src="@{/images/ru.png}" th:alt="#{message.locale.ru}">
+                </a>
             </div>
         </div>
     </div>
