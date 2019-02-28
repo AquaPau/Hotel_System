@@ -35,7 +35,7 @@ public class IndexController {
         ur_page = getPage(ur_page);
         pr_page = getPage(pr_page);
         dr_page = getPage(dr_page);
-        limit = getLimit(limit, 2);
+        limit = getLimit(limit, 5);
 
         Page<Request> unprocessedRequests = requestService.getPagedUnprocessedRequestsByUser(user, ur_page, limit);
         Page<Request> processedRequests = requestService.getPagedProcessedRequestsByUser(user, pr_page, limit);
