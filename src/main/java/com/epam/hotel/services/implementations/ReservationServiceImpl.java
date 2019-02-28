@@ -43,8 +43,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List <Reservation> findAllReservationOfThePeriod(Request request) {
-        return reservationRepository.findAllReservationOfThePeriod(request.getCheckIn(), request.getCheckOut());
+    public List<Reservation> findAllApprovedReservationOfThePeriodByRequest(Request request) {
+        return reservationRepository.findAllApprovedReservationOfThePeriod(request.getCheckIn(), request.getCheckOut());
     }
 
 }

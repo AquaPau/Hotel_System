@@ -3,10 +3,7 @@ package com.epam.hotel.services.implementations;
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
 import com.epam.hotel.domains.Room;
-import com.epam.hotel.domains.enums.Capacity;
-import com.epam.hotel.domains.enums.Status;
 import com.epam.hotel.repositories.RoomRepository;
-import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.ReservationService;
 import com.epam.hotel.services.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,7 +24,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
-    private final RequestService requestService;
     private final ReservationService reservationService;
 
     @Override
@@ -62,11 +58,17 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Page<Room> findAllRoomsAvailableForRequest(Request request, int page, int limit) {
-        List<Room> nonEmptyRooms = reservationService.findAllReservationOfThePeriod(request).
-                stream().map(Reservation::getRoom).collect(Collectors.toList());
-        List<Room> suitableRooms = roomRepository.findAll().stream().filter(x ->
-                !nonEmptyRooms.contains(x)).collect(Collectors.toList());
-        return new PageImpl<>(suitableRooms, PageRequest.of(page - 1, limit, Sort.Direction.ASC, "id"),
-                suitableRooms.size());
+        List<Room> nonEmptyRooms = reservationService.findAllApprovedReservationOfThePeriodByRequest(request).stream()
+                .map(Reservation::getRoom)
+                .collect(Collectors.toList());
+
+        List<Room> collect = roomRepository.findAll().stream()
+                .filter(x -> !nonEmptyRooms.contains(x))
+                .filter(x -> x.getCapacity().ordinal() >= request.getCapacity().ordinal())
+                .sorted(Comparator.comparingInt(o -> o.getClassID().ordinal()))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(collect, PageRequest.of(page - 1, limit), collect.size());
     }
+
 }

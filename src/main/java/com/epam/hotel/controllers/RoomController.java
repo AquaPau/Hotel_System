@@ -2,7 +2,6 @@ package com.epam.hotel.controllers;
 
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
-import com.epam.hotel.domains.ReservationId;
 import com.epam.hotel.domains.Room;
 import com.epam.hotel.exceptions.RoomNumberAlreadyExistsException;
 import com.epam.hotel.services.RequestService;
@@ -13,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+
+import static com.epam.hotel.utils.PaginationHelper.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,23 +60,16 @@ public class RoomController {
     @GetMapping("/rooms")
     public String roomsTable(@RequestParam(value = "page", required = false) Integer page,
                              @RequestParam(value = "limit", required = false) Integer limit, Model model) {
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (limit == null || limit < 1) {
-            limit = 7;
-        }
+
+        page = getPage(page);
+        limit = getLimit(limit, 7);
 
         Page<Room> roomList = roomService.findAllRoomsPaged(page, limit);
-        int totalPages = roomList.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
+        if (roomList.getTotalPages() > 0) {
+            model.addAttribute("pageNumbers", getPageNumbers(roomList));
         }
-        model.addAttribute("roomsList", roomList);
 
+        model.addAttribute("roomsList", roomList);
         return "roomsList";
     }
 
@@ -88,25 +83,21 @@ public class RoomController {
     public String getAllFittingRoomsPaged(@PathVariable String id,
                                           @RequestParam(value = "page", required = false) Integer page,
                                           @RequestParam(value = "limit", required = false) Integer limit, Model model) {
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (limit == null || limit < 1) {
-            limit = 7;
-        }
+        page = getPage(page);
+        limit = getLimit(limit, 7);
+
         Request request = requestService.findById(new Long(id));
-        Page<Room> roomList = roomService.findAllRoomsAvailableForRequest(request, page, limit);
         Reservation reservation = new Reservation();//need attention!!
-        int totalPages = roomList.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
+
+        Page<Room> roomList = roomService.findAllRoomsAvailableForRequest(request, page, limit);
+        if (roomList.getTotalPages() > 0) {
+            model.addAttribute("pageNumbers", getPageNumbers(roomList));
         }
+
         model.addAttribute("allfittingroomsList", roomList);
         model.addAttribute("requestID", id);
         model.addAttribute("reservedRoom", reservation);
         return "allfittingrooms";
     }
+
 }

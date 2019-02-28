@@ -16,6 +16,6 @@ public interface ReservationService {
 
     void deleteById(ReservationId id);
 
-    List <Reservation> findAllReservationOfThePeriod(Request request);
+    List <Reservation> findAllApprovedReservationOfThePeriodByRequest(Request request);
 
 }
