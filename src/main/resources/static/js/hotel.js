@@ -79,6 +79,15 @@ function indexUrls() {
         }
         userMenuNavigation('menu-rending');
     }
+    if (href.includes('rooms')) {
+        userMenuNavigation('menu-rooms');
+        return
+    }
+    if (href.includes('request/new')) {
+        userMenuNavigation('menu-newrequest');
+        return
+    }
+
 }
 
 function setFieldErrorColor(elem, flag) {

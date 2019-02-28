@@ -20,8 +20,9 @@
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div th:insert="~{fragments/common :: header}"></div>
+            <div th:insert="~{fragments/user :: userpanel-index}"></div>
             <div class="card-body">
-                <div th:insert="~{fragments/user :: userpanel}"></div>
+
                 <div th:insert="~{fragments/user :: usertables}"></div>
             </div>
             <div th:insert="~{fragments/common :: footer}"></div>

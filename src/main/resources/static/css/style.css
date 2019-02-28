@@ -41,6 +41,10 @@ html, body {
     max-width: 590px;
 }
 
+#request-action-button{
+    padding-top: 15px;
+}
+
 .warning-msg {
     background-color: rgba(0, 0, 0, 0.7) !important;
     width: 500px;

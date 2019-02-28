@@ -9,9 +9,7 @@ public class ControllerHelper {
     }
 
 
-
-    public static void addUserCommonElements(Model model, User user , RequestService requestService) {
-
+    public static void addUserCommonElements(Model model, User user, RequestService requestService) {
         long denied = requestService.countDeniedRequestByUser(user);
         long processed = requestService.countProcessedRequestByUser(user);
         long unprocessed = requestService.countUnprocessedRequestByUser(user);
