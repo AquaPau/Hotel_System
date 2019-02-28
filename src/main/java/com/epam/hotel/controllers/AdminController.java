@@ -15,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-
 import static com.epam.hotel.utils.PaginationHelper.*;
 
 @Controller
@@ -29,44 +27,51 @@ public class AdminController {
     private final UserService userService;
 
     @GetMapping({"/admin"})
-    public String index(Model model, Principal principal,
+    public String index(Model model,
                         @RequestParam(value = "page", required = false) Integer page,
                         @RequestParam(value = "limit", required = false) Integer limit) {
 
         page = getPage(page);
         limit = getLimit(limit, 5);
+
         Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequests(page, limit);
-        if (unapprovedRequests.getTotalPages() > 0)
-            model.addAttribute("pageNumbers", getPageNumber(unapprovedRequests));
+        if (unapprovedRequests.getTotalPages() > 0) {
+            model.addAttribute("pageNumbers", getPageNumbers(unapprovedRequests));
+        }
 
         model.addAttribute("pagedList", unapprovedRequests);
         return "admin";
     }
 
     @GetMapping({"/admin/approved-requests"})
-    public String approvedRequests(Model model, Principal principal,
+    public String approvedRequests(Model model,
                                    @RequestParam(value = "page", required = false) Integer page,
                                    @RequestParam(value = "limit", required = false) Integer limit) {
 
         page = getPage(page);
         limit = getLimit(limit, 5);
+
         Page<Reservation> approvedRequests = reservationService.getAllReservationsPaged(page, limit);
-        System.out.println(approvedRequests.getTotalPages());
-        if (approvedRequests.getTotalPages() > 0) model.addAttribute("pageNumbers", getPageNumber(approvedRequests));
+        if (approvedRequests.getTotalPages() > 0) {
+            model.addAttribute("pageNumbers", getPageNumbers(approvedRequests));
+        }
 
         model.addAttribute("pagedList", approvedRequests);
         return "approved-requests";
     }
 
     @GetMapping({"/admin/denied-requests"})
-    public String deniedRequests(Model model, Principal principal,
+    public String deniedRequests(Model model,
                                  @RequestParam(value = "page", required = false) Integer page,
                                  @RequestParam(value = "limit", required = false) Integer limit) {
 
         page = getPage(page);
         limit = getLimit(limit, 5);
+
         Page<Request> deniedRequests = requestService.getAllPagedDeniedRequests(page, limit);
-        if (deniedRequests.getTotalPages() > 0) model.addAttribute("pageNumbers", getPageNumber(deniedRequests));
+        if (deniedRequests.getTotalPages() > 0) {
+            model.addAttribute("pageNumbers", getPageNumbers(deniedRequests));
+        }
 
         model.addAttribute("pagedList", deniedRequests);
         return "denied-requests";
@@ -81,15 +86,17 @@ public class AdminController {
     }
 
     @GetMapping({"/admin/users"})
-    public String users(Model model, Principal principal,
+    public String users(Model model,
                         @RequestParam(value = "page", required = false) Integer page,
                         @RequestParam(value = "limit", required = false) Integer limit) {
 
         page = getPage(page);
         limit = getLimit(limit, 8);
+
         Page<User> userList = userService.getAllUsersPaged(page, limit);
-        System.out.println(userList.getTotalPages());
-        if (userList.getTotalPages() > 0) model.addAttribute("pageNumbers", getPageNumber(userList));
+        if (userList.getTotalPages() > 0) {
+            model.addAttribute("pageNumbers", getPageNumbers(userList));
+        }
 
         model.addAttribute("pagedList", userList);
         return "users";
