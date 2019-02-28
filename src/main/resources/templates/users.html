@@ -23,7 +23,8 @@
                     th:text="#{message.admin-page.users}">User management</span></h3>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-users}">There are no users in database</p>
+                <p class="white" th:if="${pagedList.getTotalPages()==0}" th:text="#{message.admin-page.no-users}">There are no users in database</p>
+                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.not-enough-users}">Not enough users for this page</p>
                 <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
                     <thead>
                     <tr>
@@ -46,13 +47,13 @@
                             <td th:text="${user.lastName}"></td>
                             <td>
                                 <a th:if="${user.permission.toString()=='USER'}"
-                                   th:href="@{'users/block/'+${user.id}}"
+                                   th:href="@{'users/block/'+${user.id}+'?page='+${pagedList.number+1}}"
                                    th:text="#{'message.blockstatus.'+${user.block.toString()}}"
                                    class="btn btn-dark">Block</a>
                             </td>
                             <td>
                                 <a th:if="${user.permission.toString()=='USER'}"
-                                   th:href="@{'users/delete/'+${user.id}}"
+                                   th:href="@{'users/delete/'+${user.id}+'?page='+${pagedList.number+1}}"
                                    th:text="#{message.delete}"
                                    class="btn btn-dark">Delete</a>
                             </td>
