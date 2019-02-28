@@ -19,18 +19,21 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-            <div th:insert="~{fragments :: header}"></div>
-            <div th:insert="~{fragments :: userpanel}"></div>
-            <div th:insert="~{fragments :: usertables}"></div>
+            <div th:insert="~{fragments/common-fragments :: header}"></div>
+            <div class="card-body">
+                <div th:insert="~{fragments/user-fragments :: userpanel}"></div>
+                <div th:insert="~{fragments/user-fragments :: usertables}"></div>
+                <div th:insert="~{fragments/request :: request}"></div>-->
+            </div>
+
+
+<!--            <div th:insert="~{fragments/user-fragments :: rooms}"></div>
+
+            <div th:insert="~{fragments/common-fragments :: footer}"></div>
         </div>
     </div>
 </div>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script th:src="@{/js/hotel.js}"></script>
-<script> $(document).ready(function () {
-    indexUrls();
-});</script>
+
 </body>
 </html>
 

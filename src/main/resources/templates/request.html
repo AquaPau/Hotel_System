@@ -20,6 +20,7 @@
                 <div>
                     <h3 class="text-center" th:text="#{'message.request-page.header.'+${header}}"></h3>
                 </div>
+
                 <form onsubmit="return calendarValidate()" th:object="${request}" th:action="@{/request/save}"
                       method="post">
 
@@ -81,6 +82,9 @@
                                 th:text="#{'message.'+${buttonName}}"></button>
                     </div>
                 </form>
+
+
+
                 <div class="center-align">
                     <a onclick="back()" class="btn btn-dark" th:text="#{message.back}">Back</a>
                 </div>
@@ -94,10 +98,6 @@
     </div>
 </div>
 
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script th:src="@{/js/hotel.js}"></script>
+
 </body>
 </html>
