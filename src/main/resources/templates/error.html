@@ -15,6 +15,8 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
+            <div th:insert="~{fragments/common :: header}"></div>
+            <div th:insert="~{fragments/user :: userpanel-links}"></div>
             <div>
                 <h3 id="login-header" class="text-center" th:text="#{'message.error-page.header.' + ${errorCode}}">
                     Header</h3>
@@ -36,12 +38,11 @@
                     </a>
                 </div>
             </div>
+            <div class="footer" th:insert="~{fragments/common :: footer}"></div>
         </div>
     </div>
 </div>
 </div>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script th:src="@{/js/hotel.js}"></script>
+
 </body>
 </html>

@@ -61,17 +61,17 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public Page<Request> getPagedUnprocessedRequestsByUser(User user, int page, int size) {
-        return requestRepository.findUnprocessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+        return requestRepository.findUnprocessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.DESC, "id"));
     }
 
     @Override
     public Page<Request> getPagedProcessedRequestsByUser(User user, int page, int size) {
-        return requestRepository.getProcessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+        return requestRepository.getProcessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.DESC, "id"));
     }
 
     @Override
     public Page<Request> getPagedDeniedRequestsByUser(User user, int page, int size) {
-        return requestRepository.findDeniedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+        return requestRepository.findDeniedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.DESC, "id"));
     }
 
 

@@ -37,7 +37,7 @@ public class RequestController {
         model.addAttribute("request", request);
         model.addAttribute("header", "create");
         model.addAttribute("buttonName", "create");
-        addUserCommonElements(model,user,requestService);
+        addUserCommonElements(model, user, requestService);
         return "request";
     }
 
@@ -53,11 +53,13 @@ public class RequestController {
     }
 
     @GetMapping("request/edit/{id}")
-    public String editRequest(@PathVariable String id, Model model) {
+    public String editRequest(@PathVariable String id, Model model, Principal principal) {
+        User user = userService.findByLogin(principal.getName());
         Request request = requestService.findById(new Long(id));
         model.addAttribute("request", request);
         model.addAttribute("header", "edit");
         model.addAttribute("buttonName", "save");
+        addUserCommonElements(model, user, requestService);
         return "request";
     }
 
@@ -71,9 +73,11 @@ public class RequestController {
     }
 
     @GetMapping("request/view/{id}")
-    public String viewRequest(@PathVariable String id, Model model) {
+    public String viewRequest(@PathVariable String id, Model model, Principal principal) {
+        User user = userService.findByLogin(principal.getName());
         Request request = requestService.findById(new Long(id));
         model.addAttribute("request", request);
+        addUserCommonElements(model, user, requestService);
         return "view-request";
     }
 

@@ -9,6 +9,7 @@ html, body {
 }
 
 .error {
+    margin-top: 0px;
     color: #ff5a5a !important;
 }
 
@@ -22,14 +23,14 @@ html, body {
 }
 
 .page-link {
-    background-color: #00000063 !important;
+    background-color: #00000012 !important;
     border: 1px solid #dee2e694 !important;
     color: #FFF;
 }
 
 .disabled a {
     color: #868a8e82 !important;
-    border: 1px solid #dee2e647 !important;
+    border: 1px solid #dee2e694 !important;
 }
 
 
@@ -41,16 +42,26 @@ html, body {
     max-width: 590px;
 }
 
-#request-action-button{
-    padding-top: 15px;
+#request-action-button {
+    padding-top: 25px;
 }
+
+#register-haveacc {
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+#register-haveacc p {
+    margin-top: 0px;
+}
+
 
 .warning-msg {
     background-color: rgba(0, 0, 0, 0.7) !important;
     width: 500px;
     height: 200px;
     padding: 25px;
-    border: 2px solid #FFC312;
+    border: 2px solid #37D1FF;
     position: relative;
     margin: auto;
     top: 40%;
@@ -120,6 +131,17 @@ h3 {
 .login_btn {
     width: 150px !important;
     color: black !important;
+}
+
+.pay_btn {
+    font-weight: bold;
+    width: 200px !important;
+    color: black !important;
+    background-color: #37d1ff !important;
+}
+
+.footer {
+    background-color: #00000073;
 }
 
 .form-group {
@@ -308,6 +330,11 @@ input:focus {
 .login_btn:hover {
     color: black;
     background-color: white;
+}
+
+form p {
+    margin-top: 20px;
+    margin-bottom: 0px;
 }
 
 .links {

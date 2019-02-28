@@ -27,4 +27,8 @@ public class PaginationHelper {
                 .collect(Collectors.toList());
     }
 
+    public static boolean isPageBeyondTotalPages(int page, Page pageList) {
+        return page > pageList.getTotalPages();
+    }
+
 }

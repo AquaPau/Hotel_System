@@ -31,31 +31,33 @@ public class IndexController {
                         @RequestParam(value = "dr_page", required = false) Integer dr_page,
                         @RequestParam(value = "limit", required = false) Integer limit) {
 
+        User user = userService.findByLogin(principal.getName());
         ur_page = getPage(ur_page);
         pr_page = getPage(pr_page);
         dr_page = getPage(dr_page);
-        limit = getLimit(limit, 5);
+        limit = getLimit(limit, 2);
 
-        User user = userService.findByLogin(principal.getName());
-
-        Page<Request> processedRequests = requestService.getPagedProcessedRequestsByUser(user, pr_page, limit);
         Page<Request> unprocessedRequests = requestService.getPagedUnprocessedRequestsByUser(user, ur_page, limit);
+        Page<Request> processedRequests = requestService.getPagedProcessedRequestsByUser(user, pr_page, limit);
         Page<Request> deniedRequests = requestService.getPagedDeniedRequestsByUser(user, dr_page, limit);
 
         if (unprocessedRequests.getTotalPages() > 0) {
+            if (isPageBeyondTotalPages(ur_page, unprocessedRequests)) return "redirect:index?ur_page=" + (ur_page - 1);
             model.addAttribute("unprocessedPageNumbers", getPageNumbers(unprocessedRequests));
         }
         if (processedRequests.getTotalPages() > 0) {
+            if (isPageBeyondTotalPages(pr_page, processedRequests)) return "redirect:index?pr_page=" + (pr_page - 1);
             model.addAttribute("processedPageNumbers", getPageNumbers(processedRequests));
         }
         if (deniedRequests.getTotalPages() > 0) {
             model.addAttribute("deniedPageNumbers", getPageNumbers(deniedRequests));
+            if (isPageBeyondTotalPages(dr_page, deniedRequests)) return "redirect:index?dr_page=" + (dr_page - 1);
         }
 
-                model.addAttribute("processedRequests", processedRequests);
         model.addAttribute("unprocessedRequests", unprocessedRequests);
+        model.addAttribute("processedRequests", processedRequests);
         model.addAttribute("deniedRequests", deniedRequests);
-        addUserCommonElements(model,user,requestService);
+        addUserCommonElements(model, user, requestService);
         return "index";
     }
 
