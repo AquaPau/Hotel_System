@@ -46,8 +46,8 @@
                     <thead>
                     <tr>
                         <th scope="col" th:text="#{message.fittingrooms-page.roomnumber}">Room number</th>
-                        <th scope="col" th:text="#{message.hotel.class}">Class</th>
                         <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                        <th scope="col" th:text="#{message.hotel.class}">Class</th>
                         <th scope="col" th:text="#{message.fittingrooms-page.price}">Price</th>
                         <th scope="col" th:text="#{message.fittingrooms-page.pick}">Pick Room</th>
                     </tr>
@@ -58,9 +58,11 @@
                             <th th:text="${room.number}" scope="row">1</th>
                             <td th:text="#{'message.capacity.'+${room.capacity}}"></td>
                             <td th:text="#{'message.class.'+${room.classID}}"></td>
+
                             <td th:text="${room.price}"></td>
                             <td>
-                                <form th:action="@{/admin/suitable-rooms/pick}" th:object="${reservation}" method="post">
+                                <form th:action="@{/admin/suitable-rooms/pick}" th:object="${reservation}"
+                                      method="post">
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary btn-block"
                                                 th:text="#{message.fittingrooms-page.button.submit}"> Submit

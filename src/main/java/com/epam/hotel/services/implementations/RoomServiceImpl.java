@@ -43,7 +43,6 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void deleteById(long id) {
         roomRepository.deleteById(id);
-
     }
 
     @Override
@@ -65,10 +64,27 @@ public class RoomServiceImpl implements RoomService {
         List<Room> collect = roomRepository.findAll().stream()
                 .filter(x -> !nonEmptyRooms.contains(x))
                 .filter(x -> x.getCapacity().ordinal() >= request.getCapacity().ordinal())
-                .sorted(Comparator.comparingInt(o -> o.getClassID().ordinal()))
+                .sorted(Comparator.comparing(Room::getCapacity).thenComparing(getComparator(request)))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(collect, PageRequest.of(page - 1, limit), collect.size());
+    }
+
+    private Comparator<Room> getComparator(Request request) {
+        return (r1, r2) -> {
+            for (int i = 0; i < 3; i++) {
+                if (r1.getClassID().ordinal() - i == request.getClassID().ordinal() && r2.getClassID().ordinal() - i == request.getClassID().ordinal())
+                    return 0;
+                if (r1.getClassID().ordinal() - i == request.getClassID().ordinal()) return -1;
+                if (r2.getClassID().ordinal() - i == request.getClassID().ordinal()) return 1;
+
+                if (r1.getClassID().ordinal() + i == request.getClassID().ordinal() && r2.getClassID().ordinal() + i == request.getClassID().ordinal())
+                    return 0;
+                if (r1.getClassID().ordinal() + i == request.getClassID().ordinal()) return -1;
+                if (r2.getClassID().ordinal() + i == request.getClassID().ordinal()) return 1;
+            }
+            return Integer.compare(r2.getClassID().ordinal(), r1.getClassID().ordinal());
+        };
     }
 
 }
