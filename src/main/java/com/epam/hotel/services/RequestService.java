@@ -36,4 +36,10 @@ public interface RequestService {
 
     long countUnprocessedRequestByUser(User user);
 
+    long countAllPendingRequestForAdmin();
+
+    long countAllApprovedRequestForAdmin();
+
+    long countAllDeniedRequestForAdmin();
+
 }

@@ -46,28 +46,29 @@ function setActive(id) {
     $('#' + id).addClass('menu-active');
 }
 
-function adjustUrl(url) {
+function adjustUrl(url, role) {
     var href = window.location.href.toString();
     if (!href.includes(url)) {
-        window.history.pushState("", "", '/index?'+url);
+        window.history.pushState("", "", `/${role}?${url}`);
     }
 }
 
 function userMenuNavigation(id) {
     setActive(id);
     showElement($('.index-table'), false);
+    role="user";
     switch (id) {
         case 'menu-rending':
             showElement($('#unprocessed-requests'), true);
-            adjustUrl('ur_page');
+            adjustUrl('ur_page', role);
             break;
         case 'menu-approved':
             showElement($('#processed-requests'), true);
-            adjustUrl('pr_page');
+            adjustUrl('pr_page', role);
             break;
         case 'menu-denied':
             showElement($('#denied-requests'), true);
-            adjustUrl('dr_page');
+            adjustUrl('dr_page', role);
             break;
     }
 }
@@ -95,6 +96,53 @@ function indexUrls() {
     }
     if (href.includes('request/new')) {
         userMenuNavigation('menu-newrequest');
+        return
+    }
+
+}
+function adminMenuNavigation(id){
+    setActive(id);
+    showElement($('.index-table'), false);
+    role = "admin";
+    switch (id) {
+        case 'menu-pending':
+            showElement($('#pending-requests'), true);
+            adjustUrl('prq_page', role);
+            break;
+        case 'menu-approved':
+            showElement($('#approved-requests'), true);
+            adjustUrl('arq_page', role);
+            break;
+        case 'menu-denied':
+            showElement($('#denied-requests'), true);
+            adjustUrl('drq_page', role);
+            break;
+    }
+}
+
+function adminUrls() {
+    var href = window.location.href.toString();
+    if (href.includes('admin')) {
+        if (href.includes('prq_page')) {
+            adminMenuNavigation('menu-pending');
+            return
+        }
+        if (href.includes('arq_page')) {
+            adminMenuNavigation('menu-approved');
+            return
+        }
+        if (href.includes('drq_page')) {
+            adminMenuNavigation('menu-denied');
+            return
+        }
+        adminMenuNavigation('menu-pending');
+    }
+    if (href.includes('rooms')) {
+        adminMenuNavigation('menu-rooms');
+        return
+    }
+    if (href.includes('room/new')) {
+        adminMenuNavigation('menu-newroom');
         return
     }
 

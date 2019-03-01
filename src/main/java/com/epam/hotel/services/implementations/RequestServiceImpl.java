@@ -99,5 +99,20 @@ public class RequestServiceImpl implements RequestService {
         return requestRepository.countUnprocessedRequestByUser(user);
     }
 
+    @Override
+    public long countAllPendingRequestForAdmin() {
+        return requestRepository.countAllPendingRequestForAdmin();
+    }
+
+    @Override
+    public long countAllApprovedRequestForAdmin() {
+        return requestRepository.countAllApprovedRequestForAdmin();
+    }
+
+    @Override
+    public long countAllDeniedRequestForAdmin() {
+        return requestRepository.countAllDeniedRequestForAdmin();
+    }
+
 
 }

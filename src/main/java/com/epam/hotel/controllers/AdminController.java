@@ -26,55 +26,47 @@ public class AdminController {
     private final DenyMessageService denyMessageService;
     private final UserService userService;
 
-    @GetMapping({"/admin"})
+    @GetMapping({"/admin", "admin"})
     public String index(Model model,
-                        @RequestParam(value = "page", required = false) Integer page,
+                        @RequestParam(value = "prq_page", required = false) Integer prq_page,
+                        @RequestParam(value = "arq_page", required = false) Integer arq_page,
+                        @RequestParam(value = "drq_page", required = false) Integer drq_page,
                         @RequestParam(value = "limit", required = false) Integer limit) {
 
-        page = getPage(page);
+        prq_page = getPage(prq_page);
+        arq_page = getPage(arq_page);
+        drq_page = getPage(drq_page);
         limit = getLimit(limit, 5);
 
-        Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequests(page, limit);
+        Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequests(prq_page, limit);
+        Page<Reservation> approvedRequests = reservationService.getAllReservationsPaged(arq_page, limit);
+        Page<Request> deniedRequests = requestService.getAllPagedDeniedRequests(drq_page, limit);
+
         if (unapprovedRequests.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", getPageNumbers(unapprovedRequests));
+            if (isPageBeyondTotalPages(prq_page, unapprovedRequests)) return "redirect:admin?prq_page=" + (prq_page - 1);
+            model.addAttribute("unapprovedPageNumbers", getPageNumbers(unapprovedRequests));
         }
-
-        model.addAttribute("pagedList", unapprovedRequests);
-        return "admin";
-    }
-
-    @GetMapping({"/admin/approved-requests"})
-    public String approvedRequests(Model model,
-                                   @RequestParam(value = "page", required = false) Integer page,
-                                   @RequestParam(value = "limit", required = false) Integer limit) {
-
-        page = getPage(page);
-        limit = getLimit(limit, 5);
-
-        Page<Reservation> approvedRequests = reservationService.getAllReservationsPaged(page, limit);
         if (approvedRequests.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", getPageNumbers(approvedRequests));
+            if (isPageBeyondTotalPages(arq_page, approvedRequests)) return "redirect:admin?arq_page=" + (arq_page - 1);
+            model.addAttribute("approvedPageNumbers", getPageNumbers(approvedRequests));
         }
-
-        model.addAttribute("pagedList", approvedRequests);
-        return "approved-requests";
-    }
-
-    @GetMapping({"/admin/denied-requests"})
-    public String deniedRequests(Model model,
-                                 @RequestParam(value = "page", required = false) Integer page,
-                                 @RequestParam(value = "limit", required = false) Integer limit) {
-
-        page = getPage(page);
-        limit = getLimit(limit, 5);
-
-        Page<Request> deniedRequests = requestService.getAllPagedDeniedRequests(page, limit);
         if (deniedRequests.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", getPageNumbers(deniedRequests));
+            if (isPageBeyondTotalPages(drq_page, deniedRequests)) return "redirect:admin?drq_page=" + (drq_page - 1);
+            model.addAttribute("deniedPageNumbers", getPageNumbers(deniedRequests));
         }
 
-        model.addAttribute("pagedList", deniedRequests);
-        return "denied-requests";
+        model.addAttribute("unapprovedRequestList", unapprovedRequests);
+        model.addAttribute("approvedRequestList", approvedRequests);
+        model.addAttribute("deniedRequestList", deniedRequests);
+        long denied = requestService.countAllDeniedRequestForAdmin();
+        long processed = requestService.countAllApprovedRequestForAdmin();
+        long pended = requestService.countAllPendingRequestForAdmin();
+
+        model.addAttribute("deniedCount", denied);
+        model.addAttribute("pendedCount", pended);
+        model.addAttribute("approvedCount", processed);
+
+        return "admin";
     }
 
     @PostMapping("/admin/deny")

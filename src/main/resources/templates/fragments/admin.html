@@ -2,6 +2,264 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <body>
+<div th:fragment="userpanel-admin" class="user-menu">
+    <a id="menu-pending" onclick="adminMenuNavigation(this.id)"
+       class="btn menu-btn btn-info center-align">
+        <span th:text="#{message.admin-page.pending}">Pending requests</span>
+        <span th:unless="${pendedCount==0}"
+              th:text="'('+${pendedCount}+')'">1</span>
+    </a>
+    <a id="menu-approved" onclick="adminMenuNavigation(this.id)"
+       class="btn menu-btn btn-info center-align">
+        <span th:text="#{message.admin-page.approved}">Approved requests</span>
+        <span th:unless="${approvedCount==0}"
+              th:text="'('+${approvedCount}+')'">1</span>
+    </a>
+    <a id="menu-denied" onclick="adminMenuNavigation(this.id)"
+       class="btn menu-btn btn-info center-align">
+        <span th:text="#{message.admin-page.denied}">Denied requests</span>
+        <span th:unless="${deniedCount==0}"
+              th:text="'('+${deniedCount}+')'">1</span>
+    </a>
+    <a id="menu-rooms" th:href="@{/rooms}"
+       class="btn menu-btn btn-info center-align"
+       th:text="#{message.hotel.rooms}">Rooms</a>
 
+    <a id="menu-newroom" th:href="@{/rooms/new}"
+       class="btn menu-btn btn-info center-align"
+       th:text="#{message.hotel.new-room}">New room</a>
+</div>
+
+<div th:fragment="adminanel-links" class="user-menu">
+    <a id="menu-pending" onclick="userMenuNavigation(this.id)" th:href="@{/index}"
+       class="btn menu-btn btn-info center-align">
+        <span th:text="#{message.index-page.your-requests}">Pending</span>
+        <span th:unless="${pendedCount==0}"
+              th:text="'('+${pendedCount}+')'">1</span>
+    </a>
+    <a id="menu-approved" onclick="userMenuNavigation(this.id)" th:href="@{/index(pr_page=1)}"
+       class="btn menu-btn btn-info center-align"> <span
+            th:text="#{message.index-page.processed-requests}">Processed</span>
+        <span th:unless="${approvedCount==0}"
+              th:text="'('+${approvedCount}+')'">1</span>
+    </a>
+    <a id="menu-denied" onclick="userMenuNavigation(this.id)" th:href="@{/index(dr_page=1)}"
+       class="btn menu-btn btn-info center-align">
+        <span th:text="#{message.admin-page.denied}">Denied</span>
+        <span th:unless="${deniedCount==0}"
+              th:text="'('+${deniedCount}+')'">1</span>
+    </a>
+    <a id="menu-rooms" th:href="@{/rooms}"
+       class="btn menu-btn btn-info center-align"
+       th:text="#{message.hotel.rooms}">Rooms</a>
+    <a id="menu-newroom" th:href="@{/rooms/new}"
+       class="btn menu-btn btn-info center-align"
+       th:text="#{message.hotel.new-room}">New room</a>
+</div>
+
+<div th:fragment="admintables">
+    <div hidden id="pending-requests" class="index-table">
+        <p class="white"
+           th:if="${unapprovedRequestList.hasContent()==false}"
+           th:text="#{message.admin-page.no-request}"> There are no active requests</p>
+        <div th:if="${unapprovedRequestList.hasContent()}">
+            <table class="table table-bordered white">
+                <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                    <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                    <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
+                    <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
+                    <th scope="col" th:text="#{message.find}">Find</th>
+                    <th scope="col" th:text="#{message.deny}">Deny</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="unapprovedRequest : ${unapprovedRequestList}">
+                    <tr>
+                        <td th:text="${unapprovedRequest.id}" scope="row">1</td>
+                        <td th:text="#{'message.capacity.'+${unapprovedRequest.capacity}}"></td>
+                        <td th:text="#{'message.class.'+${unapprovedRequest.classID}}"></td>
+                        <td th:text="${#dates.format(unapprovedRequest.checkIn,'MM/dd/yyyy')}"></td>
+                        <td th:text="${#dates.format(unapprovedRequest.checkOut,'MM/dd/yyyy')}"></td>
+                        <td>
+                            <a th:href="@{'/admin/suitable-rooms/'+${unapprovedRequest.id}}" th:text="#{message.find}"
+                               class="btn btn-success float-center">Find</a>
+                        </td>
+                        <td>
+                            <a th:id="'deny-a-'+${unapprovedRequest.id}"
+                               th:onclick="'showDenyPopup(true,'+${unapprovedRequest.id}+')'"
+                               class="btn button-deny  btn-warning float-center"
+                               th:text="#{message.deny}">deny</a>
+                            <div th:id="'deny-div-'+${unapprovedRequest.id}" hidden
+                                 th:with="deniedRequest = ${unapprovedRequest.deniedRequest}">
+                                <form method="post" th:action="@{/admin/deny}" th:object="${deniedRequest}">
+                                    <input id="reason" name="reason" th:value="${unapprovedRequest.deniedRequest.reason}"
+                                           type="text" th:placeholder="#{message.admin-page.enter-reason}">
+                                    <div>
+                                        <button type="submit" class="btn btn-danger deny-btn"
+                                                th:text="#{message.deny}"> Deny
+                                        </button>
+                                        <a th:onclick="'showDenyPopup(false,'+${unapprovedRequest.id}+')'"
+                                           class="btn deny-btn btn-info float-center"
+                                           th:text="#{message.cancel}">Cancel</a>
+                                    </div>
+                                    <input hidden name="id" id="id"
+                                           th:value="${unapprovedRequest.deniedRequest.id}"/>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+            <nav th:if="${unapprovedRequestList.totalPages > 0}">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${unapprovedRequestList.isFirst()} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/admin(urq_page=${unapprovedRequestList.number})}"
+                           tabindex="-1"><
+                        </a>
+                    </li>
+                    <li th:each="unapprovedRequestListPageNumber : ${unapprovedPageNumbers}" class="page-item"
+                        th:classappend="${unapprovedRequestListPageNumber==unapprovedRequestList.number + 1} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/admin(urq_page=${pageNumber})}"
+                           th:text="${unapprovedRequestListPageNumber}">
+                        </a>
+                    </li>
+                    <li class="page-item" th:classappend="${unapprovedRequestList.isLast()} ? disabled">
+                        <a class="page-link" th:href="@{/admin(urq_page=${unapprovedRequestList.number}+2)}"
+                        >>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div id="approved-requests" class="index-table">
+        <p class="white"
+           th:if="${approvedRequestList.hasContent()==false}"
+           th:text="#{message.admin-page.no-request}">
+            There are no approved requests</p>
+        <div th:if="${approvedRequestList.hasContent()}">
+            <table class="table table-bordered white">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                    <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                    <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
+                    <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
+                    <th scope="col" th:text="#{message.hotel.status}">Payment status</th>
+                    <th scope="col" th:text="#{message.hotel.room}">Room #</th>
+                    <th scope="col" th:text="#{message.hotel.firstname}">Name</th>
+                    <th scope="col" th:text="#{message.hotel.lastname}">Last name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="reservation : ${approvedRequestList}">
+                    <tr>
+                        <th th:text="${reservation.request.id}" scope="row">1</th>
+                        <td th:text="#{'message.capacity.'+${reservation.request.capacity}}"></td>
+                        <td th:text="#{'message.class.'+${reservation.request.classID}}"></td>
+                        <td th:text="${#dates.format(reservation.request.checkIn,'MM/dd/yyyy')}"></td>
+                        <td th:text="${#dates.format(reservation.request.checkOut,'MM/dd/yyyy')}"></td>
+                        <td th:text="#{'message.status.'+${reservation.status}}"></td>
+                        <td th:text="${reservation.room.number}"></td>
+                        <td th:text="${reservation.request.user.firstName}"></td>
+                        <td th:text="${reservation.request.user.lastName}"></td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+
+            <nav th:if="${approvedRequestList.totalPages > 0}">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${approvedRequestList.isFirst()} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/admin(arq_page=${approvedRequestList.number})}"
+                           tabindex="-1"><
+                        </a>
+                    </li>
+                    <li th:each="approvedPageNumber : ${approvedPageNumbers}" class="page-item"
+                        th:classappend="${spprovedPageNumber==approvedRequestList.number + 1} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/admin(arq_page=${approvedPageNumber})}"
+                           th:text="${approvedPageNumber}">
+                        </a>
+                    </li>
+                    <li class="page-item" th:classappend="${approvedRequestList.isLast()} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/admin(arq_page=${approvedRequestList.number}+2)}"
+                        >>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div id="denied-requests" class="index-table">
+            <p class="white" th:if="${deniedRequestList.hasContent()==false}" th:text="#{message.admin-page.no-request}">
+                There are no approved requests</p>
+            <div th:if="${deniedRequestList.hasContent()}">
+                <table class="table table-bordered white">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                        <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                        <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
+                        <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
+                        <th scope="col" th:text="#{message.hotel.reason}">Reason of denial</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="deniedRequest : ${deniedRequestList}">
+                        <tr>
+                            <th th:text="${deniedRequest.id}" scope="row">1</th>
+                            <td th:text="#{'message.capacity.'+${deniedRequest.capacity}}"></td>
+                            <td th:text="#{'message.class.'+${deniedRequest.classID}}"></td>
+                            <td th:text="${#dates.format(deniedRequest.checkIn,'MM/dd/yyyy')}"></td>
+                            <td th:text="${#dates.format(deniedRequest.checkOut,'MM/dd/yyyy')}"></td>
+                            <td th:text="${deniedRequest.deniedRequest.reason}"></td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+
+                <nav th:if="${deniedRequestList.totalPages > 0}">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${deniedRequestList.isFirst()} ? disabled">
+                            <a class="page-link"
+                               th:href="@{/admin(drq_page=${deniedRequestList.number})}"
+                               tabindex="-1"><
+                            </a>
+                        </li>
+                        <li th:each="deniedPageNumber : ${deniedPageNumbers}" class="page-item"
+                            th:classappend="${deniedPageNumber==deniedRequestList.number + 1} ? disabled">
+                            <a class="page-link"
+                               th:href="@{/admin(drq_page=${deniedPageNumber})}"
+                               th:text="${deniedPageNumber}">
+                            </a>
+                        </li>
+                        <li class="page-item" th:classappend="${deniedRequestList.isLast()} ? disabled">
+                            <a class="page-link"
+                               th:href="@{/deniedrequests(page=${deniedRequestList.number}+2)}"
+                            >>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User
+            menu</a>
+        <a th:href="@{/admin/users}" th:text="#{message.admin-page.usersmenu}" class="btn btn-dark float-right">Edit
+            users</a>
+    </div>
+</div>
 </body>
 </html>
