@@ -24,7 +24,6 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query("select r from Request r left join r.deniedRequest s where (s.request=r and s.reason is not null and r.user = :#{#user}) order by r.id desc")
     Page<Request> findDeniedRequestsByUser(@Param("user") User user, Pageable pageable);
 
-
     // all processed requests
     @Query("select r from Request r left join r.reservation s where (s.request=r) order by r.id")
     Page<Request> findAllProcessedRequests(Pageable pageable);
@@ -46,6 +45,14 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     @Query("select count (r) from Request r left join r.deniedRequest s where (s.request=r and s.reason is not null and r.user = :#{#user})")
     long countDeniedRequestByUser(@Param("user") User user);
+
+    // count all unprocessed requests
+    @Query("select count (r) from Request r left join r.reservation s where (s.request is null and r.deniedRequest.reason is null)")
+    long countAllUnprocessedRequests();
+
+    // count all denied requests
+    @Query("select count (r) from Request r left join r.deniedRequest s where (s.request=r and s.reason is not null)")
+    long countAllDeniedRequests();
 
 
 }

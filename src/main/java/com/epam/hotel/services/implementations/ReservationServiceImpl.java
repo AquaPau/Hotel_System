@@ -56,20 +56,22 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.deleteById(id);
     }
 
+    // all approved reservations
     @Override
-    public Page<Reservation> getAllReservationsPaged(int page, int size) {
+    public Page<Reservation> getAllApprovedReservationsPaged(int page, int size) {
         return reservationRepository.findAllApprovedReservations(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
-    @Override
-    public Page<Reservation> getAllDeniedReservationsPaged(int page, int size) {
-        return reservationRepository.findAllDeniedReservations(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
-    }
-
+    // all approved reservations of a given period of time
     @Override
     public List<Reservation> findAllApprovedReservationOfThePeriodByRequest(Request request) {
         return reservationRepository.findAllApprovedReservationOfThePeriod(request.getCheckIn(), request.getCheckOut());
     }
 
+    // count all approved reservations
+    @Override
+    public long countAllApprovedReservations() {
+        return reservationRepository.countAllApprovedReservations();
+    }
 
 }

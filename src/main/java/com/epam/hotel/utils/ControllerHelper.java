@@ -2,12 +2,12 @@ package com.epam.hotel.utils;
 
 import com.epam.hotel.domains.User;
 import com.epam.hotel.services.RequestService;
+import com.epam.hotel.services.ReservationService;
 import org.springframework.ui.Model;
 
 public class ControllerHelper {
     private ControllerHelper() {
     }
-
 
     public static void addUserCommonElements(Model model, User user, RequestService requestService) {
         long denied = requestService.countDeniedRequestByUser(user);
@@ -20,9 +20,14 @@ public class ControllerHelper {
         model.addAttribute("processedCount", processed);
     }
 
-    //ToDo
-    public static void addAdminCommonElements(Model model, RequestService requestService) {
+    public static void addAdminCommonElements(Model model, RequestService requestService, ReservationService reservationService) {
+        long denied = requestService.countDeniedRequests();
+        long approved = reservationService.countAllApprovedReservations();
+        long unapproved = requestService.countUnprocessedRequests();
 
+        model.addAttribute("unapprovedCount", unapproved);
+        model.addAttribute("approvedCount", approved);
+        model.addAttribute("deniedCount", denied);
     }
 
 }
