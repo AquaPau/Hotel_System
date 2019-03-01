@@ -49,7 +49,7 @@ function setActive(id) {
 function adjustUrl(url) {
     var href = window.location.href.toString();
     if (!href.includes(url)) {
-        window.history.pushState("", "", '/index?'+url);
+        window.history.pushState("", "", '/index?' + url);
     }
 }
 
@@ -168,3 +168,36 @@ function back() {
 }
 
 $(".datepicker").datepicker({dateFormat: 'mm/dd/yy'});
+
+$(".price-changer").change(function () {
+    $('#price').val(getPrice());
+});
+
+function getPrice() {
+    var classIndex = document.getElementById('selClass').selectedIndex;
+    var capacityIndex = document.getElementById('selCapacity').selectedIndex;
+
+    var basic = 15;
+    var classFactor = 1.5;
+    var capacityFactor = 0.6;
+
+    var price = (basic + basic * capacityIndex * capacityFactor) * Math.pow(classFactor, classIndex);
+    return price.toFixed(2).toString().replace(',','.');
+}
+
+function setInputFilter(textbox, inputFilter) {
+    ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+        textbox.addEventListener(event, function() {
+            if (inputFilter(this.value)) {
+                this.oldValue = this.value;
+                this.oldSelectionStart = this.selectionStart;
+                this.oldSelectionEnd = this.selectionEnd;
+            } else if (this.hasOwnProperty("oldValue")) {
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+            }
+        });
+    });
+}
+setInputFilter(document.getElementById("price"), function(value) {
+    return /^-?\d*[.,]?\d{0,2}$/.test(value); });

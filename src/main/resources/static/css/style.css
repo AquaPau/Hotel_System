@@ -33,6 +33,20 @@ html, body {
     border: 1px solid #dee2e694 !important;
 }
 
+#dollar{
+    position: absolute;
+    color: #495057;
+    padding-top: 7px;
+    padding-left: 62px;
+    z-index: 4;
+}
+.price-input{
+    padding-left: 22px;
+}
+
+.price-div{
+    padding-bottom: 20px;
+}
 
 .paid {
     color: #00ff6a;

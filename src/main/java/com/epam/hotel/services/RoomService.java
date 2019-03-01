@@ -22,4 +22,5 @@ public interface RoomService {
 
     Page<Room> findAllRoomsAvailableForRequest(Request request, int page, int limit);
 
+    int findLastNumber();
 }
