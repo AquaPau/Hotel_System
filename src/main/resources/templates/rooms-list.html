@@ -44,7 +44,7 @@
                             <td th:text="${room.number}"></td>
                             <td th:text="#{'message.capacity.'+${room.capacity}}"></td>
                             <td th:text="#{'message.class.'+${room.classID}}"></td>
-                            <td th:text="${room.price}"></td>
+                            <td th:text="'$'+${room.price}"></td>
                             <td sec:authorize="hasRole('ROLE_ADMIN')">
                                 <a
                                         th:href="@{'/rooms/edit/'+${room.id}}" class="btn btn-dark float-center"

@@ -15,10 +15,10 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
+            <div th:insert="~{fragments/common :: header}"></div>
+            <div th:insert="~{fragments/admin :: adminpanel-links}"></div>
             <article class="card-body mx-auto" style="max-width: 400px;">
-                <div class="card-header">
-                    <h3 class="text-center" th:text="#{'message.rooms-page.header.' + ${headerName}}"></h3>
-                </div>
+                <h3 class="text-center" th:text="#{'message.rooms-page.header.' + ${headerName}}"></h3>
                 <form th:object="${room}" th:action="@{'/rooms/save'}" method="post">
 
                     <p class="white" th:text="#{message.rooms-page.insert.roomnumber}">Insert room number:</p>
@@ -26,7 +26,10 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-key"></i> </span>
                         </div>
-                        <input th:field="*{number}" name="roomNumber" type="number" class="form-control">
+                        <input th:if="${room.getId()!=0}" th:field="*{number}" name="number" type="number"
+                               class="form-control">
+                        <input th:if="${room.getId()==0}" th:value="${number}" name="number" id="number" type="number"
+                               class="form-control">
                     </div>
                     <p class="white" th:text="#{message.rooms-page.select.class}">Select class:</p>
                     <div class="form-group input-group">
@@ -34,7 +37,7 @@
                             <span class="input-group-text"> <i class="fa fa-bed"></i> </span>
                         </div>
 
-                        <select th:field="*{classID}" class="form-control" id="selClass">
+                        <select th:field="*{classID}" class="form-control price-changer" id="selClass">
                             <option th:each="classIDValue : ${T(com.epam.hotel.domains.enums.ClassID).values()}"
                                     th:value="${classIDValue.name()}"
                                     th:text="#{'message.class.'+ ${classIDValue.name()}}">
@@ -47,7 +50,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-users"></i> </span>
                         </div>
-                        <select th:field="*{capacity}" class="form-control" id="selCapacity">
+                        <select th:field="*{capacity}" class="form-control price-changer" id="selCapacity">
 
                             <option th:each="capacityValue : ${T(com.epam.hotel.domains.enums.Capacity).values()}"
                                     th:value="${capacityValue.name()}"
@@ -57,40 +60,25 @@
                     </div>
 
                     <p class="white" th:text="#{message.rooms-page.insert.price}">Insert price:</p>
-                    <div class="input-group form-group">
+                    <div class="input-group form-group price-div">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-credit-card"></i> </span>
                         </div>
-                        <input th:field="*{price}" name="price" type="number" class="form-control">
+                        <span id="dollar">$</span>
+                        <input th:field="*{price}" name="price" type="number" step="0.01" class="form-control price-input">
                     </div>
                     <input hidden class="form-control" type="text" th:field="*{id}">
 
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block"
+                        <button type="submit" class="request-action-button btn btn-primary btn-block"
                                 th:text="#{'message.rooms-page.button.' + ${buttonName}}"></button>
                     </div>
                 </form>
-                <div>
-                </div>
-                <a th:href="@{/rooms}" class="btn btn-dark btn-block"
-                   th:text="#{message.rooms-page.button.back}">Back to the list of rooms</a>
             </article>
-            <div class="text-center">
-                <span th:text="#{message.change-language}+': '"></span>
-                <a th:href="@{'/language?lang=en'}">
-                    <img width="35px" th:src="@{/images/en.png}" th:alt="#{message.locale.en}">
-                </a> <span> /</span>
-                <a th:href="@{'/language?lang=ru'}">
-                    <img width="35px" th:src="@{/images/ru.png}" th:alt="#{message.locale.ru}">
-                </a>
-            </div>
+            <div class="footer" th:insert="~{fragments/common :: footer}"></div>
         </div>
     </div>
 </div>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script th:src="@{/js/hotel.js}"></script>
+
 </body>
 </html>

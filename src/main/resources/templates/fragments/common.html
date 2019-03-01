@@ -37,6 +37,10 @@
     <script th:src="@{/js/hotel.js}"></script>
     <script> $(document).ready(function () {
         indexUrls();
+        if(document.getElementById("price").value === ''){
+            $('#price').val(getPrice());
+        }
+
     });</script>
 </div>
 

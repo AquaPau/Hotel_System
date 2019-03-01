@@ -20,4 +20,9 @@ public class ControllerHelper {
         model.addAttribute("processedCount", processed);
     }
 
+    //ToDo
+    public static void addAdminCommonElements(Model model, RequestService requestService) {
+
+    }
+
 }
