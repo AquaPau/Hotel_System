@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import static com.epam.hotel.utils.PaginationHelper.*;
+import static com.epam.hotel.utils.ControllerHelper.addAdminCommonElements;
 
 @Controller
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -40,6 +41,7 @@ public class AdminController {
         }
 
         model.addAttribute("pagedList", unapprovedRequests);
+        addAdminCommonElements(model, requestService, reservationService);
         return "admin";
     }
 
@@ -51,12 +53,13 @@ public class AdminController {
         page = getPage(page);
         limit = getLimit(limit, 5);
 
-        Page<Reservation> approvedRequests = reservationService.getAllReservationsPaged(page, limit);
+        Page<Reservation> approvedRequests = reservationService.getAllApprovedReservationsPaged(page, limit);
         if (approvedRequests.getTotalPages() > 0) {
             model.addAttribute("pageNumbers", getPageNumbers(approvedRequests));
         }
 
         model.addAttribute("pagedList", approvedRequests);
+        addAdminCommonElements(model, requestService, reservationService);
         return "approved-requests";
     }
 
@@ -74,6 +77,7 @@ public class AdminController {
         }
 
         model.addAttribute("pagedList", deniedRequests);
+        addAdminCommonElements(model, requestService, reservationService);
         return "denied-requests";
     }
 

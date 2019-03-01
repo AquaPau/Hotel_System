@@ -36,4 +36,8 @@ public interface RequestService {
 
     long countUnprocessedRequestByUser(User user);
 
+    long countUnprocessedRequests();
+
+    long countDeniedRequests();
+
 }

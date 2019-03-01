@@ -40,12 +40,18 @@
             </div>
 
             <div>
-                <a th:href="@{/admin}" th:text="#{message.admin-page.pending}" class="btn btn-grey center-align">Pending
-                    requests</a>
-                <a th:href="@{/admin/approved-requests}" th:text="#{message.admin-page.approved}"
-                   class="btn btn-yellow center-align">Approved requests</a>
-                <a th:href="@{/admin/denied-requests}" th:text="#{message.admin-page.denied}"
-                   class="btn btn-grey center-align">Denied requests</a>
+                <a th:href="@{/admin}" class="btn btn-grey center-align">
+                    <span th:text="#{message.admin-page.pending}"></span>
+                    <span th:unless="${unapprovedCount==0}" th:text="'('+${unapprovedCount}+')'">1</span>
+                </a>
+                <a th:href="@{/admin/approved-requests}" class="btn btn-yellow center-align">
+                    <span th:text="#{message.admin-page.approved}"></span>
+                    <span th:unless="${approvedCount==0}" th:text="'('+${approvedCount}+')'">1</span>
+                </a>
+                <a th:href="@{/admin/denied-requests}" class="btn btn-grey center-align">
+                    <span th:text="#{message.admin-page.denied}"></span>
+                    <span th:unless="${deniedCount==0}" th:text="'('+${deniedCount}+')'">1</span>
+                </a>
             </div>
 
             <div class="card-body">
