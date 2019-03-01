@@ -13,10 +13,6 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, ReservationId> {
 
-    // all approved reservations
-    @Query("select r from Reservation r where status <> 'DENIED' order by r.id")
-    Page<Reservation> findAllApprovedReservations(Pageable pageable);
-
     // all approved reservations of a given period
     @Query("select r from Reservation r left join r.request s " +
             "where ((:checkin <= s.checkOut and :checkout >= s.checkIn) and (r.status='BILLSENT' or r.status='PAID'))")

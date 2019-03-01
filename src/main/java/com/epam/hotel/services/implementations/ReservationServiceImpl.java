@@ -59,7 +59,7 @@ public class ReservationServiceImpl implements ReservationService {
     // all approved reservations
     @Override
     public Page<Reservation> getAllApprovedReservationsPaged(int page, int size) {
-        return reservationRepository.findAllApprovedReservations(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+        return reservationRepository.findAll(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
     // all approved reservations of a given period of time
