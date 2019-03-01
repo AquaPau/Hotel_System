@@ -26,7 +26,8 @@
                 <table th:if="${roomsList.isEmpty()==false}" class="table table-bordered white">
                     <thead>
                     <tr>
-                        <th scope="col" th:text="#{message.roomslist-page.roomnumber}">Room Number</th>
+                        <th scope="col" sec:authorize="hasRole('ADMIN')">ID</th>
+                        <th scope="col">№</th>
                         <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
                         <th scope="col" th:text="#{message.hotel.class}">Class</th>
                         <th scope="col" th:text="#{message.roomslist-page.price}">Price</th>
@@ -41,6 +42,7 @@
                     <tbody>
                     <th:block th:each="room : ${roomsList}">
                         <tr>
+                            <td sec:authorize="hasRole('ADMIN')" th:text="${room.id}"></td>
                             <td th:text="${room.number}"></td>
                             <td th:text="#{'message.capacity.'+${room.capacity}}"></td>
                             <td th:text="#{'message.class.'+${room.classID}}"></td>
