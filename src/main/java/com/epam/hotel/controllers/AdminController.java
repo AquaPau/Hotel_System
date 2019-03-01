@@ -34,8 +34,7 @@ public class AdminController {
 
         page = getPage(page);
         limit = getLimit(limit, 5);
-        Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequests(page, limit);
-        addPagedList(unapprovedRequests, model);
+        addPagedList(requestService.getAllPagedUnprocessedRequests(page, limit), model);
         addAdminCommonElements(model, requestService, reservationService);
         return "admin";
     }
@@ -47,8 +46,7 @@ public class AdminController {
 
         page = getPage(page);
         limit = getLimit(limit, 5);
-        Page<Reservation> approvedRequests = reservationService.getAllApprovedReservationsPaged(page, limit);
-        addPagedList(approvedRequests, model);
+        addPagedList(reservationService.getAllApprovedReservationsPaged(page, limit), model);
         addAdminCommonElements(model, requestService, reservationService);
         return "approved-requests";
     }
@@ -60,8 +58,7 @@ public class AdminController {
 
         page = getPage(page);
         limit = getLimit(limit, 5);
-        Page<Request> deniedRequests = requestService.getAllPagedDeniedRequests(page, limit);
-        addPagedList(deniedRequests, model);
+        addPagedList(requestService.getAllPagedDeniedRequests(page, limit), model);
         addAdminCommonElements(model, requestService, reservationService);
         return "denied-requests";
     }
