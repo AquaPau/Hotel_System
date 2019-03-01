@@ -46,18 +46,28 @@ function setActive(id) {
     $('#' + id).addClass('menu-active');
 }
 
+function adjustUrl(url) {
+    var href = window.location.href.toString();
+    if (!href.includes(url)) {
+        window.history.pushState("", "", '/index?'+url);
+    }
+}
+
 function userMenuNavigation(id) {
     setActive(id);
     showElement($('.index-table'), false);
     switch (id) {
         case 'menu-rending':
             showElement($('#unprocessed-requests'), true);
+            adjustUrl('ur_page');
             break;
         case 'menu-approved':
             showElement($('#processed-requests'), true);
+            adjustUrl('pr_page');
             break;
         case 'menu-denied':
             showElement($('#denied-requests'), true);
+            adjustUrl('dr_page');
             break;
     }
 }
@@ -79,6 +89,15 @@ function indexUrls() {
         }
         userMenuNavigation('menu-rending');
     }
+    if (href.includes('rooms')) {
+        userMenuNavigation('menu-rooms');
+        return
+    }
+    if (href.includes('request/new')) {
+        userMenuNavigation('menu-newrequest');
+        return
+    }
+
 }
 
 function setFieldErrorColor(elem, flag) {

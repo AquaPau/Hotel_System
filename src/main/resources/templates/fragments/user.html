@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+
+
+<div th:fragment="userpanel-index" class="user-menu">
+    <a id="menu-rending" onclick="userMenuNavigation(this.id)"
+       class="btn menu-btn btn-info center-align">
+        <span th:text="#{message.index-page.your-requests}">Pending</span>
+        <span th:unless="${unprocessedCount==0}"
+              th:text="'('+${unprocessedCount}+')'">1</span>
+    </a>
+    <a id="menu-approved" onclick="userMenuNavigation(this.id)"
+       class="btn menu-btn btn-info center-align"> <span
+            th:text="#{message.index-page.processed-requests}">Processed</span>
+        <span th:unless="${processedCount==0}"
+              th:text="'('+${processedCount}+')'">1
+                    </span>
+    </a>
+    <a id="menu-denied" onclick="userMenuNavigation(this.id)"
+       class="btn menu-btn btn-info center-align">
+        <span th:text="#{message.admin-page.denied}">Denied</span>
+        <span th:unless="${deniedCount==0}"
+              th:text="'('+${deniedCount}+')'">1</span>
+    </a>
+    <a id="menu-rooms" th:href="@{/rooms}"
+       class="btn menu-btn btn-info center-align"
+       th:text="#{message.hotel.rooms}">Rooms</a>
+    <a id="menu-newrequest" th:href="@{/request/new}"
+       class="btn menu-btn btn-info center-align"
+       th:text="#{message.hotel.new-request}">New request</a>
+</div>
+
+
+<div th:fragment="userpanel-links" class="user-menu">
+    <a id="menu-rending" onclick="userMenuNavigation(this.id)" th:href="@{/index}"
+       class="btn menu-btn btn-info center-align">
+        <span th:text="#{message.index-page.your-requests}">Pending</span>
+        <span th:unless="${unprocessedCount==0}"
+              th:text="'('+${unprocessedCount}+')'">1</span>
+    </a>
+    <a id="menu-approved" onclick="userMenuNavigation(this.id)" th:href="@{/index(pr_page=1)}"
+       class="btn menu-btn btn-info center-align"> <span
+            th:text="#{message.index-page.processed-requests}">Processed</span>
+        <span th:unless="${processedCount==0}"
+              th:text="'('+${processedCount}+')'">1
+                    </span>
+    </a>
+    <a id="menu-denied" onclick="userMenuNavigation(this.id)" th:href="@{/index(dr_page=1)}"
+       class="btn menu-btn btn-info center-align">
+        <span th:text="#{message.admin-page.denied}">Denied</span>
+        <span th:unless="${deniedCount==0}"
+              th:text="'('+${deniedCount}+')'">1</span>
+    </a>
+    <a id="menu-rooms" th:href="@{/rooms}"
+       class="btn menu-btn btn-info center-align"
+       th:text="#{message.hotel.rooms}">Rooms</a>
+    <a id="menu-newrequest" th:href="@{/request/new}"
+       class="btn menu-btn btn-info center-align"
+       th:text="#{message.hotel.new-request}">New request</a>
+</div>
+
+
+<div th:fragment="usertables">
+    <div hidden id="unprocessed-requests" class="index-table">
+        <p class="white"
+           th:if="${processedRequests.hasContent() && unprocessedRequests.hasContent()==false}"
+           th:text="#{message.index-page.no-unprocessed-request}">no unprocessed</p>
+        <p class="white"
+           th:unless="${processedRequests.hasContent() || unprocessedRequests.hasContent()}"
+           th:text="#{message.index-page.no-request}">no requests</p>
+        <div th:if="${unprocessedRequests.hasContent()}">
+            <table class="table table-bordered white">
+                <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                    <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                    <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
+                    <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
+                    <th scope="col" th:text="#{message.edit}">Edit</th>
+                    <th scope="col" th:text="#{message.delete}">Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="request : ${unprocessedRequests.content}">
+                    <tr>
+                        <td th:text="${request.id}"></td>
+                        <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
+                        <td th:text="#{'message.class.'+${request.classID}}"></td>
+                        <td th:text="${#dates.format(request.checkIn,'MM/dd/yyyy')}"></td>
+                        <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
+                        <td>
+                            <a th:href="@{'/request/edit/'+${request.id}}"
+                               th:text="#{message.edit}"
+                               class="btn btn-info center-align">Edit</a>
+                        </td>
+                        <td>
+                            <a th:href="@{'/request/delete/'+${request.id}}"
+                               th:text="#{message.delete}"
+                               class="btn btn-danger center-align">Delete</a>
+                        </td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+            <nav th:if="${unprocessedRequests.totalPages > 0}">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${unprocessedRequests.isFirst()} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/index(ur_page=${unprocessedRequests.number})}"
+                           tabindex="-1"><
+                        </a>
+                    </li>
+                    <li th:each="pageNumber : ${unprocessedPageNumbers}" class="page-item"
+                        th:classappend="${pageNumber==unprocessedRequests.number + 1} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/index(ur_page=${pageNumber})}"
+                           th:text="${pageNumber}">
+                        </a>
+                    </li>
+                    <li class="page-item" th:classappend="${unprocessedRequests.isLast()} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/index(ur_page=${unprocessedRequests.number}+2)}"
+                        >>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div hidden id="processed-requests" class="index-table">
+        <p th:unless="${processedRequests.hasContent()}"
+           th:text="#{message.index-page.no-processed-requests}"></p>
+        <div th:if="${processedRequests.hasContent()}">
+            <p class="white" th:text="#{message.index-page.processed-requests}"> Processed requests:</p>
+            <table class="table table-bordered white">
+                <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                    <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                    <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
+                    <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
+                    <th scope="col" th:text="#{message.view}">View room</th>
+                    <th scope="col" th:text="#{message.hotel.status}">Status</th>
+                    <th scope="col" th:text="#{message.cancel}">Cancel</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="request : ${processedRequests}">
+                    <tr>
+                        <td th:text="${request.id}"></td>
+                        <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
+                        <td th:text="#{'message.class.'+${request.classID}}"></td>
+                        <td th:text="${#dates.format(request.checkIn,'MM/dd/yyyy')}"></td>
+                        <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
+                        <td>
+                            <a th:text="#{message.view}"
+                               th:href="@{'/request/view/'+${request.id}}"
+                               class="btn btn-info float-center">view</a>
+                        </td>
+                        <td th:text="#{'message.status.'+${request.reservation.status}}"></td>
+                        <td>
+                            <a th:href="@{'/request/delete/'+${request.id}}"
+                               th:text="#{message.delete}"
+                               class="btn btn-danger float-center">cancel</a>
+                        </td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+            <nav th:if="${processedRequests.totalPages > 0}">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${processedRequests.isFirst()} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/index(pr_page=${processedRequests.number})}"
+                           tabindex="-1"><
+                        </a>
+                    </li>
+                    <li th:each="pageNumber : ${processedPageNumbers}" class="page-item"
+                        th:classappend="${pageNumber==processedRequests.number + 1} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/index(pr_page=${pageNumber})}"
+                           th:text="${pageNumber}">
+                        </a>
+                    </li>
+                    <li class="page-item" th:classappend="${processedRequests.isLast()} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/index(pr_page=${processedRequests.number}+2)}"
+                        >>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div hidden id="denied-requests" class="index-table">
+        <p th:unless="${deniedRequests.hasContent()}"
+           th:text="#{message.index-page.no-denied-requests}"></p>
+        <div th:if="${deniedRequests.hasContent()}">
+            <table class="table table-bordered white">
+                <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                    <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                    <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
+                    <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
+
+                    <th scope="col" th:text="#{message.hotel.reason}">Status</th>
+                    <th scope="col" th:text="#{message.delete}">Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="request : ${deniedRequests}">
+                    <tr>
+                        <td th:text="${request.id}"></td>
+                        <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
+                        <td th:text="#{'message.class.'+${request.classID}}"></td>
+                        <td th:text="${#dates.format(request.checkIn,'MM/dd/yyyy')}"></td>
+                        <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
+
+                        <td th:text="${request.deniedRequest.reason}"></td>
+                        <td>
+                            <a th:href="@{'/request/delete/'+${request.id}}"
+                               th:text="#{message.delete}"
+                               class="btn btn-danger float-center">cancel</a>
+                        </td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+            <nav th:if="${deniedRequests.totalPages > 0}">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${deniedRequests.isFirst()} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/index(dr_page=${deniedRequests.number})}"
+                           tabindex="-1"><
+                        </a>
+                    </li>
+                    <li th:each="pageNumber : ${deniedPageNumbers}" class="page-item"
+                        th:classappend="${pageNumber==deniedRequests.number + 1} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/index(dr_page=${pageNumber})}"
+                           th:text="${pageNumber}">
+                        </a>
+                    </li>
+                    <li class="page-item" th:classappend="${deniedRequests.isLast()} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/index(dr_page=${deniedRequests.number}+2)}"
+                        >>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+</body>
+</html>

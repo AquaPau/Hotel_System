@@ -20,10 +20,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .headers().cacheControl().disable().and()
                 .authorizeRequests()
                 .antMatchers("static/**").permitAll()
                 .antMatchers("/language").permitAll()
-                .antMatchers("/", "/index", "/request*","/rooms").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/index", "/request*","/rooms").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin*").hasRole("ADMIN")
                 .antMatchers("/rooms/*").hasRole("ADMIN")
                 .and()

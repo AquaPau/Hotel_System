@@ -29,11 +29,11 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-            <div class="card-header">
-                <h3 id="index-header" class="text-center"
+                <div th:insert="~{fragments/common :: header}"></div>
+                <div th:insert="~{fragments/user :: userpanel-links}"></div>
+                <h3 class="text-center"
                     th:text="#{message.view-request.header}">
                     View reservedRoom</h3>
-            </div>
             <div class="card-body">
                 <p class="white" th:text="#{message.view-request.your-request}">Your request</p>
                 <table class="table table-bordered white">
@@ -78,34 +78,13 @@
                     <a th:href="@{'/reservation/cancel/'+${request.id}}"
                        th:text="#{message.cancel}"
                        class="btn btn-danger float-right">cancel</a>
-                    <a onclick="showPaymentMessage(true)" class="btn login_btn float-right"
+                    <a onclick="showPaymentMessage(true)" class="btn pay_btn float-right"
                        th:text="#{message.pay}+': $'+${request.reservation.totalPrice}">pay</a>
                 </div>
-                <div class="card-footer">
-
-                    <div class="text-center">
-                        <div>
-                            <a th:href="@{/index}" class="btn btn-dark text-center" th:text="#{message.back}">Back</a>
-                            <div>
-                                <div class="text-center">
-                                    <span th:text="#{message.change-language}+': '"></span>
-                                    <a th:href="@{'/language?lang=en'}">
-                                        <img width="35px" th:src="@{/images/en.png}" th:alt="#{message.locale.en}">
-                                    </a> <span> /</span>
-                                    <a th:href="@{'/language?lang=ru'}">
-                                        <img width="35px" th:src="@{/images/ru.png}" th:alt="#{message.locale.ru}">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+            <div class="footer" th:insert="~{fragments/common :: footer}"></div>
         </div>
     </div>
 </div>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script th:src="@{/js/hotel.js}"></script>
 </body>
 </html>

@@ -13,15 +13,15 @@ import org.springframework.data.repository.query.Param;
 public interface RequestRepository extends JpaRepository<Request, Long> {
 
     // unprocessed requests by user
-    @Query("select r from Request r left join r.reservation s where (s.request is null and r.user = :#{#user} and r.deniedRequest.reason is null) order by r.id")
+    @Query("select r from Request r left join r.reservation s where (s.request is null and r.user = :#{#user} and r.deniedRequest.reason is null) order by r.id desc")
     Page<Request> findUnprocessedRequestsByUser(@Param("user") User user, Pageable pageable);
 
     // processed requests by user
-    @Query("select r from Request r left join r.reservation s where (s.request=r and r.user = :#{#user}) order by r.id")
+    @Query("select r from Request r left join r.reservation s where (s.request=r and r.user = :#{#user}) order by r.id desc")
     Page<Request> getProcessedRequestsByUser(@Param("user") User user, Pageable pageable);
 
     // denied requests by user
-    @Query("select r from Request r left join r.deniedRequest s where (s.request=r and s.reason is not null and r.user = :#{#user}) order by r.id")
+    @Query("select r from Request r left join r.deniedRequest s where (s.request=r and s.reason is not null and r.user = :#{#user}) order by r.id desc")
     Page<Request> findDeniedRequestsByUser(@Param("user") User user, Pageable pageable);
 
 
@@ -36,6 +36,16 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     // all denied requests
     @Query("select r from Request r left join r.deniedRequest s where (s.request=r and s.reason is not null) order by r.id")
     Page<Request> findAllDeniedRequests(PageRequest id);
+
+
+    @Query("select count (r) from Request r left join r.reservation s where (s.request is null and r.user = :#{#user} and r.deniedRequest.reason is null)")
+    long countUnprocessedRequestByUser(@Param("user") User user);
+
+    @Query("select count (r) from Request r left join r.reservation s where (s.request=r and r.user = :#{#user})")
+    long countProcessedRequestByUser(@Param("user") User user);
+
+    @Query("select count (r) from Request r left join r.deniedRequest s where (s.request=r and s.reason is not null and r.user = :#{#user})")
+    long countDeniedRequestByUser(@Param("user") User user);
 
 
 }

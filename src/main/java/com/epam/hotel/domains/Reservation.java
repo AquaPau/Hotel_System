@@ -38,7 +38,6 @@ public class Reservation {
 
     public Reservation(ReservationId reservationId) {
         this.id = reservationId;
-        //totalPrice = countTotalPrice();
     }
 }
 

@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+
+import static com.epam.hotel.utils.ControllerHelper.addUserCommonElements;
 
 @Controller
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -24,7 +27,8 @@ public class RequestController {
     private final RequestService requestService;
 
     @GetMapping("/request/new")
-    public String createRequestForm(Model model) {
+    public String createRequestForm(Model model, Principal principal) {
+        User user = userService.findByLogin(principal.getName());
         Request request = new Request();
 
         request.setCheckIn(BookingHelper.getTodayPlusDays(1));
@@ -33,6 +37,7 @@ public class RequestController {
         model.addAttribute("request", request);
         model.addAttribute("header", "create");
         model.addAttribute("buttonName", "create");
+        addUserCommonElements(model, user, requestService);
         return "request";
     }
 
@@ -48,28 +53,33 @@ public class RequestController {
     }
 
     @GetMapping("request/edit/{id}")
-    public String editRequest(@PathVariable String id, Model model) {
+    public String editRequest(@PathVariable String id, Model model, Principal principal) {
+        User user = userService.findByLogin(principal.getName());
         Request request = requestService.findById(new Long(id));
         model.addAttribute("request", request);
         model.addAttribute("header", "edit");
         model.addAttribute("buttonName", "save");
+        addUserCommonElements(model, user, requestService);
         return "request";
     }
 
     @GetMapping("request/delete/{id}")
-    public String deleteRequest(@PathVariable String id, Principal principal) {
+    public String deleteRequest(@PathVariable String id, Principal principal, HttpServletRequest httpRequest) {
         User user = userService.findByLogin(principal.getName());
         Request request = requestService.findById(new Long(id));
         user.removeRequest(request);
         userService.save(user);
-        return "redirect:/index";
+        return "redirect:" + httpRequest.getHeader("Referer");
     }
 
     @GetMapping("request/view/{id}")
-    public String viewRequest(@PathVariable String id, Model model) {
+    public String viewRequest(@PathVariable String id, Model model, Principal principal) {
+        User user = userService.findByLogin(principal.getName());
         Request request = requestService.findById(new Long(id));
         model.addAttribute("request", request);
+        addUserCommonElements(model, user, requestService);
         return "view-request";
     }
+
 
 }

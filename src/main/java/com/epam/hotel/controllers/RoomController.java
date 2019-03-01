@@ -1,14 +1,12 @@
 package com.epam.hotel.controllers;
 
-import com.epam.hotel.domains.Request;
-import com.epam.hotel.domains.Reservation;
-import com.epam.hotel.domains.ReservationId;
-import com.epam.hotel.domains.Room;
+import com.epam.hotel.domains.*;
 import com.epam.hotel.domains.enums.Status;
 import com.epam.hotel.exceptions.RoomNumberAlreadyExistsException;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.ReservationService;
 import com.epam.hotel.services.RoomService;
+import com.epam.hotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
+import static com.epam.hotel.utils.ControllerHelper.addUserCommonElements;
 import static com.epam.hotel.utils.PaginationHelper.*;
 
 @Controller
@@ -25,6 +26,7 @@ public class RoomController {
     private final RequestService requestService;
     private final RoomService roomService;
     private final ReservationService reservationService;
+    private final UserService userService;
 
     @GetMapping("/rooms/new")
     public String createRoomForm(Model model) {
@@ -58,7 +60,10 @@ public class RoomController {
 
     @GetMapping("/rooms")
     public String roomsTable(@RequestParam(value = "page", required = false) Integer page,
-                             @RequestParam(value = "limit", required = false) Integer limit, Model model) {
+                             @RequestParam(value = "limit", required = false) Integer limit,
+                             Model model, Principal principal) {
+
+        User user = userService.findByLogin(principal.getName());
 
         page = getPage(page);
         limit = getLimit(limit, 7);
@@ -69,7 +74,8 @@ public class RoomController {
         }
 
         model.addAttribute("roomsList", roomList);
-        return "roomsList";
+        addUserCommonElements(model, user, requestService);
+        return "rooms-list";
     }
 
     @ExceptionHandler(RoomNumberAlreadyExistsException.class)

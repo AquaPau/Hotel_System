@@ -24,11 +24,16 @@ public interface RequestService {
     Page<Request> getPagedDeniedRequestsByUser(User user, int page, int size);
 
 
-
     Page<Request> getAllPagedUnprocessedRequests(int page, int size);
 
     Page<Request> getAllPagedProcessedRequests(int page, int size);
 
     Page<Request> getAllPagedDeniedRequests(int page, int size);
+
+    long countDeniedRequestByUser(User user);
+
+    long countProcessedRequestByUser(User user);
+
+    long countUnprocessedRequestByUser(User user);
 
 }
