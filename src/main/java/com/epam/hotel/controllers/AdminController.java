@@ -34,13 +34,8 @@ public class AdminController {
 
         page = getPage(page);
         limit = getLimit(limit, 5);
-
         Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequests(page, limit);
-        if (unapprovedRequests.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", getPageNumbers(unapprovedRequests));
-        }
-
-        model.addAttribute("pagedList", unapprovedRequests);
+        addPagedList(unapprovedRequests, model);
         addAdminCommonElements(model, requestService, reservationService);
         return "admin";
     }
@@ -52,13 +47,8 @@ public class AdminController {
 
         page = getPage(page);
         limit = getLimit(limit, 5);
-
         Page<Reservation> approvedRequests = reservationService.getAllApprovedReservationsPaged(page, limit);
-        if (approvedRequests.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", getPageNumbers(approvedRequests));
-        }
-
-        model.addAttribute("pagedList", approvedRequests);
+        addPagedList(approvedRequests, model);
         addAdminCommonElements(model, requestService, reservationService);
         return "approved-requests";
     }
@@ -70,13 +60,8 @@ public class AdminController {
 
         page = getPage(page);
         limit = getLimit(limit, 5);
-
         Page<Request> deniedRequests = requestService.getAllPagedDeniedRequests(page, limit);
-        if (deniedRequests.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", getPageNumbers(deniedRequests));
-        }
-
-        model.addAttribute("pagedList", deniedRequests);
+        addPagedList(deniedRequests, model);
         addAdminCommonElements(model, requestService, reservationService);
         return "denied-requests";
     }
@@ -96,13 +81,8 @@ public class AdminController {
 
         page = getPage(page);
         limit = getLimit(limit, 8);
-
         Page<User> userList = userService.getAllUsersPaged(page, limit);
-        if (userList.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", getPageNumbers(userList));
-        }
-
-        model.addAttribute("pagedList", userList);
+        addPagedList(userList, model);
         return "users";
     }
 
