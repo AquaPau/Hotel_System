@@ -36,12 +36,12 @@ html, body {
 #dollar{
     position: absolute;
     color: #495057;
-    padding-top: 6px;
+    padding-top: 7px;
     padding-left: 62px;
     z-index: 4;
 }
 .price-input{
-    padding-left: 25px;
+    padding-left: 22px;
 }
 
 .price-div{
