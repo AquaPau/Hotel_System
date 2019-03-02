@@ -25,7 +25,7 @@
         <span th:unless="${deniedCount==0}"
               th:text="'('+${deniedCount}+')'">1</span>
     </a>
-    <a id="menu-rooms" onclick="userMenuNavigation(this.id)"
+    <a id="menu-rooms" onclick="userMenuNavigation(this.id)" th:href="@{/rooms}"
        class="btn menu-btn btn-info center-align">
         <span th:text="#{message.hotel.rooms}">Rooms</span>
     </a>
