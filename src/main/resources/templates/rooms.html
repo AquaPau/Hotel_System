@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 <head>
-    <title>Hotel System</title>
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.ico}"/>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -10,11 +9,14 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
           integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
+            <div th:insert="~{fragments/common :: header}"></div>
+            <div th:insert="~{fragments/common :: panel-links}"></div>
             <article class="card-body mx-auto" style="max-width: 400px;">
                 <div class="card-header">
                     <h3 class="text-center" th:text="#{'message.rooms-page.header.' + ${headerName}}"></h3>

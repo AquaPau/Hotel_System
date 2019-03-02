@@ -101,6 +101,11 @@ h3 {
     justify-content: space-between;
 }
 
+.card-left-flex {
+    display: flex;
+    justify-content: left;
+}
+
 .language {
     padding-top: 19px;
 }

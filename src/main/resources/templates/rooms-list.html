@@ -19,7 +19,7 @@
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div th:insert="~{fragments/common :: header}"></div>
-            <div th:insert="~{fragments/user :: userpanel-links}"></div>
+            <div th:insert="~{fragments/common :: panel-links}"></div>
             <div class="card-body">
                 <p class="white" th:if="${roomsList.isEmpty()==true}" th:text="#{message.roomslist-page.norooms}">There
                     are no rooms for booking in hotel now</p>

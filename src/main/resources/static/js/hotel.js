@@ -47,7 +47,7 @@ function setActive(id) {
 }
 
 function adjustUrl(url, role) {
-    var href = window.location.href.toString();
+    const href = window.location.href.toString();
     if (!href.includes(url)) {
         window.history.pushState("", "", `/${role}?${url}`);
     }
@@ -56,7 +56,7 @@ function adjustUrl(url, role) {
 function userMenuNavigation(id) {
     setActive(id);
     showElement($('.index-table'), false);
-    role = "user";
+    const role="user";
     switch (id) {
         case 'menu-rending':
             showElement($('#unprocessed-requests'), true);
@@ -69,10 +69,6 @@ function userMenuNavigation(id) {
         case 'menu-denied':
             showElement($('#denied-requests'), true);
             adjustUrl('dr_page', role);
-            break;
-        case 'menu-rooms':
-            showElement($('#room-list'), true);
-            adjustUrl('rl_page', role);
             break;
     }
 }
@@ -92,10 +88,6 @@ function indexUrls() {
             userMenuNavigation('menu-denied');
             return
         }
-        if (href.includes('rl_page')) {
-            userMenuNavigation('room-list');
-            return
-        }
         userMenuNavigation('menu-rending');
     }
     if (href.includes('rooms')) {
@@ -108,11 +100,10 @@ function indexUrls() {
     }
 
 }
-
-function adminMenuNavigation(id) {
+function adminMenuNavigation(id){
     setActive(id);
     showElement($('.index-table'), false);
-    role = "admin";
+    const role = "admin";
     switch (id) {
         case 'menu-pending':
             showElement($('#pending-requests'), true);
@@ -134,8 +125,8 @@ function adminMenuNavigation(id) {
 }
 
 function adminUrls() {
-    var href = window.location.href.toString();
-    if (href.includes('admin')) {
+    const href = window.location.href.toString();
+    if (href.includes('index')) {
         if (href.includes('prq_page')) {
             adminMenuNavigation('menu-pending');
             return
@@ -148,16 +139,17 @@ function adminUrls() {
             adminMenuNavigation('menu-denied');
             return
         }
-        if (href.includes('rl_page')) {
-            adminMenuNavigation('room-list');
-            return
-        }
+        adminMenuNavigation('menu-pending');
     }
-    adminMenuNavigation('menu-pending');
+    if (href.includes('rooms')) {
+        adminMenuNavigation('menu-rooms');
+        return
+    }
     if (href.includes('rooms/new')) {
         adminMenuNavigation('menu-newroom');
         return
     }
+
 }
 
 function setFieldErrorColor(elem, flag) {
