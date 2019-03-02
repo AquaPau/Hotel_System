@@ -117,35 +117,11 @@ function adminMenuNavigation(id){
             showElement($('#denied-requests'), true);
             adjustUrl('drq_page', role);
             break;
+        case 'menu-rooms':
+            showElement($('#room-list'), true);
+            adjustUrl('rl_page', role);
+            break;
     }
-}
-
-function adminUrls() {
-    var href = window.location.href.toString();
-    if (href.includes('admin')) {
-        if (href.includes('prq_page')) {
-            adminMenuNavigation('menu-pending');
-            return
-        }
-        if (href.includes('arq_page')) {
-            adminMenuNavigation('menu-approved');
-            return
-        }
-        if (href.includes('drq_page')) {
-            adminMenuNavigation('menu-denied');
-            return
-        }
-        adminMenuNavigation('menu-pending');
-    }
-    if (href.includes('rooms')) {
-        adminMenuNavigation('menu-rooms');
-        return
-    }
-    if (href.includes('room/new')) {
-        adminMenuNavigation('menu-newroom');
-        return
-    }
-
 }
 
 function setFieldErrorColor(elem, flag) {

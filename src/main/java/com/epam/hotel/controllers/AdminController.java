@@ -1,13 +1,7 @@
 package com.epam.hotel.controllers;
 
-import com.epam.hotel.domains.DeniedRequest;
-import com.epam.hotel.domains.Request;
-import com.epam.hotel.domains.Reservation;
-import com.epam.hotel.domains.User;
-import com.epam.hotel.services.DenyMessageService;
-import com.epam.hotel.services.RequestService;
-import com.epam.hotel.services.ReservationService;
-import com.epam.hotel.services.UserService;
+import com.epam.hotel.domains.*;
+import com.epam.hotel.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
+import static com.epam.hotel.utils.ControllerHelper.addUserCommonElements;
 import static com.epam.hotel.utils.PaginationHelper.*;
 
 @Controller
@@ -24,6 +21,7 @@ public class AdminController {
     private final RequestService requestService;
     private final ReservationService reservationService;
     private final DenyMessageService denyMessageService;
+    private final RoomService roomService;
     private final UserService userService;
 
     @GetMapping({"/admin", "admin"})
@@ -31,16 +29,21 @@ public class AdminController {
                         @RequestParam(value = "prq_page", required = false) Integer prq_page,
                         @RequestParam(value = "arq_page", required = false) Integer arq_page,
                         @RequestParam(value = "drq_page", required = false) Integer drq_page,
-                        @RequestParam(value = "limit", required = false) Integer limit) {
+                        @RequestParam(value = "rl_page", required = false) Integer rl_page,
+                        @RequestParam(value = "limit", required = false) Integer limit,
+                        @RequestParam(value = "rl_size", required = false) Integer rl_size) {
 
         prq_page = getPage(prq_page);
         arq_page = getPage(arq_page);
         drq_page = getPage(drq_page);
+        rl_page = getPage(rl_page);
         limit = getLimit(limit, 5);
+        rl_size = getLimit(rl_size, 7);
 
         Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequests(prq_page, limit);
         Page<Reservation> approvedRequests = reservationService.getAllReservationsPaged(arq_page, limit);
         Page<Request> deniedRequests = requestService.getAllPagedDeniedRequests(drq_page, limit);
+        Page<Room> roomList = roomService.findAllRoomsPaged(rl_page, rl_size);
 
         if (unapprovedRequests.getTotalPages() > 0) {
             if (isPageBeyondTotalPages(prq_page, unapprovedRequests)) return "redirect:admin?prq_page=" + (prq_page - 1);
@@ -54,18 +57,24 @@ public class AdminController {
             if (isPageBeyondTotalPages(drq_page, deniedRequests)) return "redirect:admin?drq_page=" + (drq_page - 1);
             model.addAttribute("deniedPageNumbers", getPageNumbers(deniedRequests));
         }
+        if (roomList.getTotalPages() > 0) {
+            if (isPageBeyondTotalPages(rl_page, roomList)) return "redirect:admin?rl_page=" + (rl_page - 1);
+            model.addAttribute("roomListNumbers", getPageNumbers(roomList));
+        }
 
         model.addAttribute("unapprovedRequestList", unapprovedRequests);
         model.addAttribute("approvedRequestList", approvedRequests);
         model.addAttribute("deniedRequestList", deniedRequests);
+        model.addAttribute("roomsList", roomList);
         long denied = requestService.countAllDeniedRequestForAdmin();
         long processed = requestService.countAllApprovedRequestForAdmin();
         long pended = requestService.countAllPendingRequestForAdmin();
+        long roomed = roomService.countAllRooms();
 
         model.addAttribute("deniedCount", denied);
         model.addAttribute("pendedCount", pended);
         model.addAttribute("approvedCount", processed);
-
+        model.addAttribute("roomCount", roomed);
         return "admin";
     }
 

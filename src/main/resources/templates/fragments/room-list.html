@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<div th:fragment="room-list">
+    <p class="white" th:if="${roomsList.isEmpty()==true}" th:text="#{message.roomslist-page.norooms}">There
+        are no rooms for booking in hotel now</p>
+    <table th:if="${roomsList.isEmpty()==false}" class="table table-bordered white">
+        <thead>
+        <tr>
+            <th scope="col" th:text="#{message.roomslist-page.roomnumber}">Room Number</th>
+            <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+            <th scope="col" th:text="#{message.hotel.class}">Class</th>
+            <th scope="col" th:text="#{message.roomslist-page.price}">Price</th>
+            <th scope="col" sec:authorize="hasRole('ADMIN')"
+                th:text="#{message.roomseditor-page.edit}">Edit
+            </th>
+            <th scope="col" sec:authorize="hasRole('ADMIN')"
+                th:text="#{message.roomseditor-page.delete}" }>Delete
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="room : ${roomsList}">
+            <tr>
+                <td th:text="${room.number}"></td>
+                <td th:text="#{'message.capacity.'+${room.capacity}}"></td>
+                <td th:text="#{'message.class.'+${room.classID}}"></td>
+                <td th:text="${room.price}"></td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a
+                            th:href="@{'/rooms/edit/'+${room.id}}" class="btn btn-dark float-center"
+                            th:text="#{message.roomseditor-page.edit}">Edit</a>
+                </td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a sec:authorize="hasRole('ROLE_ADMIN')"
+                       th:href="@{'/rooms/delete/'+${room.id}}" class="btn btn-dark float-center"
+                       th:text="#{message.roomseditor-page.delete}">Delete</a>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+    <div>
+    </div>
+    <nav th:if="${roomsList.totalPages > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${roomsList.isFirst()} ? disabled">
+                <a class="page-link"
+                   th:href="@{/admin(rl_page=${roomsList.number})}"
+                   tabindex="-1"><
+                </a>
+            </li>
+            <li th:each="pageNumber : ${roomListNumbers}" class="page-item"
+                th:classappend="${pageNumber==roomsList.number + 1} ? disabled">
+                <a class="page-link"
+                   th:href="@{/admin(rl_page=${pageNumber})}"
+                   th:text="${pageNumber}">
+                </a>
+            </li>
+            <li class="page-item" th:classappend="${roomsList.isLast()} ? disabled">
+                <a class="page-link"
+                   th:href="@{/admin(rl_page=${roomsList.number}+2)}"
+                >>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

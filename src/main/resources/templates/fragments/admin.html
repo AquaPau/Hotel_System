@@ -21,9 +21,10 @@
         <span th:unless="${deniedCount==0}"
               th:text="'('+${deniedCount}+')'">1</span>
     </a>
-    <a id="menu-rooms" th:href="@{/rooms}"
-       class="btn menu-btn btn-info center-align"
-       th:text="#{message.hotel.rooms}">Rooms</a>
+    <a id="menu-rooms" onclick="adminMenuNavigation(this.id)"
+       class="btn menu-btn btn-info center-align">
+        <span th:text="#{message.hotel.rooms}">Rooms</span>
+    </a>
 
     <a id="menu-newroom" th:href="@{/rooms/new}"
        class="btn menu-btn btn-info center-align"
@@ -228,12 +229,7 @@
             </nav>
         </div>
     </div>
-    <div class="card-footer">
-        <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User
-            menu</a>
-        <a th:href="@{/admin/users}" th:text="#{message.admin-page.usersmenu}" class="btn btn-dark float-right">Edit
-            users</a>
-    </div>
+    <div hidden id="room-list" class = "index-table" th:insert="~{fragments/room-list :: room-list}"></div>
 </div>
 </body>
 </html>
