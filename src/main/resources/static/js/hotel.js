@@ -56,7 +56,7 @@ function adjustUrl(url, role) {
 function userMenuNavigation(id) {
     setActive(id);
     showElement($('.index-table'), false);
-    role="user";
+    role = "user";
     switch (id) {
         case 'menu-rending':
             showElement($('#unprocessed-requests'), true);
@@ -69,6 +69,10 @@ function userMenuNavigation(id) {
         case 'menu-denied':
             showElement($('#denied-requests'), true);
             adjustUrl('dr_page', role);
+            break;
+        case 'menu-rooms':
+            showElement($('#room-list'), true);
+            adjustUrl('rl_page', role);
             break;
     }
 }
@@ -88,6 +92,10 @@ function indexUrls() {
             userMenuNavigation('menu-denied');
             return
         }
+        if (href.includes('rl_page')) {
+            userMenuNavigation('room-list');
+            return
+        }
         userMenuNavigation('menu-rending');
     }
     if (href.includes('rooms')) {
@@ -100,7 +108,8 @@ function indexUrls() {
     }
 
 }
-function adminMenuNavigation(id){
+
+function adminMenuNavigation(id) {
     setActive(id);
     showElement($('.index-table'), false);
     role = "admin";
@@ -121,6 +130,33 @@ function adminMenuNavigation(id){
             showElement($('#room-list'), true);
             adjustUrl('rl_page', role);
             break;
+    }
+}
+
+function adminUrls() {
+    var href = window.location.href.toString();
+    if (href.includes('admin')) {
+        if (href.includes('prq_page')) {
+            adminMenuNavigation('menu-pending');
+            return
+        }
+        if (href.includes('arq_page')) {
+            adminMenuNavigation('menu-approved');
+            return
+        }
+        if (href.includes('drq_page')) {
+            adminMenuNavigation('menu-denied');
+            return
+        }
+        if (href.includes('rl_page')) {
+            adminMenuNavigation('room-list');
+            return
+        }
+    }
+    adminMenuNavigation('menu-pending');
+    if (href.includes('rooms/new')) {
+        adminMenuNavigation('menu-newroom');
+        return
     }
 }
 
