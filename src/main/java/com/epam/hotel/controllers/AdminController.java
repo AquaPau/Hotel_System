@@ -78,8 +78,7 @@ public class AdminController {
 
         page = getPage(page);
         limit = getLimit(limit, 8);
-        Page<User> userList = userService.getAllUsersPaged(page, limit);
-        addPagedList(userList, model);
+        addPagedList(userService.getAllUsersPaged(page, limit), model);
         return "users";
     }
 
@@ -96,5 +95,16 @@ public class AdminController {
                             @RequestParam(value = "page", required = false) Integer page) {
         userService.changeUserBlockForId(Long.valueOf(id));
         return "redirect:/admin/users?page="+page;
+    }
+
+    @GetMapping({"/admin/today-users"})
+    public String usersToday(Model model,
+                        @RequestParam(value = "page", required = false) Integer page,
+                        @RequestParam(value = "limit", required = false) Integer limit) {
+
+        page = getPage(page);
+        limit = getLimit(limit, 8);
+        addPagedList(reservationService.findAllReservationsForToday(page, limit), model);
+        return "today-users";
     }
 }

@@ -11,12 +11,14 @@ import com.epam.hotel.services.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import static com.epam.hotel.utils.BookingHelper.countTotalPrice;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,6 +74,12 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public long countAllApprovedReservations() {
         return reservationRepository.countAllApprovedReservations();
+    }
+
+    @Override
+    public Page<Reservation> findAllReservationsForToday(int page, int size) {
+        List<Reservation> list = reservationRepository.findAllReservationsForToday(new Date());
+        return new PageImpl<>(list, PageRequest.of(page - 1, size), list.size());
     }
 
 }
