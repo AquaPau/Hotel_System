@@ -252,7 +252,7 @@
                 <tbody>
                 <th:block th:each="room : ${roomsList}">
                     <tr>
-                        <td th:text="${room.id}"scope="row">1</td>
+                        <td th:text="${room.id}" scope="row">1</td>
                         <td th:text="${room.number}"></td>
                         <td th:text="#{'message.capacity.'+${room.capacity}}"></td>
                         <td th:text="#{'message.class.'+${room.classID}}"></td>
