@@ -79,7 +79,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Page<Reservation> findAllReservationsForToday(int page, int size) {
         List<Reservation> list = reservationRepository.findAllReservationsForToday(new Date());
-        return new PageImpl<>(list, PageRequest.of(page - 1, size), list.size());
+        return new PageImpl<>(list, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"), list.size());
     }
 
 }
