@@ -60,15 +60,17 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script th:src="@{/js/hotel.js}"></script>
-    <script th:if="${#httpServletRequest.requestURI == '/index' || #httpServletRequest.requestURI == '/user'}">
-        $(document).ready(function () {
-            indexUrls();
-        });</script>
     <script th:if="${#httpServletRequest.requestURI == '/admin'}">
         $(document).ready(function () {
             adminUrls();
         });</script>
+    <script th:if="${#httpServletRequest.requestURI == '/index' || #httpServletRequest.requestURI == '/user'}">
+        $(document).ready(function () {
+            indexUrls();
+        });</script>
+
 </div>
+
 <div th:fragment="panel-links" class="user-menu">
     <a sec:authorize="hasAnyRole('USER, ADMIN')" id="to-user-menu" th:href="@{/index(ur_page=1)}"
        class="btn menu-btn btn-info center-align">
