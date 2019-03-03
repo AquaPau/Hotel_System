@@ -43,15 +43,15 @@ public class AdminController {
 
         if (unapprovedRequests.getTotalPages() > 0) {
             if (isPageBeyondTotalPages(prq_page, unapprovedRequests))
-                return "redirect:admin?prq_page=" + (prq_page - 1);
+                return "redirect:/admin?prq_page=" + (prq_page - 1);
             model.addAttribute("unapprovedPageNumbers", getPageNumbers(unapprovedRequests));
         }
         if (approvedRequests.getTotalPages() > 0) {
-            if (isPageBeyondTotalPages(arq_page, approvedRequests)) return "redirect:admin?arq_page=" + (arq_page - 1);
+            if (isPageBeyondTotalPages(arq_page, approvedRequests)) return "redirect:/admin?arq_page=" + (arq_page - 1);
             model.addAttribute("approvedPageNumbers", getPageNumbers(approvedRequests));
         }
         if (deniedRequests.getTotalPages() > 0) {
-            if (isPageBeyondTotalPages(drq_page, deniedRequests)) return "redirect:admin?drq_page=" + (drq_page - 1);
+            if (isPageBeyondTotalPages(drq_page, deniedRequests)) return "redirect:/admin?drq_page=" + (drq_page - 1);
             model.addAttribute("deniedPageNumbers", getPageNumbers(deniedRequests));
         }
 
