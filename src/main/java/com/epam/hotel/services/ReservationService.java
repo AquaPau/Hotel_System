@@ -23,4 +23,6 @@ public interface ReservationService {
 
     long countAllApprovedReservations();
 
+    Page<Reservation> findAllReservationsForToday(int page, int size);
+
 }

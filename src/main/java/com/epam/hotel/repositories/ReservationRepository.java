@@ -22,4 +22,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Reserv
     @Query("select count (r) from Reservation r where status <> 'DENIED'")
     long countAllApprovedReservations();
 
+    @Query("select r from Reservation r left join r.request s " +
+            "where ((:today >= s.checkIn and :today <= s.checkOut) and (r.status='PAID'))")
+    List<Reservation> findAllReservationsForToday(@Param("today") Date today);
+
+
 }

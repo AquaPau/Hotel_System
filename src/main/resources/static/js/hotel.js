@@ -56,7 +56,7 @@ function adjustUrl(url, role) {
 function userMenuNavigation(id) {
     setActive(id);
     showElement($('.index-table'), false);
-    const role = "user";
+    const role = "index";
     switch (id) {
         case 'menu-rending':
             showElement($('#unprocessed-requests'), true);
