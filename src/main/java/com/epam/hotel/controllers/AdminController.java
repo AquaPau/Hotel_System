@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 
 import static com.epam.hotel.utils.ControllerHelper.addUserCommonElements;
 import static com.epam.hotel.utils.PaginationHelper.*;
+import static com.epam.hotel.utils.ControllerHelper.addAdminCommonElements;
 
 @Controller
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -37,7 +38,7 @@ public class AdminController {
         limit = getLimit(limit, 5);
 
         Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequests(prq_page, limit);
-        Page<Reservation> approvedRequests = reservationService.getAllReservationsPaged(arq_page, limit);
+        Page<Reservation> approvedRequests = reservationService.getAllApprovedReservationsPaged(arq_page, limit);
         Page<Request> deniedRequests = requestService.getAllPagedDeniedRequests(drq_page, limit);
 
         if (unapprovedRequests.getTotalPages() > 0) {
@@ -82,13 +83,8 @@ public class AdminController {
 
         page = getPage(page);
         limit = getLimit(limit, 8);
-
         Page<User> userList = userService.getAllUsersPaged(page, limit);
-        if (userList.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", getPageNumbers(userList));
-        }
-
-        model.addAttribute("pagedList", userList);
+        addPagedList(userList, model);
         return "users";
     }
 

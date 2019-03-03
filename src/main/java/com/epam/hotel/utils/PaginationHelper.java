@@ -1,6 +1,7 @@
 package com.epam.hotel.utils;
 
 import org.springframework.data.domain.Page;
+import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,6 +10,13 @@ import java.util.stream.IntStream;
 public class PaginationHelper {
 
     private PaginationHelper() {
+    }
+
+    public static void addPagedList(Page<? extends Object> pagedList, Model model) {
+        if (pagedList.getTotalPages() > 0) {
+            model.addAttribute("pageNumbers", getPageNumbers(pagedList));
+        }
+        model.addAttribute("pagedList", pagedList);
     }
 
     public static Integer getPage(Integer page) {

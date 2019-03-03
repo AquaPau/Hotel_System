@@ -30,8 +30,10 @@ public class RoomController {
 
     @GetMapping("/rooms/new")
     public String createRoomForm(Model model) {
+        int newNumber = roomService.findLastNumber() + 1;
         Room room = new Room();
         model.addAttribute("room", room);
+        model.addAttribute("number", newNumber);
         model.addAttribute("headerName", "create");
         model.addAttribute("buttonName", "create");
         return "rooms";

@@ -24,7 +24,6 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query("select r from Request r left join r.deniedRequest s where (s.request=r and s.reason is not null and r.user = :#{#user}) order by r.id desc")
     Page<Request> findDeniedRequestsByUser(@Param("user") User user, Pageable pageable);
 
-
     // all processed requests
     @Query("select r from Request r left join r.reservation s where (s.request=r) order by r.id")
     Page<Request> findAllProcessedRequests(Pageable pageable);

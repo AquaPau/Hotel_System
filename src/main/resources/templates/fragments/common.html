@@ -78,12 +78,12 @@
        class="btn menu-btn btn-info center-align">
         <span th:text="#{message.button.admin-menu}">To admin menu</span>
     </a>
-    <a sec:authorize="hasAnyRole('USER, ADMIN')" id="menu-rooms" th:href="@{/rooms}"
-       class="btn menu-btn btn-info center-align"
-       th:text="#{message.hotel.rooms}">Rooms</a>
     <a sec:authorize="hasAnyRole('USER, ADMIN')" id="menu-newrequest" th:href="@{/request/new}"
        class="btn menu-btn btn-info center-align"
        th:text="#{message.hotel.new-request}">New request</a>
+    <a sec:authorize="hasAnyRole('USER, ADMIN')" id="menu-rooms" th:href="@{/rooms}"
+       class="btn menu-btn btn-info center-align"
+       th:text="#{message.hotel.rooms}">Rooms</a>
     <a sec:authorize="hasRole('ADMIN')" id="menu-newroom" th:href="@{/rooms/new}"
        class="btn menu-btn btn-info center-align"
        th:text="#{message.hotel.new-room}">New room</a>

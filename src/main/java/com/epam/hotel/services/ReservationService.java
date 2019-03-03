@@ -17,10 +17,10 @@ public interface ReservationService {
 
     void deleteById(ReservationId id);
 
-    Page<Reservation> getAllReservationsPaged(int page, int size);
-
-    Page<Reservation> getAllDeniedReservationsPaged(int page, int size);
+    Page<Reservation> getAllApprovedReservationsPaged(int page, int size);
 
     List <Reservation> findAllApprovedReservationOfThePeriodByRequest(Request request);
+
+    long countAllApprovedReservations();
 
 }

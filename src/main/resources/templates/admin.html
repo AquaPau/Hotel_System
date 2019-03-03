@@ -23,7 +23,10 @@
             <div class="card-body">
                 <div th:insert="~{fragments/admin :: admintables}"></div>
             </div>
-            <div class="footer" th:insert="~{fragments/common :: footer}"></div>
+            <div class="footer" th:insert="~{fragments/common :: footer}">
+                <a th:href="@{/index}" th:text="#{message.admin-page.user}" class="btn btn-info float-left">User
+                    menu</a>
+            </div>
         </div>
     </div>
 </div>

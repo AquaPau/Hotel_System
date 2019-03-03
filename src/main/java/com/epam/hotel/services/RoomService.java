@@ -24,4 +24,5 @@ public interface RoomService {
 
     long countAllRooms();
 
+    int findLastNumber();
 }
