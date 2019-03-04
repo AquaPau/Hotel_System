@@ -13,6 +13,8 @@ public interface UserService {
 
     User save(User user);
 
+    User update(User updatedUser, String currentPassword);
+
     void deleteById(Long id);
 
     User findByLogin(String login);
