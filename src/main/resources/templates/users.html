@@ -23,8 +23,10 @@
             <div class="card-body">
                 <h3 id="index-header" class="left"
                     th:text="#{message.admin-page.users}">User management</span></h3>
-                <p class="white" th:if="${pagedList.getTotalPages()==0}" th:text="#{message.admin-page.no-users}">There are no users in database</p>
-                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.not-enough-users}">Not enough users for this page</p>
+                <p class="white" th:if="${pagedList.getTotalPages()==0}" th:text="#{message.admin-page.no-users}">There
+                    are no users in database</p>
+                <p class="white" th:if="${pagedList.hasContent()==false}"
+                   th:text="#{message.admin-page.not-enough-users}">Not enough users for this page</p>
                 <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
                     <thead>
                     <tr>
@@ -85,15 +87,10 @@
                         </li>
                     </ul>
                 </nav>
-
             </div>
             <div class="footer" th:insert="~{fragments/common :: footer}"></div>
         </div>
     </div>
 </div>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script th:src="@{resources/js/hotel.js}"></script>
-
 </body>
 </html>
