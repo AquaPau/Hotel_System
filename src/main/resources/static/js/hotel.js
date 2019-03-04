@@ -127,7 +127,7 @@ function adminMenuNavigation(id) {
 
 function adminUrls() {
     const href = window.location.href.toString();
-    if (href.includes('index')) {
+    if (href.includes('admin')) {
         if (href.includes('prq_page')) {
             adminMenuNavigation('menu-pending');
             return
@@ -235,12 +235,12 @@ function getPrice() {
     var capacityFactor = 0.6;
 
     var price = (basic + basic * capacityIndex * capacityFactor) * Math.pow(classFactor, classIndex);
-    return price.toFixed(2).toString().replace(',','.');
+    return price.toFixed(2).toString().replace(',', '.');
 }
 
 function setInputFilter(textbox, inputFilter) {
-    ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
-        textbox.addEventListener(event, function() {
+    ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function (event) {
+        textbox.addEventListener(event, function () {
             if (inputFilter(this.value)) {
                 this.oldValue = this.value;
                 this.oldSelectionStart = this.selectionStart;
@@ -252,5 +252,7 @@ function setInputFilter(textbox, inputFilter) {
         });
     });
 }
-setInputFilter(document.getElementById("price"), function(value) {
-    return /^-?\d*[.,]?\d{0,2}$/.test(value); });
+
+setInputFilter(document.getElementById("price"), function (value) {
+    return /^-?\d*[.,]?\d{0,2}$/.test(value);
+});

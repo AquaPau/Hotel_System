@@ -35,7 +35,7 @@ public class AdminController {
         prq_page = getPage(prq_page);
         arq_page = getPage(arq_page);
         drq_page = getPage(drq_page);
-        limit = getLimit(limit, 5);
+        limit = getLimit(limit, 2);
 
         Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequests(prq_page, limit);
         Page<Reservation> approvedRequests = reservationService.getAllApprovedReservationsPaged(arq_page, limit);
@@ -104,8 +104,8 @@ public class AdminController {
 
     @GetMapping({"/admin/today-users"})
     public String usersToday(Model model,
-                        @RequestParam(value = "page", required = false) Integer page,
-                        @RequestParam(value = "limit", required = false) Integer limit) {
+                             @RequestParam(value = "page", required = false) Integer page,
+                             @RequestParam(value = "limit", required = false) Integer limit) {
 
         page = getPage(page);
         limit = getLimit(limit, 8);

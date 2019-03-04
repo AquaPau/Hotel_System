@@ -160,7 +160,7 @@
                     <li th:each="approvedPageNumber : ${approvedPageNumbers}" class="page-item"
                         th:classappend="${approvedPageNumber==approvedRequestList.number + 1} ? disabled">
                         <a class="page-link"
-                           th:href="@{/admin(arq_page=${aapprovedPageNumber})}"
+                           th:href="@{/admin(arq_page=${approvedPageNumber})}"
                            th:text="${approvedPageNumber}">
                         </a>
                     </li>
@@ -220,7 +220,7 @@
                     </li>
                     <li class="page-item" th:classappend="${deniedRequestList.isLast()} ? disabled">
                         <a class="page-link"
-                           th:href="@{/deniedrequests(drq_page=${deniedRequestList.number}+2)}"
+                           th:href="@{/admin(drq_page=${deniedRequestList.number}+2)}"
                         >>
                         </a>
                     </li>
