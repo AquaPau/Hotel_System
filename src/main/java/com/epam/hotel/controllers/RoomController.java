@@ -77,6 +77,11 @@ public class RoomController {
 
         model.addAttribute("roomsList", roomList);
         addUserCommonElements(model, user, requestService);
+        long denied = requestService.countAllDeniedRequestForAdmin();
+        long processed = requestService.countAllApprovedRequestForAdmin();
+        long pended = requestService.countAllPendingRequestForAdmin();
+        model.addAttribute("pendedCount", pended);
+        model.addAttribute("approvedCount", processed);
         return "rooms-list";
     }
 

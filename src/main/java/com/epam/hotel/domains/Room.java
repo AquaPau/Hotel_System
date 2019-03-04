@@ -2,17 +2,15 @@ package com.epam.hotel.domains;
 
 import com.epam.hotel.domains.enums.Capacity;
 import com.epam.hotel.domains.enums.ClassID;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 @Entity
+@Data
 public class Room{
 
     @Id

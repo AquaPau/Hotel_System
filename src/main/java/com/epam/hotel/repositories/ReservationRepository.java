@@ -26,4 +26,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Reserv
             "where ((:today >= s.checkIn and :today <= s.checkOut) and (r.status='PAID'))")
     List<Reservation> findAllReservationsForToday(@Param("today") Date today);
 
+
 }
