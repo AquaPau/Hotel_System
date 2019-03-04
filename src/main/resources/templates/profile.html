@@ -23,7 +23,8 @@
                     <h3 class="text-center" th:text="#{message.profile-page.header}">Edit profile</h3>
                 </div>
                 <div>
-                    <h2 hidden="true" class="text-center alert alert-success" id="success" th:text="#{message.success}">Success</h2>
+                    <h2 hidden="true" class="text-center alert alert-success" id="success" th:text="#{message.success}">
+                        Success</h2>
                 </div>
                 <form name="sign-in-form" th:action="@{'/profile/update'}"
                       onsubmit="return validateEditProfileForm()" method="post">
@@ -74,29 +75,40 @@
                                th:placeholder="#{message.profile-page.current-password}" type="password">
                     </div>
 
-                    <p class="white" th:text="#{message.profile-page.edit.new-password}">New password</p>
-                    <div class="login-input-group form-group input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-                        </div>
-                        <input id="pw-input" name="password" th:value="${user.password}" class="form-control"
-                               th:placeholder="#{message.profile-page.new-password}"
-                               type="password">
+                    <div class="form-group">
+                        <input id="change-pass" type="checkbox" checked="checked">
+                        <label class="checkbox-inline" aria-describedby="change-pass"
+                               for="change-pass" th:text="#{message.profile-page.change-password}" readonly>
+                            Change the password
+                        </label>
                     </div>
-                    <p hidden id="pw-error" class="error" th:text="#{message.register-page.error.password}">Password
-                        error</p>
 
-                    <p class="white" th:text="#{message.profile-page.edit.confirm-password}">Confirm password</p>
-                    <div class="login-input-group form-group input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    <div id="new-conf-pas">
+                        <p class="white" th:text="#{message.profile-page.edit.new-password}">New password</p>
+                        <div class="login-input-group form-group input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                            </div>
+                            <input id="pw-input" name="password" th:value="${user.password}" class="form-control"
+                                   th:placeholder="#{message.profile-page.new-password}"
+                                   type="password">
                         </div>
-                        <input id="confirm-input" name="confirm" class="form-control"
-                               th:placeholder="#{message.register-page.repeat-password}"
-                               type="password">
+                        <p hidden id="pw-error" class="error" th:text="#{message.register-page.error.password}">Password
+                            error</p>
+
+                        <p class="white" th:text="#{message.profile-page.edit.confirm-password}">Confirm password</p>
+                        <div class="login-input-group form-group input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                            </div>
+                            <input id="confirm-input" name="confirm" class="form-control"
+                                   th:placeholder="#{message.register-page.repeat-password}"
+                                   type="password">
+                        </div>
+                        <p hidden id="confirm-error" class="error" th:text="#{message.register-page.error.confirm}">
+                            Confirm error</p>
                     </div>
-                    <p hidden id="confirm-error" class="error" th:text="#{message.register-page.error.confirm}">
-                        Confirm error</p>
+
 
                     <div class="login-input-group form-group">
                         <button type="submit" class="btn btn-primary btn-block create-account"
@@ -111,13 +123,20 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script th:src="@{/js/hotel.js}"></script>
-<script> $(document).ready(function () {
-    var params = window.location.search.replace('?','').split('=');
-    if(params[0] == "success" && params[1] == "true") {
-        $("#success").attr("hidden",false);
-        $("#success").fadeOut(3500);
-    }
-
-});</script>
+<script>
+    $(document).ready(function () {
+        var params = window.location.search.replace('?', '').split('=');
+        if (params[0] == "success" && params[1] == "true") {
+            $("#success").attr("hidden", false);
+            $("#success").fadeOut(3500);
+        }
+        $("#change-pass").click();
+    });
+    $("#change-pass").on('click', function () {
+        $("#new-conf-pas").toggle();
+        document.getElementById('pw-input').value = '';
+        document.getElementById('confirm-input').value = '';
+    });
+</script>
 </body>
 </html>
