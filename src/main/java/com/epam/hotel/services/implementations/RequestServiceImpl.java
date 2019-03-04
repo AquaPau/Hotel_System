@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -55,37 +54,65 @@ public class RequestServiceImpl implements RequestService {
 
 
     @Override
-    public Page<Request> getPagedUnprocessedRequestByUser(User user, int page, int size) {
-        return requestRepository.findUnprocessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    public Page<Request> getPagedUnprocessedRequestsByUser(User user, int page, int size) {
+        return requestRepository.findUnprocessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.DESC, "id"));
     }
 
     @Override
-    public Page<Request> getPagedProcessedRequestByUser(User user, int page, int size) {
-        return requestRepository.findProcessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    public Page<Request> getPagedProcessedRequestsByUser(User user, int page, int size) {
+        return requestRepository.getProcessedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.DESC, "id"));
     }
 
     @Override
     public Page<Request> getPagedDeniedRequestsByUser(User user, int page, int size) {
-        return requestRepository.findAllByUserAndDeniedRequestReasonIsNotNull(user, PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+        return requestRepository.findDeniedRequestsByUser(user, PageRequest.of(page - 1, size, Sort.Direction.DESC, "id"));
     }
 
 
     @Override
-    public Page<Request> getAllPagedUnprocessedRequest(int page, int size) {
-        return requestRepository.findAllByReservationIsNullAndDeniedRequestReasonIsNull(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    public Page<Request> getAllPagedUnprocessedRequests(int page, int size) {
+        return requestRepository.findAllUnprocessedRequests(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
     @Override
-    public Page<Request> getAllPagedProcessedRequest(int page, int size) {
-        return requestRepository.findAllByReservationIsNotNull(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    public Page<Request> getAllPagedProcessedRequests(int page, int size) {
+        return requestRepository.findAllProcessedRequests(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
     @Override
     public Page<Request> getAllPagedDeniedRequests(int page, int size) {
-        return requestRepository.findAllByDeniedRequestReasonIsNotNull(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+        return requestRepository.findAllDeniedRequests(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
+    @Override
+    public long countDeniedRequestByUser(User user) {
+        return requestRepository.countDeniedRequestByUser(user);
+    }
 
+    @Override
+    public long countProcessedRequestByUser(User user) {
+        return requestRepository.countProcessedRequestByUser(user);
+    }
+
+    @Override
+    public long countUnprocessedRequestByUser(User user) {
+        return requestRepository.countUnprocessedRequestByUser(user);
+    }
+
+    @Override
+    public long countAllPendingRequestForAdmin() {
+        return requestRepository.countAllPendingRequestForAdmin();
+    }
+
+    @Override
+    public long countAllApprovedRequestForAdmin() {
+        return requestRepository.countAllApprovedRequestForAdmin();
+    }
+
+    @Override
+    public long countAllDeniedRequestForAdmin() {
+        return requestRepository.countAllDeniedRequestForAdmin();
+    }
 
 
 }

@@ -1,25 +1,19 @@
 package com.epam.hotel.controllers;
 
-import com.epam.hotel.domains.DeniedRequest;
-import com.epam.hotel.domains.Request;
-import com.epam.hotel.domains.Reservation;
-import com.epam.hotel.domains.User;
-import com.epam.hotel.services.DenyMessageService;
-import com.epam.hotel.services.RequestService;
-import com.epam.hotel.services.ReservationService;
-import com.epam.hotel.services.UserService;
-import com.epam.hotel.utils.PaginationHelper;
+import com.epam.hotel.domains.*;
+import com.epam.hotel.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
+import javax.persistence.criteria.CriteriaBuilder;
+
+import static com.epam.hotel.utils.ControllerHelper.addUserCommonElements;
+import static com.epam.hotel.utils.PaginationHelper.*;
+import static com.epam.hotel.utils.ControllerHelper.addAdminCommonElements;
 
 @Controller
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -28,73 +22,50 @@ public class AdminController {
     private final RequestService requestService;
     private final ReservationService reservationService;
     private final DenyMessageService denyMessageService;
+    private final RoomService roomService;
     private final UserService userService;
 
-    @GetMapping({"/admin"})
-    public String index(Model model, Principal principal,
-                        @RequestParam(value = "page", required = false) Integer page,
+    @GetMapping({"/admin", "admin"})
+    public String index(Model model,
+                        @RequestParam(value = "prq_page", required = false) Integer prq_page,
+                        @RequestParam(value = "arq_page", required = false) Integer arq_page,
+                        @RequestParam(value = "drq_page", required = false) Integer drq_page,
                         @RequestParam(value = "limit", required = false) Integer limit) {
 
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (limit == null || limit < 1) {
-            limit = 5;
-        }
+        prq_page = getPage(prq_page);
+        arq_page = getPage(arq_page);
+        drq_page = getPage(drq_page);
+        limit = getLimit(limit, 2);
 
-        Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequest(page, limit);
+        Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequests(prq_page, limit);
+        Page<Reservation> approvedRequests = reservationService.getAllApprovedReservationsPaged(arq_page, limit);
+        Page<Request> deniedRequests = requestService.getAllPagedDeniedRequests(drq_page, limit);
 
         if (unapprovedRequests.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", PaginationHelper.getPageNumber(unapprovedRequests));
+            if (isPageBeyondTotalPages(prq_page, unapprovedRequests))
+                return "redirect:/admin?prq_page=" + (prq_page - 1);
+            model.addAttribute("unapprovedPageNumbers", getPageNumbers(unapprovedRequests));
         }
-
-        model.addAttribute("pagedList", unapprovedRequests);
-        return "admin";
-    }
-
-    @GetMapping({"/admin/approved-requests"})
-    public String approvedRequests(Model model, Principal principal,
-                                   @RequestParam(value = "page", required = false) Integer page,
-                                   @RequestParam(value = "limit", required = false) Integer limit) {
-
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (limit == null || limit < 1) {
-            limit = 5;
-        }
-
-        Page<Reservation> approvedRequests = reservationService.getAllReservationsPaged(page, limit);
-        System.out.println(approvedRequests.getTotalPages());
-
         if (approvedRequests.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", PaginationHelper.getPageNumber(approvedRequests));
+            if (isPageBeyondTotalPages(arq_page, approvedRequests)) return "redirect:/admin?arq_page=" + (arq_page - 1);
+            model.addAttribute("approvedPageNumbers", getPageNumbers(approvedRequests));
         }
-
-        model.addAttribute("pagedList", approvedRequests);
-        return "approved-requests";
-    }
-
-    @GetMapping({"/admin/denied-requests"})
-    public String deniedRequests(Model model, Principal principal,
-                                 @RequestParam(value = "page", required = false) Integer page,
-                                 @RequestParam(value = "limit", required = false) Integer limit) {
-
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (limit == null || limit < 1) {
-            limit = 5;
-        }
-
-        Page<Request> deniedRequests = requestService.getAllPagedDeniedRequests(page, limit);
-
         if (deniedRequests.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", PaginationHelper.getPageNumber(deniedRequests));
+            if (isPageBeyondTotalPages(drq_page, deniedRequests)) return "redirect:/admin?drq_page=" + (drq_page - 1);
+            model.addAttribute("deniedPageNumbers", getPageNumbers(deniedRequests));
         }
 
-        model.addAttribute("pagedList", deniedRequests);
-        return "denied-requests";
+        model.addAttribute("unapprovedRequestList", unapprovedRequests);
+        model.addAttribute("approvedRequestList", approvedRequests);
+        model.addAttribute("deniedRequestList", deniedRequests);
+        long denied = requestService.countAllDeniedRequestForAdmin();
+        long processed = requestService.countAllApprovedRequestForAdmin();
+        long pended = requestService.countAllPendingRequestForAdmin();
+
+        model.addAttribute("deniedCount", denied);
+        model.addAttribute("pendedCount", pended);
+        model.addAttribute("approvedCount", processed);
+        return "admin";
     }
 
     @PostMapping("/admin/deny")
@@ -106,26 +77,39 @@ public class AdminController {
     }
 
     @GetMapping({"/admin/users"})
-    public String users(Model model, Principal principal,
+    public String users(Model model,
                         @RequestParam(value = "page", required = false) Integer page,
                         @RequestParam(value = "limit", required = false) Integer limit) {
 
-        if (page == null || page < 1) {
-            page = 1;
-        }
-        if (limit == null || limit < 1) {
-            limit = 8;
-        }
-
-        Page<User> userList = userService.getAllUsersPaged(page, limit);
-        System.out.println(userList.getTotalPages());
-
-        if (userList.getTotalPages() > 0) {
-            model.addAttribute("pageNumbers", PaginationHelper.getPageNumber(userList));
-        }
-
-        model.addAttribute("pagedList", userList);
+        page = getPage(page);
+        limit = getLimit(limit, 8);
+        addPagedList(userService.getAllUsersPaged(page, limit), model);
         return "users";
     }
 
+    @GetMapping("admin/users/delete/{id}")
+    public String deleteUser(@PathVariable String id,
+                             @RequestParam(value = "page", required = false) Integer page) {
+
+        userService.deleteById(Long.valueOf(id));
+        return "redirect:/admin/users?page=" + page;
+    }
+
+    @GetMapping("admin/users/block/{id}")
+    public String blockUser(@PathVariable String id,
+                            @RequestParam(value = "page", required = false) Integer page) {
+        userService.changeUserBlockForId(Long.valueOf(id));
+        return "redirect:/admin/users?page=" + page;
+    }
+
+    @GetMapping({"/admin/today-users"})
+    public String usersToday(Model model,
+                             @RequestParam(value = "page", required = false) Integer page,
+                             @RequestParam(value = "limit", required = false) Integer limit) {
+
+        page = getPage(page);
+        limit = getLimit(limit, 8);
+        addPagedList(reservationService.findAllReservationsForToday(page, limit), model);
+        return "today-users";
+    }
 }

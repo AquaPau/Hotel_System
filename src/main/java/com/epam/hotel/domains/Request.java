@@ -51,4 +51,9 @@ public class Request {
         deniedRequest.setRequest(this);
         this.setDeniedRequest(deniedRequest);
     }
+
+    public void addReservation(Reservation reservation) {
+        reservation.setRequest(this);
+        this.setReservation(reservation);
+    }
 }

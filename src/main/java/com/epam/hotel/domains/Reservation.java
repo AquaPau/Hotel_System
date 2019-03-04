@@ -6,6 +6,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+import static com.epam.hotel.utils.BookingHelper.countTotalPrice;
+
 @Getter
 @Setter
 @Entity
@@ -34,5 +36,8 @@ public class Reservation {
         this.request = request;
     }
 
+    public Reservation(ReservationId reservationId) {
+        this.id = reservationId;
+    }
 }
 

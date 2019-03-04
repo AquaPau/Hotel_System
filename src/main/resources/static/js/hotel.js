@@ -41,6 +41,118 @@ function validate(elem, matcher, error) {
     }
 }
 
+function setActive(id) {
+    $('.menu-btn').removeClass("menu-active");
+    $('#' + id).addClass('menu-active');
+}
+
+function adjustUrl(url, role) {
+    const href = window.location.href.toString();
+    if (!href.includes(url)) {
+        window.history.pushState("", "", `/${role}?${url}`);
+    }
+}
+
+function userMenuNavigation(id) {
+    setActive(id);
+    showElement($('.index-table'), false);
+    const role = "index";
+    switch (id) {
+        case 'menu-rending':
+            showElement($('#unprocessed-requests'), true);
+            adjustUrl('ur_page', role);
+            break;
+        case 'menu-approved':
+            showElement($('#processed-requests'), true);
+            adjustUrl('pr_page', role);
+            break;
+        case 'menu-denied':
+            showElement($('#denied-requests'), true);
+            adjustUrl('dr_page', role);
+            break;
+    }
+}
+
+function indexUrls() {
+    var href = window.location.href.toString();
+    if (href.includes('index')) {
+        if (href.includes('ur_page')) {
+            userMenuNavigation('menu-rending');
+            return
+        }
+        if (href.includes('pr_page')) {
+            userMenuNavigation('menu-approved');
+            return
+        }
+        if (href.includes('dr_page')) {
+            userMenuNavigation('menu-denied');
+            return
+        }
+        userMenuNavigation('menu-rending');
+    }
+    if (href.includes('rooms')) {
+        userMenuNavigation('menu-rooms');
+        return
+    }
+    if (href.includes('request/new')) {
+        userMenuNavigation('menu-newrequest');
+        return
+    }
+
+}
+
+function adminMenuNavigation(id) {
+    setActive(id);
+    showElement($('.index-table'), false);
+    const role = "admin";
+    switch (id) {
+        case 'menu-pending':
+            showElement($('#pending-requests'), true);
+            adjustUrl('prq_page', role);
+            break;
+        case 'menu-approved':
+            showElement($('#approved-requests'), true);
+            adjustUrl('arq_page', role);
+            break;
+        case 'menu-denied':
+            showElement($('#denied-requests'), true);
+            adjustUrl('drq_page', role);
+            break;
+        case 'menu-rooms':
+            showElement($('#room-list'), true);
+            adjustUrl('rl_page', role);
+            break;
+    }
+}
+
+function adminUrls() {
+    const href = window.location.href.toString();
+    if (href.includes('admin')) {
+        if (href.includes('prq_page')) {
+            adminMenuNavigation('menu-pending');
+            return
+        }
+        if (href.includes('arq_page')) {
+            adminMenuNavigation('menu-approved');
+            return
+        }
+        if (href.includes('drq_page')) {
+            adminMenuNavigation('menu-denied');
+            return
+        }
+        adminMenuNavigation('menu-pending');
+    }
+    if (href.includes('rooms')) {
+        adminMenuNavigation('menu-rooms');
+        return
+    }
+    if (href.includes('rooms/new')) {
+        adminMenuNavigation('menu-newroom');
+        return
+    }
+
+}
+
 function setFieldErrorColor(elem, flag) {
     if (flag) {
         elem.css({border: '2px solid #ff5a5a', backgroundColor: '#ffc6c6'});
@@ -95,6 +207,11 @@ function validateLoginPage() {
     }
 }
 
+function showDenyPopup(flag, id) {
+    showElement($('#deny-div-' + id), flag);
+    showElement($('#deny-a-' + id), !flag);
+}
+
 function showPaymentMessage(flag) {
     showElement($('#payment'), flag);
 }
@@ -104,3 +221,38 @@ function back() {
 }
 
 $(".datepicker").datepicker({dateFormat: 'mm/dd/yy'});
+
+$(".price-changer").change(function () {
+    $('#price').val(getPrice());
+});
+
+function getPrice() {
+    var classIndex = document.getElementById('selClass').selectedIndex;
+    var capacityIndex = document.getElementById('selCapacity').selectedIndex;
+
+    var basic = 15;
+    var classFactor = 1.5;
+    var capacityFactor = 0.6;
+
+    var price = (basic + basic * capacityIndex * capacityFactor) * Math.pow(classFactor, classIndex);
+    return price.toFixed(2).toString().replace(',', '.');
+}
+
+function setInputFilter(textbox, inputFilter) {
+    ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function (event) {
+        textbox.addEventListener(event, function () {
+            if (inputFilter(this.value)) {
+                this.oldValue = this.value;
+                this.oldSelectionStart = this.selectionStart;
+                this.oldSelectionEnd = this.selectionEnd;
+            } else if (this.hasOwnProperty("oldValue")) {
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+            }
+        });
+    });
+}
+
+setInputFilter(document.getElementById("price"), function (value) {
+    return /^-?\d*[.,]?\d{0,2}$/.test(value);
+});

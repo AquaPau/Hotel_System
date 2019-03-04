@@ -1,5 +1,6 @@
 package com.epam.hotel.services;
 
+import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
 import com.epam.hotel.domains.ReservationId;
 import org.springframework.data.domain.Page;
@@ -16,8 +17,12 @@ public interface ReservationService {
 
     void deleteById(ReservationId id);
 
-    Page<Reservation> getAllReservationsPaged(int page, int size);
+    Page<Reservation> getAllApprovedReservationsPaged(int page, int size);
 
-    Page<Reservation> getAllDeniedReservationsPaged(int page, int size);
+    List <Reservation> findAllApprovedReservationOfThePeriodByRequest(Request request);
+
+    long countAllApprovedReservations();
+
+    Page<Reservation> findAllReservationsForToday(int page, int size);
 
 }

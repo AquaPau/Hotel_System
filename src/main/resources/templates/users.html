@@ -23,23 +23,40 @@
                     th:text="#{message.admin-page.users}">User management</span></h3>
             </div>
             <div class="card-body">
-                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.no-users}">There are no users in database</p>
+                <p class="white" th:if="${pagedList.getTotalPages()==0}" th:text="#{message.admin-page.no-users}">There are no users in database</p>
+                <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.not-enough-users}">Not enough users for this page</p>
                 <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col" th:text="#{message.hotel.login}">Login</th>
                         <th scope="col" th:text="#{message.hotel.permission}">Permission</th>
                         <th scope="col" th:text="#{message.hotel.firstname}">Name</th>
                         <th scope="col" th:text="#{message.hotel.lastname}">Last name</th>
+                        <th scope="col" th:text="#{message.block}">Block</th>
+                        <th scope="col" th:text="#{message.delete}">Delete</th>
                     </tr>
                     </thead>
                     <tbody>
                     <th:block th:each="user : ${pagedList}">
                         <tr>
                             <th th:text="${user.id}" scope="row">1</th>
+                            <td th:text="${user.login}"></td>
                             <td th:text="#{'message.permission.'+${user.permission}}"></td>
                             <td th:text="${user.firstName}"></td>
                             <td th:text="${user.lastName}"></td>
+                            <td>
+                                <a th:if="${user.permission.toString()=='USER'}"
+                                   th:href="@{'users/block/'+${user.id}+'?page='+${pagedList.number+1}}"
+                                   th:text="#{'message.blockstatus.'+${user.block.toString()}}"
+                                   class="btn btn-dark">Block</a>
+                            </td>
+                            <td>
+                                <a th:if="${user.permission.toString()=='USER'}"
+                                   th:href="@{'users/delete/'+${user.id}+'?page='+${pagedList.number+1}}"
+                                   th:text="#{message.delete}"
+                                   class="btn btn-dark">Delete</a>
+                            </td>
                         </tr>
                     </th:block>
                     </tbody>
@@ -49,20 +66,20 @@
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${pagedList.isFirst()} ? disabled">
                             <a class="page-link"
-                               th:href="@{/users(page=${pagedList.number})}"
+                               th:href="@{users(page=${pagedList.number})}"
                                tabindex="-1"><
                             </a>
                         </li>
                         <li th:each="pageNumber : ${pageNumbers}" class="page-item"
                             th:classappend="${pageNumber==pagedList.number + 1} ? disabled">
                             <a class="page-link"
-                               th:href="@{/users(page=${pageNumber})}"
+                               th:href="@{users(page=${pageNumber})}"
                                th:text="${pageNumber}">
                             </a>
                         </li>
                         <li class="page-item" th:classappend="${pagedList.isLast()} ? disabled">
                             <a class="page-link"
-                               th:href="@{/users(page=${pagedList.number}+2)}"
+                               th:href="@{users(page=${pagedList.number}+2)}"
                             >>
                             </a>
                         </li>
@@ -74,8 +91,12 @@
                 <a th:href="@{/admin}" th:text="#{message.admin-page.back-to-admin}" class="btn btn-info float-left">Back to admin menu</a>
                 <div class="text-center">
                     <span th:text="#{message.change-language}+': '"></span>
-                    <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
-                    <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+                    <a th:href="@{'/language?lang=en'}">
+                        <img width="35px" th:src="@{/images/en.png}" th:alt="#{message.locale.en}">
+                    </a> <span> /</span>
+                    <a th:href="@{'/language?lang=ru'}">
+                        <img width="35px" th:src="@{/images/ru.png}" th:alt="#{message.locale.ru}">
+                    </a>
                 </div>
             </div>
         </div>

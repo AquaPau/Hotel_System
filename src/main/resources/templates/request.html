@@ -16,10 +16,13 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
+            <div th:insert="~{fragments/common :: header}"></div>
+            <div th:insert="~{fragments/common :: panel-links}"></div>
             <article class="card-body mx-auto" style="max-width: 400px;">
                 <div>
                     <h3 class="text-center" th:text="#{'message.request-page.header.'+${header}}"></h3>
                 </div>
+
                 <form onsubmit="return calendarValidate()" th:object="${request}" th:action="@{/request/save}"
                       method="post">
 
@@ -76,28 +79,16 @@
                     </div>
                     <input hidden class="form-control" type="text" th:field="*{id}"/>
                     <input hidden class="form-control" type="text" th:field="*{deniedRequest}"/>
-                    <div class="form-group">
+                    <div id="request-action-button" class="form-group">
                         <button type="submit" class="btn btn-primary btn-block"
                                 th:text="#{'message.'+${buttonName}}"></button>
                     </div>
                 </form>
-                <div class="center-align">
-                    <a onclick="back()" class="btn btn-dark" th:text="#{message.back}">Back</a>
-                </div>
+
             </article>
-            <div class="text-center">
-                <span th:text="#{message.change-language}+': '"></span>
-                <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
-                <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
-            </div>
+            <div class="footer" th:insert="~{fragments/common :: footer}"></div>
         </div>
     </div>
 </div>
-
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script th:src="@{/js/hotel.js}"></script>
 </body>
 </html>

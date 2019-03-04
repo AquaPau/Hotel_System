@@ -14,7 +14,7 @@
 <body>
 <div class="container">
     <div class="d-flex justify-content-center h-100">
-        <div class="card">
+        <div class="card-login">
             <div>
                 <h3 id="login-header" class="text-center" th:text="#{message.login-page.header}">Sign In</h3>
             </div>
@@ -37,20 +37,22 @@
                         <p hidden th:text="#{message.login-page.error}" id="lgn-error" class="error text-center">error</p>
                     </div>
 
-                    <div class="center-align form-group">
+                    <div class="center-align form-group ">
                         <input type="submit" th:value="#{message.login-page.button}" class="btn login_btn">
                     </div>
                 </form>
-            </div>
-            <div class="card-footer">
-                <div class="d-flex justify-content-center links">
-                    <span th:text="#{message.login-page.signup.text}"></span><a
-                        th:text="#{message.login-page.signup.link}" id="signup" href="/register">Sign Up</a>
+                <div id="register-haveacc" class="d-flex justify-content-center links">
+                    <span th:text="#{message.login-page.signup.text}+' '"></span><a
+                        th:text="' '+#{message.login-page.signup.link}" id="signup" href="/register">Sign Up</a>
                 </div>
                 <div class="text-center">
                     <span th:text="#{message.change-language}+': '"></span>
-                    <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
-                    <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
+                    <a th:href="@{'/language?lang=en'}">
+                        <img width="35px" th:src="@{/images/en.png}" th:alt="#{message.locale.en}">
+                    </a> <span> /</span>
+                    <a th:href="@{'/language?lang=ru'}">
+                        <img width="35px" th:src="@{/images/ru.png}" th:alt="#{message.locale.ru}">
+                    </a>
                 </div>
             </div>
         </div>

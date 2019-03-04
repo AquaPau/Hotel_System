@@ -10,3 +10,4 @@ gradle
 build
 logs
 hotel_log.log
+logfile.log

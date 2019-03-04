@@ -2,19 +2,16 @@ package com.epam.hotel.domains;
 
 import com.epam.hotel.domains.enums.Capacity;
 import com.epam.hotel.domains.enums.ClassID;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 @Entity
-public class Room implements Comparable<Room> {
+@Data
+public class Room{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,13 +35,6 @@ public class Room implements Comparable<Room> {
     private List<Reservation> reservations = new ArrayList<>();
 
     private BigDecimal price;
-
-    @Override
-    public int compareTo(@NotNull Room room) {
-        if (this.id == room.id) return 0;
-        else if (this.id < room.id) return -1;
-        return 1;
-    }
 
 }
 

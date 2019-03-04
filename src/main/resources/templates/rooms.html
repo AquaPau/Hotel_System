@@ -2,31 +2,36 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 <head>
-    <title>Hotel System</title>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.ico}"/>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
           integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
+            <div th:insert="~{fragments/common :: header}"></div>
+            <div th:insert="~{fragments/common :: panel-links}"></div>
             <article class="card-body mx-auto" style="max-width: 400px;">
                 <div class="card-header">
                     <h3 class="text-center" th:text="#{'message.rooms-page.header.' + ${headerName}}"></h3>
                 </div>
-                <form th:object="${room}" th:action="@{/rooms/save}" method="post">
+                <form th:object="${room}" th:action="@{'/rooms/save'}" method="post">
 
                     <p class="white" th:text="#{message.rooms-page.insert.roomnumber}">Insert room number:</p>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-key"></i> </span>
                         </div>
-                        <input th:field="*{roomNumber}" name="roomNumber" type="number" class="form-control">
+                        <input th:if="${room.getId()!=0}" th:field="*{number}" name="number" type="number"
+                               class="form-control">
+                        <input th:if="${room.getId()==0}" th:value="${number}" name="number" id="number" type="number"
+                               class="form-control">
                     </div>
                     <p class="white" th:text="#{message.rooms-page.select.class}">Select class:</p>
                     <div class="form-group input-group">
@@ -34,7 +39,7 @@
                             <span class="input-group-text"> <i class="fa fa-bed"></i> </span>
                         </div>
 
-                        <select th:field="*{classID}" class="form-control" id="selClass">
+                        <select th:field="*{classID}" class="form-control price-changer" id="selClass">
                             <option th:each="classIDValue : ${T(com.epam.hotel.domains.enums.ClassID).values()}"
                                     th:value="${classIDValue.name()}"
                                     th:text="#{'message.class.'+ ${classIDValue.name()}}">
@@ -47,7 +52,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"> <i class="fa fa-users"></i> </span>
                         </div>
-                        <select th:field="*{capacity}" class="form-control" id="selCapacity">
+                        <select th:field="*{capacity}" class="form-control price-changer" id="selCapacity">
 
                             <option th:each="capacityValue : ${T(com.epam.hotel.domains.enums.Capacity).values()}"
                                     th:value="${capacityValue.name()}"
@@ -57,29 +62,22 @@
                     </div>
 
                     <p class="white" th:text="#{message.rooms-page.insert.price}">Insert price:</p>
-                    <div class="input-group form-group">
+                    <div class="input-group form-group price-div">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-credit-card"></i> </span>
                         </div>
-                        <input th:field="*{price}" name="price" type="number" class="form-control">
+                        <span id="dollar">$</span>
+                        <input th:field="*{price}" name="price" type="text" class="form-control price-input">
                     </div>
-                    <input hidden class="form-control" type="text" th:field="*{roomID}">
+                    <input hidden class="form-control" type="text" th:field="*{id}">
 
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block"
+                        <button type="submit" class="request-action-button btn btn-primary btn-block"
                                 th:text="#{'message.rooms-page.button.' + ${buttonName}}"></button>
                     </div>
                 </form>
-                <div>
-                </div>
-                <a th:href="@{/roomseditor/}" class="btn btn-dark btn-block"
-                   th:text="#{message.rooms-page.button.back}">Back to the list of rooms</a>
             </article>
-            <div class="text-center">
-                <span th:text="#{message.change-language}+': '"></span>
-                <a th:href="@{'/language?lang=en'}" th:text="#{message.locale.en}"></a><span> /</span>
-                <a th:href="@{'/language?lang=ru'}" th:text="#{message.locale.ru}"></a>
-            </div>
+            <div class="footer" th:insert="~{fragments/common :: footer}"></div>
         </div>
     </div>
 </div>
@@ -87,6 +85,6 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script th:src="@{/resources/js/hotel.js}"></script>
+<script th:src="@{/js/hotel.js}"></script>
 </body>
 </html>
