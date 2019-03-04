@@ -75,6 +75,7 @@
                     </tbody>
                 </table>
                 <div class="reserv-buttons" th:if="${request.reservation.status.name()=='BILLSENT'}">
+
                     <a onclick="showPaymentMessage(true)" class="btn pay_btn float-right"
                        th:text="#{message.pay}+': $'+${request.reservation.totalPrice}">pay</a>
                 </div>

@@ -32,7 +32,7 @@
 
 <div th:fragment="footer" class="card-footer">
     <div>
-        <input onclick="back()" class="btn header-button btn-dark" th:value="#{message.back}"/>
+        <a onclick="back()" class="btn header-button btn-dark" th:text="#{message.back}"></a>
         <a id="toAdminPage"
            th:if="${#httpServletRequest.requestURI == '/index' || #httpServletRequest.requestURI == '/'
            || #httpServletRequest.requestURI == '/index/rooms'
