@@ -94,7 +94,11 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public int findLastNumber() {
-        return roomRepository.findLastNumber();
+        try {
+            return roomRepository.findLastNumber();
+        } catch (Exception ignored) {
+            return 0;
+        }
     }
 
 
