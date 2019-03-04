@@ -21,9 +21,9 @@ public class ControllerHelper {
     }
 
     public static void addAdminCommonElements(Model model, RequestService requestService, ReservationService reservationService) {
-        long denied = requestService.countDeniedRequests();
+        long denied = requestService.countAllDeniedRequestForAdmin();
         long approved = reservationService.countAllApprovedReservations();
-        long unapproved = requestService.countUnprocessedRequests();
+        long unapproved = requestService.countAllPendingRequestForAdmin();
 
         model.addAttribute("unapprovedCount", unapproved);
         model.addAttribute("approvedCount", approved);

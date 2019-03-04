@@ -46,13 +46,15 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query("select count (r) from Request r left join r.deniedRequest s where (s.request=r and s.reason is not null and r.user = :#{#user})")
     long countDeniedRequestByUser(@Param("user") User user);
 
-    // count all unprocessed requests
     @Query("select count (r) from Request r left join r.reservation s where (s.request is null and r.deniedRequest.reason is null)")
-    long countAllUnprocessedRequests();
+    long countAllPendingRequestForAdmin();
 
-    // count all denied requests
+    @Query("select count (r) from Request r left join r.reservation s where (s.request=r)")
+    long countAllApprovedRequestForAdmin();
+
     @Query("select count (r) from Request r left join r.deniedRequest s where (s.request=r and s.reason is not null)")
-    long countAllDeniedRequests();
+    long countAllDeniedRequestForAdmin();
+
 
 
 }
