@@ -70,6 +70,11 @@ public class RoomServiceImpl implements RoomService {
         return new PageImpl<>(collect, PageRequest.of(page - 1, limit), collect.size());
     }
 
+    @Override
+    public long countAllRooms() {
+        return roomRepository.countAllRooms();
+    }
+
     private Comparator<Room> getComparator(Request request) {
         return (r1, r2) -> {
             for (int i = 0; i < 3; i++) {
@@ -89,7 +94,11 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public int findLastNumber() {
-        return roomRepository.findLastNumber();
+        try {
+            return roomRepository.findLastNumber();
+        } catch (Exception ignored) {
+            return 0;
+        }
     }
 
 
