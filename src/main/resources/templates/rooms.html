@@ -16,12 +16,11 @@
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div th:insert="~{fragments/common :: header}"></div>
-            <div th:insert="~{fragments/common :: panel-links}"></div>
+            <div id="userpanel-links" hidden th:insert="~{fragments/user :: userpanel-links}"></div>
+            <div id="adminpanel-links" hidden th:insert="~{fragments/admin :: adminpanel-links}"></div>
             <article class="card-body mx-auto" style="max-width: 400px;">
-                <div class="card-header">
-                    <h3 class="text-center" th:text="#{'message.rooms-page.header.' + ${headerName}}"></h3>
-                </div>
-                <form th:object="${room}" th:action="@{'/rooms/save'}" method="post">
+                <h3 class="text-center" th:text="#{'message.rooms-page.header.' + ${headerName}}"></h3>
+                <form th:object="${room}" th:action="@{/admin/rooms/save}" method="post">
 
                     <p class="white" th:text="#{message.rooms-page.insert.roomnumber}">Insert room number:</p>
                     <div class="input-group form-group">
@@ -81,10 +80,5 @@
         </div>
     </div>
 </div>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script th:src="@{/js/hotel.js}"></script>
 </body>
 </html>

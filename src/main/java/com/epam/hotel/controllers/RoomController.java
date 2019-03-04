@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 import static com.epam.hotel.utils.ControllerHelper.addUserCommonElements;
@@ -28,7 +29,7 @@ public class RoomController {
     private final ReservationService reservationService;
     private final UserService userService;
 
-    @GetMapping("/rooms/new")
+    @GetMapping("/admin/rooms/new")
     public String createRoomForm(Model model) {
         int newNumber = roomService.findLastNumber() + 1;
         Room room = new Room();
@@ -39,13 +40,13 @@ public class RoomController {
         return "rooms";
     }
 
-    @PostMapping("/rooms/save")
+    @PostMapping("/admin/rooms/save")
     public String createRoom(@ModelAttribute("room") Room room) {
         roomService.save(room);
-        return "redirect:/rooms";
+        return "redirect:/admin/rooms";
     }
 
-    @GetMapping("/rooms/edit/{id}")
+    @GetMapping("/admin/rooms/edit/{id}")
     public String editRoom(@PathVariable String id, Model model) {
         Room room = roomService.findById(new Long(id));
         model.addAttribute("room", room);
@@ -54,18 +55,21 @@ public class RoomController {
         return "rooms";
     }
 
-    @GetMapping("/rooms/delete/{id}")
-    public String deleteRoom(@PathVariable String id) {
+    @GetMapping("/admin/rooms/delete/{id}")
+    public String deleteRoom(@PathVariable String id, HttpServletRequest request) {
         roomService.deleteById(new Long(id));
-        return "redirect:/rooms";
+        return "redirect:" + request.getHeader("Referer");
     }
 
-    @GetMapping("/rooms")
+    @GetMapping({"index/rooms", "admin/rooms"})
     public String roomsTable(@RequestParam(value = "page", required = false) Integer page,
                              @RequestParam(value = "limit", required = false) Integer limit,
-                             Model model, Principal principal) {
+                             Model model, Principal principal,
+                             HttpServletRequest httpRequest) {
+
 
         User user = userService.findByLogin(principal.getName());
+
 
         page = getPage(page);
         limit = getLimit(limit, 7);
@@ -74,6 +78,14 @@ public class RoomController {
         if (roomList.getTotalPages() > 0) {
             model.addAttribute("pageNumbers", getPageNumbers(roomList));
         }
+
+        if (roomList.getTotalPages() > 0) {
+            String requestURI = httpRequest.getRequestURI();
+            String role = requestURI.contains("admin") ? "admin" : "index";
+            if (isPageBeyondTotalPages(page, roomList)) return "redirect:/" + role + "/rooms?page=" + (page - 1);
+            model.addAttribute("unprocessedPageNumbers", getPageNumbers(roomList));
+        }
+
 
         model.addAttribute("roomsList", roomList);
         addUserCommonElements(model, user, requestService);

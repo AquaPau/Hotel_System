@@ -2,6 +2,7 @@ package com.epam.hotel.controllers;
 
 import com.epam.hotel.domains.*;
 import com.epam.hotel.services.*;
+import com.epam.hotel.utils.ControllerHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ public class AdminController {
     private final DenyMessageService denyMessageService;
     private final RoomService roomService;
     private final UserService userService;
+    private static ControllerHelper controllerHelper;
 
     @GetMapping({"/admin", "admin"})
     public String index(Model model,
@@ -35,7 +37,7 @@ public class AdminController {
         prq_page = getPage(prq_page);
         arq_page = getPage(arq_page);
         drq_page = getPage(drq_page);
-        limit = getLimit(limit, 2);
+        limit = getLimit(limit, 5);
 
         Page<Request> unapprovedRequests = requestService.getAllPagedUnprocessedRequests(prq_page, limit);
         Page<Reservation> approvedRequests = reservationService.getAllApprovedReservationsPaged(arq_page, limit);
@@ -58,13 +60,7 @@ public class AdminController {
         model.addAttribute("unapprovedRequestList", unapprovedRequests);
         model.addAttribute("approvedRequestList", approvedRequests);
         model.addAttribute("deniedRequestList", deniedRequests);
-        long denied = requestService.countAllDeniedRequestForAdmin();
-        long processed = requestService.countAllApprovedRequestForAdmin();
-        long pended = requestService.countAllPendingRequestForAdmin();
-
-        model.addAttribute("deniedCount", denied);
-        model.addAttribute("pendedCount", pended);
-        model.addAttribute("approvedCount", processed);
+        controllerHelper.addAdminCommonElements(model, requestService, reservationService);
         return "admin";
     }
 
