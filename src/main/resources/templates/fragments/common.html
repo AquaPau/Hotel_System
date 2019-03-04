@@ -32,7 +32,7 @@
 
 <div th:fragment="footer" class="card-footer">
     <div>
-        <a onclick="back()" class="btn header-button btn-dark" th:text="#{message.back}"></a>
+        <input onclick="back()" class="btn header-button btn-dark" th:value="#{message.back}"/>
         <a id="toAdminPage"
            th:if="${#httpServletRequest.requestURI == '/index' || #httpServletRequest.requestURI == '/'
            || #httpServletRequest.requestURI == '/index/rooms'
@@ -41,7 +41,8 @@
            th:href="@{/admin}" class="btn header-button btn-dark rightContainer">Admin</a>
         <a id="toUserPage" th:if="${#httpServletRequest.requestURI == '/admin'
         || #httpServletRequest.requestURI == '/admin/rooms'
-        || #httpServletRequest.requestURI == '/admin/rooms/new'}"
+        || #httpServletRequest.requestURI == '/admin/rooms/new'
+        || #httpServletRequest.requestURI == '/admin/rooms/newsuitable-rooms'}"
            sec:authorize="hasRole('ADMIN')" th:text="#{message.admin-page.user}"
            th:href="@{/index}" class="btn header-button btn-dark rightContainer">Admin</p>
         </a>
@@ -52,7 +53,9 @@
            th:text="#{message.roomslist-page.button.home}"
            th:href="@{/index}" class="btn header-button btn-dark rightContainer">Home</p>
         </a>
-        <a id="userEditor" th:if="${#httpServletRequest.requestURI == '/admin'}"
+        <a id="userEditor" th:if="${#httpServletRequest.requestURI == '/admin'
+        || #httpServletRequest.requestURI == 'admin/rooms/new'
+        || #httpServletRequest.requestURI == '/admin/rooms'}"
            sec:authorize="hasRole('ADMIN')" th:text="#{message.admin-page.usersmenu}"
            th:href="@{/admin/users}" class="btn header-button btn-dark rightContainer">Edit users</a>
         <a th:href="@{/admin/today-users}" sec:authorize="hasRole('ADMIN')"

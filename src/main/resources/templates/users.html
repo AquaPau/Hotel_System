@@ -18,11 +18,11 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-            <div class="card-header">
-                <h3 id="index-header" class="text-center"
-                    th:text="#{message.admin-page.users}">User management</span></h3>
-            </div>
+            <div th:insert="~{fragments/common :: header}"></div>
+            <div id="adminpanel-links" th:insert="~{fragments/admin :: adminpanel-links}"></div>
             <div class="card-body">
+                <h3 id="index-header" class="left"
+                    th:text="#{message.admin-page.users}">User management</span></h3>
                 <p class="white" th:if="${pagedList.getTotalPages()==0}" th:text="#{message.admin-page.no-users}">There are no users in database</p>
                 <p class="white" th:if="${pagedList.hasContent()==false}" th:text="#{message.admin-page.not-enough-users}">Not enough users for this page</p>
                 <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
@@ -87,18 +87,7 @@
                 </nav>
 
             </div>
-            <div class="card-footer">
-                <a th:href="@{/admin}" th:text="#{message.admin-page.back-to-admin}" class="btn btn-info float-left">Back to admin menu</a>
-                <div class="text-center">
-                    <span th:text="#{message.change-language}+': '"></span>
-                    <a th:href="@{'/language?lang=en'}">
-                        <img width="35px" th:src="@{/images/en.png}" th:alt="#{message.locale.en}">
-                    </a> <span> /</span>
-                    <a th:href="@{'/language?lang=ru'}">
-                        <img width="35px" th:src="@{/images/ru.png}" th:alt="#{message.locale.ru}">
-                    </a>
-                </div>
-            </div>
+            <div class="footer" th:insert="~{fragments/common :: footer}"></div>
         </div>
     </div>
 </div>

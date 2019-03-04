@@ -18,30 +18,15 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-
-            <div id="header" class="card-header card-header-flex">
-                <h3 id="index-header" class="text-center"
-                    th:text="#{message-admin-page.current-residents}">Current residents</h3>
-                <div class="card-header-flex">
-                    <div class="language">
-                        <span th:text="#{message.change-language}+': '"></span>
-                        <a th:href="@{'/language?lang=en'}">
-                            <img width="35px" th:src="@{/images/en.png}" th:alt="#{message.locale.en}">
-                        </a> <span> /</span>
-                        <a th:href="@{'/language?lang=ru'}">
-                            <img width="35px" th:src="@{/images/ru.png}" th:alt="#{message.locale.ru}">
-                        </a>
-                    </div>
-                    <form name="logoutForm" th:action="@{/logout}" method="post">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                        <input type="submit" class="btn header-button btn-dark" th:value="#{message.signout}"/>
-                    </form>
-                </div>
-            </div>
-
+            <div th:insert="~{fragments/common :: header}"></div>
+            <div id="adminpanel-links" th:insert="~{fragments/admin :: adminpanel-links}"></div>
             <div class="card-body">
-                <p class="white" th:if="${pagedList.getTotalPages()==0}" th:text="#{message.admin-page.no-users-today}">There are no customers in a hotel today</p>
-                <p class="white" th:if="${pagedList.hasContent()==false} and ${pagedList.getTotalPages()>0}" th:text="#{message.admin-page.not-enough-users}">Not enough users for this page</p>
+                <h3 id="index-header" class="left"
+                    th:text="#{message-admin-page.current-residents}">Current residents</h3>
+                <p class="white" th:if="${pagedList.getTotalPages()==0}" th:text="#{message.admin-page.no-users-today}">
+                    There are no customers in a hotel today</p>
+                <p class="white" th:if="${pagedList.hasContent()==false} and ${pagedList.getTotalPages()>0}"
+                   th:text="#{message.admin-page.not-enough-users}">Not enough users for this page</p>
                 <table th:if="${pagedList.hasContent()}" class="table table-bordered white">
                     <thead>
                     <tr>
@@ -94,12 +79,8 @@
                         </li>
                     </ul>
                 </nav>
-
-                <div>
-                    <a th:href="@{/admin}" th:text="#{message.admin-page.back-to-admin}" class="btn btn-info float-left">Back to admin menu</a>
-                </div>
-
             </div>
+            <div class="footer" th:insert="~{fragments/common :: footer}"></div>
         </div>
     </div>
 </div>

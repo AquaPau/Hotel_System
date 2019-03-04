@@ -16,7 +16,7 @@
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div th:insert="~{fragments/common :: header}"></div>
-            <div th:insert="~{fragments/common :: panel-links}"></div>
+            <div id="userpanel-links"th:insert="~{fragments/user :: userpanel-links}"></div>
             <div>
                 <h3 id="login-header" class="text-center" th:text="#{'message.error-page.header'} +' '+ ${errorCode}">
                     Header</h3>

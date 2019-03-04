@@ -10,11 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
+import javax.servlet.http.HttpServletRequest;
 
-import static com.epam.hotel.utils.ControllerHelper.addUserCommonElements;
+import static com.epam.hotel.utils.ControllerHelper.*;
 import static com.epam.hotel.utils.PaginationHelper.*;
-import static com.epam.hotel.utils.ControllerHelper.addAdminCommonElements;
+
 
 @Controller
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -25,7 +25,6 @@ public class AdminController {
     private final DenyMessageService denyMessageService;
     private final RoomService roomService;
     private final UserService userService;
-    private static ControllerHelper controllerHelper;
 
     @GetMapping({"/admin", "admin"})
     public String index(Model model,
@@ -60,7 +59,7 @@ public class AdminController {
         model.addAttribute("unapprovedRequestList", unapprovedRequests);
         model.addAttribute("approvedRequestList", approvedRequests);
         model.addAttribute("deniedRequestList", deniedRequests);
-        controllerHelper.addAdminCommonElements(model, requestService, reservationService);
+        addAdminCommonElements(model, requestService, reservationService);
         return "admin";
     }
 
@@ -80,6 +79,7 @@ public class AdminController {
         page = getPage(page);
         limit = getLimit(limit, 8);
         addPagedList(userService.getAllUsersPaged(page, limit), model);
+        addAdminCommonElements(model,requestService, reservationService);
         return "users";
     }
 
@@ -101,11 +101,21 @@ public class AdminController {
     @GetMapping({"/admin/today-users"})
     public String usersToday(Model model,
                              @RequestParam(value = "page", required = false) Integer page,
-                             @RequestParam(value = "limit", required = false) Integer limit) {
+                             @RequestParam(value = "limit", required = false) Integer limit,
+                             HttpServletRequest httpRequest) {
 
         page = getPage(page);
         limit = getLimit(limit, 8);
+        Page<Reservation> reservationList = reservationService.findAllReservationsForToday(page, limit);
+        if (reservationList.getTotalPages() > 0) {
+            String requestURI = httpRequest.getRequestURI();
+            String role = requestURI.contains("admin") ? "admin" : "index";
+            if (isPageBeyondTotalPages(page, reservationList)) return "redirect:/admin/today-users?page=" + (page - 1);
+            model.addAttribute("pageNumbers", getPageNumbers(reservationList));
+        }
+        model.addAttribute("pagedList", reservationList);
         addPagedList(reservationService.findAllReservationsForToday(page, limit), model);
+        addAdminCommonElements(model,requestService, reservationService);
         return "today-users";
     }
 }
