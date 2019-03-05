@@ -5,28 +5,28 @@
 <body>
 <div th:fragment="adminpanel-index" class="user-menu">
     <a id="menu-pending" onclick="adminMenuNavigation(this.id)"
-       class="btn menu-btn btn-info center-align">
+       class="btn admin-menu-btn btn-warning center-align">
         <span th:text="#{message.admin-page.pending}">Pending requests</span>
         <span th:unless="${pendedCount==0}"
               th:text="'('+${pendedCount}+')'">1</span>
     </a>
     <a id="menu-approved" onclick="adminMenuNavigation(this.id)"
-       class="btn menu-btn btn-info center-align">
+       class="btn admin-menu-btn btn-warning center-align">
         <span th:text="#{message.admin-page.approved}">Approved requests</span>
         <span th:unless="${approvedCount==0}"
               th:text="'('+${approvedCount}+')'">1</span>
     </a>
     <a id="menu-denied" onclick="adminMenuNavigation(this.id)"
-       class="btn menu-btn btn-info center-align">
+       class="btn admin-menu-btn btn-warning center-align">
         <span th:text="#{message.admin-page.denied}">Denied requests</span>
         <span th:unless="${deniedCount==0}"
               th:text="'('+${deniedCount}+')'">1</span>
     </a>
     <a id="menu-rooms" th:href="@{/admin/rooms}"
-       class="btn menu-btn btn-info center-align"
+       class="btn admin-menu-btn btn-warning center-align"
        th:text="#{message.hotel.rooms}">Rooms</a>
     <a id="menu-newroom" th:href="@{/admin/rooms/new}"
-       class="btn menu-btn btn-info center-align"
+       class="btn admin-menu-btn btn-warning center-align"
        th:text="#{message.hotel.new-room}">New room</a>
 </div>
 
@@ -34,28 +34,28 @@
 
 <div sec:authorize="hasRole('ADMIN')" th:fragment="adminpanel-links" class="user-menu">
     <a id="menu-pending" onclick="adminMenuNavigation(this.id)" th:href="@{/admin}"
-       class="btn menu-btn btn-info center-align">
+       class="btn admin-menu-btn btn-warning center-align">
         <span th:text="#{message.admin-page.pending}">Pending requests</span>
         <span th:unless="${pendedCount==0}"
               th:text="'('+${pendedCount}+')'">1</span>
     </a>
     <a id="menu-approved" onclick="adminMenuNavigation(this.id)" th:href="@{/admin(arq_page=1)}"
-       class="btn menu-btn btn-info center-align">
+       class="btn admin-menu-btn btn-warning center-align">
         <span th:text="#{message.admin-page.approved}">Approved requests</span>
         <span th:unless="${approvedCount==0}"
               th:text="'('+${approvedCount}+')'">1</span>
     </a>
     <a id="menu-denied" onclick="adminMenuNavigation(this.id)" th:href="@{/admin(drq_page=1)}"
-       class="btn menu-btn btn-info center-align">
+       class="btn admin-menu-btn btn-warning center-align">
         <span th:text="#{message.admin-page.denied}">Denied requests</span>
         <span th:unless="${deniedCount==0}"
               th:text="'('+${deniedCount}+')'">1</span>
     </a>
     <a id="menu-rooms" th:href="@{/admin/rooms}"
-       class="btn menu-btn btn-info center-align"
+       class="btn admin-menu-btn btn-warning center-align"
        th:text="#{message.hotel.rooms}">Rooms</a>
     <a id="menu-newroom" th:href="@{/admin/rooms/new}"
-       class="btn menu-btn btn-info center-align"
+       class="btn admin-menu-btn btn-warning center-align"
        th:text="#{message.hotel.new-room}">New room</a>
 </div>
 

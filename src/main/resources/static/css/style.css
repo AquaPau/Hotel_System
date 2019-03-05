@@ -17,8 +17,23 @@ html, body {
     min-width: 200px;
 }
 
+.admin-menu-btn, .admin-mode-btn {
+    min-width: 200px !important;
+    color: white !important;
+}
+
+.admin-mode-btn:hover, .admin-menu-btn:hover {
+    min-width: 200px !important;
+    color: black !important;
+}
+
 .menu-active {
     background-color: #37d1ff !important;
+    color: #000 !important;
+}
+
+.admin-menu-active {
+    background-color: #FFC312 !important;
     color: #000 !important;
 }
 
@@ -28,23 +43,25 @@ html, body {
     color: #FFF;
 }
 
+
 .disabled a {
     color: #868a8e82 !important;
     border: 1px solid #dee2e694 !important;
 }
 
-#dollar{
+#dollar {
     position: absolute;
     color: #495057;
     padding-top: 7px;
     padding-left: 62px;
     z-index: 4;
 }
-.price-input{
+
+.price-input {
     padding-left: 22px;
 }
 
-.price-div{
+.price-div {
     padding-bottom: 20px;
 }
 
