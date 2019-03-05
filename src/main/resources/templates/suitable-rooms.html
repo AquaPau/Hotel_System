@@ -23,8 +23,34 @@
             <div th:insert="~{fragments/common :: header}"></div>
             <div id="adminpanel-links" th:insert="~{fragments/admin :: adminpanel-links}"></div>
             <div class="card-body">
+                <p th:text="#{message.request-page.current-request}">Current request</p>
+                <table class="table table-bordered white">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                        <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                        <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
+                        <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${request.id}"></td>
+                        <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
+                        <td th:text="#{'message.class.'+${request.classID}}"></td>
+                        <td th:text="${#dates.format(request.checkIn,'MM/dd/yyyy')}"></td>
+                        <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
                 <p class="white" th:unless="${roomsList.hasContent()}"
                    th:text="#{message.fittingrooms-page.nofitting}">There are no fitting rooms</p>
+
+
+                <p th:if="${roomsList.hasContent()}" th:text="#{message.request-page.suitable-rooms}">Current request</p>
                 <table th:if="${roomsList.hasContent()}" class="table table-bordered white">
                     <thead>
                     <tr>
@@ -36,6 +62,8 @@
                     </tr>
                     </thead>
                     <tbody>
+
+
                     <th:block th:each="room : ${roomsList.content}">
                         <tr>
                             <th th:text="${room.number}" scope="row">1</th>

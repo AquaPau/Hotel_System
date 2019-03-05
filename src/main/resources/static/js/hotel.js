@@ -131,7 +131,7 @@ function indexUrls() {
             userMenuNavigation('menu-rending');
             return
         }
-        if (href.includes('pr_page')) {
+        if (href.includes('pr_page') || href.includes('request/view')) {
             userMenuNavigation('menu-approved');
             return
         }
@@ -145,6 +145,13 @@ function indexUrls() {
         }
         if (href.includes('request/new')) {
             userMenuNavigation('menu-newrequest');
+            return
+        }
+        if (href.includes('request/edit')) {
+            userMenuNavigation('menu-rending');
+            return
+        }if (href.includes('profile')) {
+            userMenuNavigation('profile-btn');
             return
         }
         userMenuNavigation('menu-rending');
@@ -199,6 +206,8 @@ function switchPanels(role) {
 function adminUrls() {
     const href = window.location.href.toString();
     if (href.includes('admin')) {
+        showElement($('#currentUsers'),true);
+        showElement($('#userEditor'),true);
         var admin_button = $('#admin-mode-btn');
         admin_button.addClass('admin-menu-active');
         admin_button.attr("href", "/index");
@@ -218,17 +227,31 @@ function adminUrls() {
             adminMenuNavigation('menu-newroom');
             return
         }
+        if (href.includes('today-users')) {
+            adminMenuNavigation('currentUsers');
+            return
+        }
+        if (href.includes('admin/users')) {
+            adminMenuNavigation('userEditor');
+            return
+        }
+        if (href.includes('suitable-rooms')) {
+            adminMenuNavigation('menu-pending');
+            return
+        }
         if (href.includes('rooms')) {
             adminMenuNavigation('menu-rooms');
             return
         }
-        if (href.includes('today-users')){
+        if (href.includes('today-users')) {
             return
         }
-        if (href.includes('users')){
+        if (href.includes('users')) {
             return
         }
         adminMenuNavigation('menu-pending');
+    }else{
+
     }
 
 
