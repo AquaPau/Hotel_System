@@ -56,6 +56,7 @@ public class RoomController {
         model.addAttribute("room", room);
         model.addAttribute("headerName", "edit");
         model.addAttribute("buttonName", "save");
+        addAdminCommonElements(model,requestService);
         return "rooms";
     }
 
@@ -128,6 +129,7 @@ public class RoomController {
         addUserCommonElements(model, user, requestService);
         addAdminCommonElements(model, requestService);
 
+        model.addAttribute("request", request);
         model.addAttribute("requestId", requestId);
         model.addAttribute("roomsList", roomList);
         model.addAttribute("reservation", new ReservationId());

@@ -63,13 +63,14 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/profile")
+    @GetMapping("/index/profile")
     public String editProfile(Model model, Principal principal,
     @RequestParam(value="success",required = false) Boolean success) {
         User user = userService.findByLogin(principal.getName());
         user.setPassword("");
         model.addAttribute(user);
         model.addAttribute("currentPassword", "");
+        addUserCommonElements(model, user, requestService);
         return "profile";
     }
 
@@ -77,7 +78,7 @@ public class IndexController {
     public View updateProfile(@ModelAttribute("user") User user,
                               @ModelAttribute("currentPassword") String currentPassword) {
         userService.update(user, currentPassword);
-        RedirectView redirect = new RedirectView("/profile?success=true");
+        RedirectView redirect = new RedirectView("/index/profile?success=true");
         redirect.setExposeModelAttributes(false);
         return redirect;
     }
