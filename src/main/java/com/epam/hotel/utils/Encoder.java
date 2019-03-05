@@ -13,4 +13,8 @@ public class Encoder {
     public static String encode(String s) {
         return encoder.encode(s);
     }
+
+    public static boolean matches(String newPassword, String oldPassword){
+        return encoder.matches(newPassword,oldPassword);
+    }
 }

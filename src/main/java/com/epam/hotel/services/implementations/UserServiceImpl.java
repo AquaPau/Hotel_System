@@ -3,6 +3,7 @@ package com.epam.hotel.services.implementations;
 import com.epam.hotel.domains.User;
 import com.epam.hotel.domains.enums.BlockStatus;
 import com.epam.hotel.domains.enums.Permission;
+import com.epam.hotel.exceptions.PasswordDoesNotMatchException;
 import com.epam.hotel.repositories.UserRepository;
 import com.epam.hotel.services.UserService;
 import com.epam.hotel.utils.Encoder;
@@ -11,9 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+import static com.epam.hotel.utils.Encoder.encode;
+import static com.epam.hotel.utils.Encoder.matches;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -35,24 +40,44 @@ public class UserServiceImpl implements UserService {
         if (user.getId() == 0) {
             user.setPermission(Permission.USER);
             user.setBlock(BlockStatus.UNBLOCKED);
-            user.setPassword(Encoder.encode(user.getPassword()));
+            user.setPassword(encode(user.getPassword()));
         }
         return userRepository.save(user);
     }
 
     @Override
+    public User update(User updatedUser, String currentPassword){
+        Optional<User> user = userRepository.findByLogin(updatedUser.getLogin());
+        if(!user.isPresent())
+            throw new UsernameNotFoundException("UserNotFound");
+        User savedUser = user.get();
+        if (matches(currentPassword,savedUser.getPassword())){
+            savedUser.setFirstName(updatedUser.getFirstName());
+            savedUser.setLastName(updatedUser.getLastName());
+            savedUser.setLogin(updatedUser.getLogin());
+            if(!updatedUser.getPassword().equals("")){
+                savedUser.setPassword(encode(updatedUser.getPassword()));
+            }
+            return userRepository.save(savedUser);
+        } else {
+            throw new PasswordDoesNotMatchException("Current password doesnt match");
+        }
+    }
+
+    @Override
     public void deleteById(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.get().getPermission() == Permission.USER) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new UsernameNotFoundException("Uesername not found"));
+        if (user.getPermission() == Permission.USER){
             userRepository.deleteById(id);
         } else {
-            throw new IllegalArgumentException("You cant delete ADMIN");
+            throw new RuntimeException("You cant delete ADMIN");
         }
     }
 
     @Override
     public User findByLogin(String login) {
-        return userRepository.findByLogin(login);
+        return userRepository.findByLogin(login).orElseThrow(() -> new UsernameNotFoundException("Uesername not found"));
     }
 
     @Override
