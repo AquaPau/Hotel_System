@@ -66,7 +66,8 @@ public class RoomServiceImpl implements RoomService {
                 .sorted(Comparator.comparing(Room::getCapacity).thenComparing(getComparator(request)))
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(collect, PageRequest.of(page - 1, limit), collect.size());
+        int max = (limit * (page) > collect.size()) ? collect.size() : limit * (page);
+        return new PageImpl<>(collect.subList((page - 1) * limit, max), PageRequest.of(page - 1, limit), collect.size());
     }
 
     private Comparator<Room> getComparator(Request request) {

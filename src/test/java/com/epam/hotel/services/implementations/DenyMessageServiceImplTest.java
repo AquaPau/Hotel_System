@@ -2,10 +2,13 @@ package com.epam.hotel.services.implementations;
 
 import com.epam.hotel.domains.DeniedRequest;
 import com.epam.hotel.repositories.DenyMessageRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
@@ -31,6 +34,13 @@ class DenyMessageServiceImplTest {
         when(denyMessageRepository.findById(anyLong())).thenReturn(testRequest);
         DeniedRequest foundRequest = denyMessageService.findById(1l);
         assertEquals(foundRequest, testRequest.get());
+    }
+
+    @Test
+    void findByNotexistingId() {
+        Optional<DeniedRequest> testRequest = Optional.empty();
+        when(denyMessageRepository.findById(anyLong())).thenReturn(testRequest);
+        Assertions.assertThrows(RuntimeException.class, () -> denyMessageService.findById(1l));
     }
 
 }

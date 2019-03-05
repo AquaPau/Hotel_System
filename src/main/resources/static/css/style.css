@@ -134,12 +134,16 @@ h3 {
 .card-header-flex {
     display: flex;
     justify-content: space-between;
-    margin-top: 5px;
 }
 
 .card-left-flex {
     display: flex;
     justify-content: left;
+}
+
+#footer-btns{
+    display: flex !important;
+    justify-content: space-between !important;
 }
 
 .language {
@@ -238,7 +242,7 @@ h3 {
     height: -webkit-fill-available;
     margin-bottom: auto;
     width: auto;
-    min-width: 855px;
+    min-width: 1070px;
     background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
