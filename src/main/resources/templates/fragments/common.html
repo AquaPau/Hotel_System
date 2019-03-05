@@ -47,9 +47,10 @@
         || #httpServletRequest.requestURI == '/admin/rooms'}"
            sec:authorize="hasRole('ADMIN')" th:text="#{message.admin-page.usersmenu}"
            th:href="@{/admin/users}" class="btn btn-dark rightContainer">Edit users</a>
-        <a th:href="@{/admin/today-users}" sec:authorize="hasRole('ADMIN')"
-           th:text="#{message-admin-page.current-residents-menu}" class="btn btn-dark rightContainer">
-            In a hotel</a>
+        <a id="currentUsers" th:if="${#httpServletRequest.requestURI == '/admin'}"
+           th:href="@{/admin/today-users}" sec:authorize="hasRole('ADMIN')"
+           th:text="#{message-admin-page.current-residents-menu}" class="btn header-button btn-dark rightContainer">
+            Current residents</a>
     </div>
 
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
