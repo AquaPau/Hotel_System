@@ -29,11 +29,11 @@
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">
-                <div th:insert="~{fragments/common :: header}"></div>
-                <div th:insert="~{fragments/user :: userpanel-links}"></div>
-                <h3 class="text-center"
-                    th:text="#{message.view-request.header}">
-                    View reservedRoom</h3>
+            <div th:insert="~{fragments/common :: header}"></div>
+            <div th:insert="~{fragments/user :: userpanel-links}"></div>
+            <h3 class="text-center"
+                th:text="#{message.view-request.header}">
+                View reservedRoom</h3>
             <div class="card-body">
                 <p class="white" th:text="#{message.view-request.your-request}">Your request</p>
                 <table class="table table-bordered white">
@@ -75,9 +75,7 @@
                     </tbody>
                 </table>
                 <div class="reserv-buttons" th:if="${request.reservation.status.name()=='BILLSENT'}">
-                    <a th:href="@{'/reservation/cancel/'+${request.id}}"
-                       th:text="#{message.cancel}"
-                       class="btn btn-danger float-right">cancel</a>
+
                     <a onclick="showPaymentMessage(true)" class="btn pay_btn float-right"
                        th:text="#{message.pay}+': $'+${request.reservation.totalPrice}">pay</a>
                 </div>

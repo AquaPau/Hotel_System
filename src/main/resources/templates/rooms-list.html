@@ -19,7 +19,8 @@
     <div class="d-flex justify-content-center h-100">
         <div class="card">
             <div th:insert="~{fragments/common :: header}"></div>
-            <div th:insert="~{fragments/common :: panel-links}"></div>
+            <div id="userpanel-links"  hidden th:insert="~{fragments/user :: userpanel-links}"></div>
+            <div id="adminpanel-links"  hidden th:insert="~{fragments/admin :: adminpanel-links}"></div>
             <div class="card-body">
                 <p class="white" th:if="${roomsList.isEmpty()==true}" th:text="#{message.roomslist-page.norooms}">There
                     are no rooms for booking in hotel now</p>
@@ -49,12 +50,12 @@
                             <td th:text="'$'+${room.price}"></td>
                             <td sec:authorize="hasRole('ROLE_ADMIN')">
                                 <a
-                                        th:href="@{'/rooms/edit/'+${room.id}}" class="btn btn-dark float-center"
+                                        th:href="@{'/admin/rooms/edit/'+${room.id}}" class="btn btn-dark float-center"
                                         th:text="#{message.roomseditor-page.edit}">Edit</a>
                             </td>
                             <td sec:authorize="hasRole('ROLE_ADMIN')">
                                 <a sec:authorize="hasRole('ROLE_ADMIN')"
-                                   th:href="@{'/rooms/delete/'+${room.id}}" class="btn btn-dark float-center"
+                                   th:href="@{'/admin/rooms/delete/'+${room.id}}" class="btn btn-dark float-center"
                                    th:text="#{message.roomseditor-page.delete}">Delete</a>
                             </td>
                         </tr>
@@ -63,24 +64,47 @@
                 </table>
                 <div>
                 </div>
-                <nav th:if="${roomsList.totalPages > 0}">
+                <nav id="admin-nav-rooms" hidden sec:authorize="hasRole('ADMIN')" th:if="${roomsList.totalPages > 0}">
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${roomsList.isFirst()} ? disabled">
                             <a class="page-link"
-                               th:href="@{/rooms(page=${roomsList.number})}"
+                               th:href="@{/admin/rooms(page=${roomsList.number})}"
                                tabindex="-1"><
                             </a>
                         </li>
                         <li th:each="pageNumber : ${pageNumbers}" class="page-item"
                             th:classappend="${pageNumber==roomsList.number + 1} ? disabled">
                             <a class="page-link"
-                               th:href="@{/rooms(page=${pageNumber})}"
+                               th:href="@{/admin/rooms(page=${pageNumber})}"
                                th:text="${pageNumber}">
                             </a>
                         </li>
                         <li class="page-item" th:classappend="${roomsList.isLast()} ? disabled">
                             <a class="page-link"
-                               th:href="@{/rooms(page=${roomsList.number}+2)}"
+                               th:href="@{/admin/rooms(page=${roomsList.number}+2)}"
+                            >>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <nav id="user-nav-rooms" hidden th:if="${roomsList.totalPages > 0}">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${roomsList.isFirst()} ? disabled">
+                            <a class="page-link"
+                               th:href="@{/index/rooms(page=${roomsList.number})}"
+                               tabindex="-1"><
+                            </a>
+                        </li>
+                        <li th:each="pageNumber : ${pageNumbers}" class="page-item"
+                            th:classappend="${pageNumber==roomsList.number + 1} ? disabled">
+                            <a class="page-link"
+                               th:href="@{/index/rooms(page=${pageNumber})}"
+                               th:text="${pageNumber}">
+                            </a>
+                        </li>
+                        <li class="page-item" th:classappend="${roomsList.isLast()} ? disabled">
+                            <a class="page-link"
+                               th:href="@{/index/rooms(page=${roomsList.number}+2)}"
                             >>
                             </a>
                         </li>

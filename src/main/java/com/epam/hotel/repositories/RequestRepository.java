@@ -1,7 +1,6 @@
 package com.epam.hotel.repositories;
 
 import com.epam.hotel.domains.Request;
-import com.epam.hotel.domains.Reservation;
 import com.epam.hotel.domains.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

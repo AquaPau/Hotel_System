@@ -21,13 +21,14 @@ public class ControllerHelper {
     }
 
     public static void addAdminCommonElements(Model model, RequestService requestService, ReservationService reservationService) {
-        long denied = requestService.countAllDeniedRequestForAdmin();
-        long approved = reservationService.countAllApprovedReservations();
-        long unapproved = requestService.countAllPendingRequestForAdmin();
 
-        model.addAttribute("unapprovedCount", unapproved);
-        model.addAttribute("approvedCount", approved);
+        long denied = requestService.countAllDeniedRequestForAdmin();
+        long processed = requestService.countAllApprovedRequestForAdmin();
+        long pended = requestService.countAllPendingRequestForAdmin();
+
         model.addAttribute("deniedCount", denied);
+        model.addAttribute("pendedCount", pended);
+        model.addAttribute("approvedCount", processed);
     }
 
 }

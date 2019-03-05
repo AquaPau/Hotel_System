@@ -26,7 +26,7 @@ public class RequestController {
     private final UserService userService;
     private final RequestService requestService;
 
-    @GetMapping("/request/new")
+    @GetMapping("index/request/new")
     public String createRequestForm(Model model, Principal principal) {
         User user = userService.findByLogin(principal.getName());
         Request request = new Request();

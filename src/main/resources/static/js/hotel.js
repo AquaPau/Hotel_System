@@ -46,6 +46,14 @@ function setActive(id) {
     $('#' + id).addClass('menu-active');
 }
 
+function setAdminActive(id) {
+    if (document.contains(document.getElementById("userpanel-links"))) {
+        document.getElementById("userpanel-links").remove();
+    }
+    $('.admin-menu-btn').removeClass("admin-menu-active");
+    $('#' + id).addClass('admin-menu-active');
+}
+
 function adjustUrl(url, role) {
     const href = window.location.href.toString();
     if (!href.includes(url)) {
@@ -70,12 +78,21 @@ function userMenuNavigation(id) {
             showElement($('#denied-requests'), true);
             adjustUrl('dr_page', role);
             break;
+        case 'menu-rooms':
+            adjustUrl('rooms', role);
+            switchPanels(role);
+            break;
     }
 }
 
 function indexUrls() {
     var href = window.location.href.toString();
     if (href.includes('index')) {
+        if (document.contains(document.getElementById("admin-mode-btn"))) {
+            var admin_button = $('#admin-mode-btn');
+            admin_button.removeClass('admin-menu-active');
+            admin_button.attr("href", "/admin");
+        }
         if (href.includes('ur_page')) {
             userMenuNavigation('menu-rending');
             return
@@ -88,21 +105,20 @@ function indexUrls() {
             userMenuNavigation('menu-denied');
             return
         }
+        if (href.includes('rooms')) {
+            userMenuNavigation('menu-rooms');
+            return
+        }
+        if (href.includes('request/new')) {
+            userMenuNavigation('menu-newrequest');
+            return
+        }
         userMenuNavigation('menu-rending');
     }
-    if (href.includes('rooms')) {
-        userMenuNavigation('menu-rooms');
-        return
-    }
-    if (href.includes('request/new')) {
-        userMenuNavigation('menu-newrequest');
-        return
-    }
-
 }
 
 function adminMenuNavigation(id) {
-    setActive(id);
+    setAdminActive(id);
     showElement($('.index-table'), false);
     const role = "admin";
     switch (id) {
@@ -119,8 +135,29 @@ function adminMenuNavigation(id) {
             adjustUrl('drq_page', role);
             break;
         case 'menu-rooms':
-            showElement($('#room-list'), true);
-            adjustUrl('rl_page', role);
+            switchPanels(role);
+            adjustUrl('rooms', role);
+            break;
+        case 'menu-newroom':
+            switchPanels(role);
+            adjustUrl('rooms/new', role);
+            break;
+    }
+}
+
+function switchPanels(role) {
+    switch (role) {
+        case 'admin':
+            showElement($('#userpanel-links'), false);
+            showElement($('#adminpanel-links'), true);
+            showElement($('#admin-nav-rooms'), true);
+            showElement($('#user-nav-rooms'), false);
+            break;
+        case 'index':
+            showElement($('#admin-nav-rooms'), false);
+            showElement($('#user-nav-rooms'), true);
+            showElement($('#userpanel-links'), true);
+            showElement($('#adminpanel-links'), false);
             break;
     }
 }
@@ -128,6 +165,9 @@ function adminMenuNavigation(id) {
 function adminUrls() {
     const href = window.location.href.toString();
     if (href.includes('admin')) {
+        var admin_button = $('#admin-mode-btn');
+        admin_button.addClass('admin-menu-active');
+        admin_button.attr("href", "/index");
         if (href.includes('prq_page')) {
             adminMenuNavigation('menu-pending');
             return
@@ -140,16 +180,17 @@ function adminUrls() {
             adminMenuNavigation('menu-denied');
             return
         }
+        if (href.includes('rooms/new')) {
+            adminMenuNavigation('menu-newroom');
+            return
+        }
+        if (href.includes('rooms')) {
+            adminMenuNavigation('menu-rooms');
+            return
+        }
         adminMenuNavigation('menu-pending');
     }
-    if (href.includes('rooms')) {
-        adminMenuNavigation('menu-rooms');
-        return
-    }
-    if (href.includes('rooms/new')) {
-        adminMenuNavigation('menu-newroom');
-        return
-    }
+
 
 }
 
