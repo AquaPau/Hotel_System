@@ -88,5 +88,10 @@ public class IndexController {
         model.addAttribute("errorCode", "passwordDoesNotMatch");
         return "error";
     }
+    @ExceptionHandler(Exception.class)
+    public String randomException(Model model) {
+        model.addAttribute("errorCode", "500");
+        return "error";
+    }
 
 }
