@@ -41,6 +41,13 @@ function validate(elem, matcher, error) {
     }
 }
 
+function errorPage(){
+    var url = document.referrer;
+    if (url.includes('index')){}
+    if (url.includes('admin')){}
+
+}
+
 function setActive(id) {
     $('.menu-btn').removeClass("menu-active");
     $('#' + id).addClass('menu-active');

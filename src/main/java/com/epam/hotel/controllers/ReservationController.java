@@ -4,7 +4,6 @@ import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.User;
 import com.epam.hotel.domains.enums.Status;
 import com.epam.hotel.services.RequestService;
-import com.epam.hotel.services.ReservationService;
 import com.epam.hotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

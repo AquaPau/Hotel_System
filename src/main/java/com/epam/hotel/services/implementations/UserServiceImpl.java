@@ -10,11 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,11 +20,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
 
     @Override
     public User findById(Long id) {
@@ -50,7 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.get().getPermission() == Permission.USER){
+        if (optionalUser.get().getPermission() == Permission.USER) {
             userRepository.deleteById(id);
         } else {
             throw new IllegalArgumentException("You cant delete ADMIN");
@@ -63,7 +56,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> getAllUsersPaged(int page, int size) { return userRepository.findAll(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id")); }
+    public Page<User> getAllUsersPaged(int page, int size) {
+        return userRepository.findAll(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
+    }
 
     @Override
     public void changeUserBlockForId(Long id) {
