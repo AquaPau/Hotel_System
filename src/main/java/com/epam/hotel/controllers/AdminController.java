@@ -105,7 +105,7 @@ public class AdminController {
         limit = getLimit(limit, 8);
         Page<Reservation> reservationList = reservationService.findAllReservationsForToday(page, limit);
         if (reservationList.getTotalPages() > 0) {
-            if (isPageBeyondTotalPages(page, reservationList)) return "redirect:/admin/today-users?page=" + (page - 1);
+           if (isPageBeyondTotalPages(page, reservationList)) return "redirect:/admin/today-users?page=" + (page - 1);
             model.addAttribute("pageNumbers", getPageNumbers(reservationList));
         }
         model.addAttribute("pagedList", reservationList);

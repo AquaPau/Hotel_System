@@ -108,16 +108,16 @@ public class RoomController {
         return "error";
     }
 
-    @GetMapping("/admin/suitable-rooms/{id}")
-    public String getSuitableRoomsForRequest(@PathVariable String id,
+    @GetMapping("/admin/suitable-rooms")
+    public String getSuitableRoomsForRequest(@RequestParam(value = "request") Long requestId,
                                              @RequestParam(value = "page", required = false) Integer page,
                                              @RequestParam(value = "limit", required = false) Integer limit,
                                              Principal principal,
                                              Model model) {
         page = getPage(page);
-        limit = getLimit(limit, 7);
+        limit = getLimit(limit, 5);
         User user = userService.findByLogin(principal.getName());
-        Request request = requestService.findById(new Long(id));
+        Request request = requestService.findById(requestId);
         Reservation reservation = new Reservation();
         request.addReservation(reservation);
 
@@ -128,7 +128,7 @@ public class RoomController {
         addUserCommonElements(model, user, requestService);
         addAdminCommonElements(model, requestService);
 
-        model.addAttribute("requestId", request.getId());
+        model.addAttribute("requestId", requestId);
         model.addAttribute("roomsList", roomList);
         model.addAttribute("reservation", new ReservationId());
 

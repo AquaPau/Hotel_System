@@ -50,15 +50,10 @@
            th:text="#{message.roomslist-page.button.home}"
            th:href="@{/index}" class="btn btn-dark rightContainer">Home</p>
         </a>
-        <a id="userEditor" th:if="${#httpServletRequest.requestURI == '/admin'
-        || #httpServletRequest.requestURI == 'admin/rooms/new'
-        || #httpServletRequest.requestURI == '/admin/rooms'}"
-           sec:authorize="hasRole('ADMIN')" th:text="#{message.admin-page.usersmenu}"
+        <a id="userEditor" sec:authorize="hasRole('ADMIN')" th:text="#{message.admin-page.usersmenu}"
            th:href="@{/admin/users}" class="btn btn-dark rightContainer">Edit users</a>
-        <a id="currentUsers" th:if="${#httpServletRequest.requestURI == '/admin'}"
-           th:href="@{/admin/today-users}" sec:authorize="hasRole('ADMIN')"
-           th:text="#{message-admin-page.current-residents-menu}"
-           class="btn header-button btn-dark rightContainer">
+        <a id="currentUsers" th:href="@{/admin/today-users}" sec:authorize="hasRole('ADMIN')"
+           th:text="#{message-admin-page.current-residents-menu}" class="btn  btn-dark rightContainer">
             Current residents</a>
     </div>
 
