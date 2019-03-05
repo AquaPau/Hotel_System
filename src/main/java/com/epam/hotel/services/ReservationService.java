@@ -9,19 +9,13 @@ import java.util.List;
 
 public interface ReservationService {
 
-    List<Reservation> findAll();
-
     Reservation findById(ReservationId id);
 
     Reservation save(Reservation reservation);
 
-    void deleteById(ReservationId id);
-
     Page<Reservation> getAllApprovedReservationsPaged(int page, int size);
 
-    List <Reservation> findAllApprovedReservationOfThePeriodByRequest(Request request);
-
-    long countAllApprovedReservations();
+    List<Reservation> findAllApprovedReservationOfThePeriodByRequest(Request request);
 
     Page<Reservation> findAllReservationsForToday(int page, int size);
 

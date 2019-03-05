@@ -16,11 +16,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import static com.epam.hotel.utils.BookingHelper.countTotalPrice;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static com.epam.hotel.utils.BookingHelper.countTotalPrice;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -30,11 +30,6 @@ public class ReservationServiceImpl implements ReservationService {
     private final RequestService requestService;
     @Autowired
     private RoomService roomService;
-
-    @Override
-    public List<Reservation> findAll() {
-        return reservationRepository.findAll();
-    }
 
     @Override
     public Reservation findById(ReservationId id) {
@@ -53,11 +48,6 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.save(reservation);
     }
 
-    @Override
-    public void deleteById(ReservationId id) {
-        reservationRepository.deleteById(id);
-    }
-
     // all approved reservations
     @Override
     public Page<Reservation> getAllApprovedReservationsPaged(int page, int size) {
@@ -68,12 +58,6 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Reservation> findAllApprovedReservationOfThePeriodByRequest(Request request) {
         return reservationRepository.findAllApprovedReservationOfThePeriod(request.getCheckIn(), request.getCheckOut());
-    }
-
-    // count all approved reservations
-    @Override
-    public long countAllApprovedReservations() {
-        return reservationRepository.countAllApprovedReservations();
     }
 
     @Override

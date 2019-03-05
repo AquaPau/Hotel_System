@@ -2,7 +2,6 @@ package com.epam.hotel.utils;
 
 import com.epam.hotel.domains.User;
 import com.epam.hotel.services.RequestService;
-import com.epam.hotel.services.ReservationService;
 import org.springframework.ui.Model;
 
 public class ControllerHelper {
@@ -20,7 +19,7 @@ public class ControllerHelper {
         model.addAttribute("processedCount", processed);
     }
 
-    public static void addAdminCommonElements(Model model, RequestService requestService, ReservationService reservationService) {
+    public static void addAdminCommonElements(Model model, RequestService requestService) {
 
         long denied = requestService.countAllDeniedRequestForAdmin();
         long processed = requestService.countAllApprovedRequestForAdmin();

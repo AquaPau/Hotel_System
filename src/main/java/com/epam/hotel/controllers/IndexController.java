@@ -1,11 +1,9 @@
 package com.epam.hotel.controllers;
 
 import com.epam.hotel.domains.Request;
-import com.epam.hotel.domains.Room;
 import com.epam.hotel.domains.User;
 import com.epam.hotel.exceptions.PasswordDoesNotMatchException;
 import com.epam.hotel.services.RequestService;
-import com.epam.hotel.services.RoomService;
 import com.epam.hotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,6 @@ public class IndexController {
 
     private final UserService userService;
     private final RequestService requestService;
-    private final RoomService roomService;
 
     @GetMapping({"/", "/index"})
     public String index(Model model, Principal principal,
