@@ -134,7 +134,6 @@ h3 {
 .card-header-flex {
     display: flex;
     justify-content: space-between;
-    margin-top: 5px;
 }
 
 .card-left-flex {
