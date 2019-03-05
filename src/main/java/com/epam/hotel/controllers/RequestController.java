@@ -52,7 +52,7 @@ public class RequestController {
         return "redirect:/index";
     }
 
-    @GetMapping("request/edit/{id}")
+    @GetMapping("index/request/edit/{id}")
     public String editRequest(@PathVariable String id, Model model, Principal principal) {
         User user = userService.findByLogin(principal.getName());
         Request request = requestService.findById(new Long(id));
@@ -72,7 +72,7 @@ public class RequestController {
         return "redirect:" + httpRequest.getHeader("Referer");
     }
 
-    @GetMapping("request/view/{id}")
+    @GetMapping("index/request/view/{id}")
     public String viewRequest(@PathVariable String id, Model model, Principal principal) {
         User user = userService.findByLogin(principal.getName());
         Request request = requestService.findById(new Long(id));
