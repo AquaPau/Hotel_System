@@ -71,7 +71,6 @@ public class IndexController {
     @RequestParam(value="success",required = false) Boolean success) {
         User user = userService.findByLogin(principal.getName());
         user.setPassword("");
-        System.out.println(success);
         model.addAttribute(user);
         model.addAttribute("currentPassword", "");
         return "profile";

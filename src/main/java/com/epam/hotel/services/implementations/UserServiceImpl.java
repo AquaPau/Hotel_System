@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,8 +54,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User updatedUser, String currentPassword){
-        User savedUser = userRepository.findByLogin(updatedUser.getLogin());
-
+        Optional<User> user = userRepository.findByLogin(updatedUser.getLogin());
+        if(!user.isPresent())
+            throw new UsernameNotFoundException("UserNotFound");
+        User savedUser = user.get();
         if (matches(currentPassword,savedUser.getPassword())){
             savedUser.setFirstName(updatedUser.getFirstName());
             savedUser.setLastName(updatedUser.getLastName());
@@ -70,8 +73,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.get().getPermission() == Permission.USER){
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new UsernameNotFoundException("Uesername not found"));
+        if (user.getPermission() == Permission.USER){
             userRepository.deleteById(id);
         } else {
             throw new RuntimeException("You cant delete ADMIN");
@@ -80,7 +84,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByLogin(String login) {
-        return userRepository.findByLogin(login);
+        return userRepository.findByLogin(login).orElseThrow(() -> new UsernameNotFoundException("Uesername not found"));
     }
 
     @Override
