@@ -3,6 +3,7 @@ package com.epam.hotel.controllers;
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Room;
 import com.epam.hotel.domains.User;
+import com.epam.hotel.exceptions.PasswordDoesNotMatchException;
 import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.RoomService;
 import com.epam.hotel.services.UserService;
@@ -11,8 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 
@@ -64,5 +66,29 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping("/profile")
+    public String editProfile(Model model, Principal principal,
+    @RequestParam(value="success",required = false) Boolean success) {
+        User user = userService.findByLogin(principal.getName());
+        user.setPassword("");
+        model.addAttribute(user);
+        model.addAttribute("currentPassword", "");
+        return "profile";
+    }
+
+    @PostMapping("/profile/update")
+    public View updateProfile(@ModelAttribute("user") User user,
+                              @ModelAttribute("currentPassword") String currentPassword) {
+        userService.update(user, currentPassword);
+        RedirectView redirect = new RedirectView("/profile?success=true");
+        redirect.setExposeModelAttributes(false);
+        return redirect;
+    }
+
+    @ExceptionHandler(PasswordDoesNotMatchException.class)
+    public String passwordDoesNotMatchException(Model model) {
+        model.addAttribute("errorCode", "passwordDoesNotMatch");
+        return "error";
+    }
 
 }

@@ -29,6 +29,37 @@ function validateSignInForm() {
     return validated;
 }
 
+function validateEditProfileForm() {
+    var validated;
+
+     var firstName = document.forms["sign-in-form"]["firstName"].value;
+    var lastName = document.forms["sign-in-form"]["lastName"].value;
+    var password = document.forms["sign-in-form"]["password"].value;
+    var confirm = document.forms["sign-in-form"]["confirm"].value;
+
+
+    var firstNameMatcher = firstName.match(/^[a-zA-Z]{3,20}$/);
+    var lastNameMatcher = lastName.match(/^[a-zA-Z]{3,20}$/);
+    var passwordMatcher = password.match(/^.{6,50}$/);
+
+    validated = validate($('#fn-input'), firstNameMatcher, $('#fn-error'));
+    validated = validate($('#ln-input'), lastNameMatcher, $('#ln-error')) && validated;
+    if( password == "") return validated;
+    validated = validate($('#pw-input'), passwordMatcher, $('#pw-error')) && validated;
+
+    if (password !== confirm) {
+        setFieldErrorColor($('#pw-input'), true);
+        setFieldErrorColor($('#confirm-input'), true);
+        showElement($('#confirm-error'), true);
+        validated = false;
+    } else {
+        setFieldErrorColor($('#confirm-input'), false);
+        showElement($('#confirm-error'), false);
+    }
+    return validated;
+}
+
+
 function validate(elem, matcher, error) {
     if (matcher == null) {
         setFieldErrorColor(elem, true);
