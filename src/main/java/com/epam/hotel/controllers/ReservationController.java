@@ -46,7 +46,7 @@ public class ReservationController {
             throw new RuntimeException(String.format("User id%s has no such request %s", user.getId(), id));
         }
         requestService.save(request);
-        return "redirect:/index";
+        return "redirect:/index?pr_page";
     }
 
 }

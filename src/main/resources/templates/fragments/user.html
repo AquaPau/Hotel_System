@@ -25,14 +25,44 @@
         <span th:unless="${deniedCount==0}"
               th:text="'('+${deniedCount}+')'">1</span>
     </a>
-    <a id="menu-rooms" onclick="userMenuNavigation(this.id)" th:href="@{/rooms}"
+    <a id="menu-rooms" onclick="userMenuNavigation(this.id)" th:href="@{index/rooms}"
        class="btn menu-btn btn-info center-align">
         <span th:text="#{message.hotel.rooms}">Rooms</span>
     </a>
-    <a id="menu-newrequest" th:href="@{/request/new}"
+    <a id="menu-newrequest" th:href="@{index/request/new}"
        class="btn menu-btn btn-info center-align"
        th:text="#{message.hotel.new-request}">New request</a>
 </div>
+
+<div th:fragment="userpanel-links" class="user-menu">
+    <a id="menu-rending" onclick="userMenuNavigation(this.id)" th:href="@{/index}"
+       class="btn menu-btn btn-info center-align">
+        <span th:text="#{message.index-page.your-requests}">Pending</span>
+        <span th:unless="${unprocessedCount==0}"
+              th:text="'('+${unprocessedCount}+')'">1</span>
+    </a>
+    <a id="menu-approved" onclick="userMenuNavigation(this.id)" th:href="@{/index(pr_page=1)}"
+       class="btn menu-btn btn-info center-align"> <span
+            th:text="#{message.index-page.processed-requests}">Processed</span>
+        <span th:unless="${processedCount==0}"
+              th:text="'('+${processedCount}+')'">1
+                    </span>
+    </a>
+    <a id="menu-denied" onclick="userMenuNavigation(this.id)" th:href="@{/index(dr_page=1)}"
+       class="btn menu-btn btn-info center-align">
+        <span th:text="#{message.admin-page.denied}">Denied</span>
+        <span th:unless="${deniedCount==0}"
+              th:text="'('+${deniedCount}+')'">1</span>
+    </a>
+    <a id="menu-rooms" th:href="@{/index/rooms}"
+       class="btn menu-btn btn-info center-align"
+       th:text="#{message.hotel.rooms}">Rooms</a>
+
+    <a id="menu-newrequest" th:href="@{/index/request/new}"
+       class="btn menu-btn btn-info center-align"
+       th:text="#{message.hotel.new-request}">New request</a>
+</div>
+
 
 <div th:fragment="usertables">
     <div hidden id="unprocessed-requests" class="index-table">
@@ -118,7 +148,7 @@
                     <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
                     <th scope="col" th:text="#{message.view}">View room</th>
                     <th scope="col" th:text="#{message.hotel.status}">Status</th>
-                    <th scope="col" th:text="#{message.cancel}">Cancel</th>
+                    <th scope="col" th:text="#{message.delete}">Cancel</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -232,7 +262,7 @@
         </div>
 
     </div>
-    </div>
+</div>
 </div>
 </body>
 </html>

@@ -32,26 +32,23 @@
 
 <div th:fragment="footer" class="card-footer">
     <div>
-        <input onclick="back()" class="btn header-button btn-dark" th:value="#{message.back}"/>
-        <a id="toAdminPage"
-           th:if="${#httpServletRequest.requestURI == '/index' || #httpServletRequest.requestURI == '/' }"
-           sec:authorize="hasRole('ADMIN')" th:text="#{message.index-page.admin}"
-           th:href="@{/admin}" class="btn header-button btn-dark rightContainer">Admin</a>
-        <a id="toUserPage" th:if="${#httpServletRequest.requestURI == '/admin'}"
-           sec:authorize="hasRole('ADMIN')" th:text="#{message.admin-page.user}"
-           th:href="@{/index}" class="btn header-button btn-dark rightContainer">Admin</p>
-        </a>
-        <a id="toHomePage" th:if="${#httpServletRequest.requestURI == '/rooms' ||
-    #httpServletRequest.requestURI == '/request/new' ||
-    #httpServletRequest.requestURI == '/rooms/new'}"
+        <a class="btn admin-mode-btn btn-warning center-align" sec:authorize="hasRole('ADMIN')" id="admin-mode-btn" th:text="#{message.button.admin-menu}"></a>
+
+        <input onclick="back()" class="btn btn-dark" th:value="#{message.back}"/>
+        <a id="toHomePage" th:if="${#httpServletRequest.requestURI == 'admin/rooms' ||
+    #httpServletRequest.requestURI == 'user/request/new' ||
+    #httpServletRequest.requestURI == 'admin/rooms/new'  ||
+    #httpServletRequest.requestURI == 'user/rooms'}"
            th:text="#{message.roomslist-page.button.home}"
-           th:href="@{/index}" class="btn header-button btn-dark rightContainer">Home</p>
+           th:href="@{/index}" class="btn btn-dark rightContainer">Home</p>
         </a>
-        <a id="userEditor" th:if="${#httpServletRequest.requestURI == '/admin'}"
+        <a id="userEditor" th:if="${#httpServletRequest.requestURI == '/admin'
+        || #httpServletRequest.requestURI == 'admin/rooms/new'
+        || #httpServletRequest.requestURI == '/admin/rooms'}"
            sec:authorize="hasRole('ADMIN')" th:text="#{message.admin-page.usersmenu}"
-           th:href="@{/admin/users}" class="btn header-button btn-dark rightContainer">Edit users</a>
+           th:href="@{/admin/users}" class="btn btn-dark rightContainer">Edit users</a>
         <a th:href="@{/admin/today-users}" sec:authorize="hasRole('ADMIN')"
-           th:text="#{message-admin-page.current-residents-menu}" class="btn header-button btn-dark rightContainer">
+           th:text="#{message-admin-page.current-residents-menu}" class="btn btn-dark rightContainer">
             In a hotel</a>
     </div>
 
