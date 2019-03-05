@@ -86,7 +86,7 @@
                         <td th:text="${#dates.format(unapprovedRequest.checkIn,'MM/dd/yyyy')}"></td>
                         <td th:text="${#dates.format(unapprovedRequest.checkOut,'MM/dd/yyyy')}"></td>
                         <td>
-                            <a th:href="@{'/admin/suitable-rooms/'+${unapprovedRequest.id}}" th:text="#{message.find}"
+                            <a th:href="@{/admin/suitable-rooms(request=${unapprovedRequest.id})}" th:text="#{message.find}"
                                class="btn btn-success float-center">Find</a>
                         </td>
                         <td>

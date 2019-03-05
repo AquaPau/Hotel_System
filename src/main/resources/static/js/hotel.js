@@ -226,6 +226,12 @@ function adminUrls() {
             adminMenuNavigation('menu-rooms');
             return
         }
+        if (href.includes('today-users')){
+            return
+        }
+        if (href.includes('users')){
+            return
+        }
         adminMenuNavigation('menu-pending');
     }
 
