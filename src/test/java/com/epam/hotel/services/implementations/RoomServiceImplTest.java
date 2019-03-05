@@ -2,6 +2,7 @@ package com.epam.hotel.services.implementations;
 
 import com.epam.hotel.domains.Room;
 import com.epam.hotel.repositories.RoomRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +44,13 @@ class RoomServiceImplTest {
     }
 
     @Test
+    void findByNotExistingId() {
+        Optional<Room> testRoom = Optional.empty();
+        when(roomRepository.findById(anyLong())).thenReturn(testRoom);
+        Assertions.assertThrows(RuntimeException.class, () -> roomServiceImpl.findById(1l));
+    }
+
+    @Test
     void findAllRoomsPaged() {
         List<Room> testList = new ArrayList<>();
         testList.add(new Room()); testList.add(new Room());
@@ -51,4 +59,10 @@ class RoomServiceImplTest {
         Page<Room> foundPage = roomServiceImpl.findAllRoomsPaged(1,2);
         assertEquals(foundPage, testPage);
     }
+
+    @Test
+    void findAllRoomsAvailableForRequest() {
+
+    }
+
 }
