@@ -3,6 +3,7 @@ package com.epam.hotel.services.implementations;
 import com.epam.hotel.domains.Request;
 import com.epam.hotel.domains.Reservation;
 import com.epam.hotel.domains.Room;
+import com.epam.hotel.exceptions.RoomNumberAlreadyExistsException;
 import com.epam.hotel.repositories.RoomRepository;
 import com.epam.hotel.services.ReservationService;
 import com.epam.hotel.services.RoomService;
@@ -42,6 +43,9 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Room save(Room room) {
+        if (roomRepository.getOne(room.getId()) != null) {
+            throw new RoomNumberAlreadyExistsException("Room number already exists");
+        }
         return roomRepository.save(room);
     }
 
