@@ -1,11 +1,9 @@
 package com.epam.hotel.controllers;
 
 import com.epam.hotel.domains.Request;
-import com.epam.hotel.domains.Room;
 import com.epam.hotel.domains.User;
 import com.epam.hotel.exceptions.PasswordDoesNotMatchException;
 import com.epam.hotel.services.RequestService;
-import com.epam.hotel.services.RoomService;
 import com.epam.hotel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +25,8 @@ public class IndexController {
 
     private final UserService userService;
     private final RequestService requestService;
-    private final RoomService roomService;
 
-    @GetMapping({"/", "/index"})
+    @GetMapping({"", "/", "/index"})
     public String index(Model model, Principal principal,
                         @RequestParam(value = "ur_page", required = false) Integer ur_page,
                         @RequestParam(value = "pr_page", required = false) Integer pr_page,
@@ -66,13 +63,14 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/profile")
+    @GetMapping("/index/profile")
     public String editProfile(Model model, Principal principal,
     @RequestParam(value="success",required = false) Boolean success) {
         User user = userService.findByLogin(principal.getName());
         user.setPassword("");
         model.addAttribute(user);
         model.addAttribute("currentPassword", "");
+        addUserCommonElements(model, user, requestService);
         return "profile";
     }
 
@@ -80,7 +78,7 @@ public class IndexController {
     public View updateProfile(@ModelAttribute("user") User user,
                               @ModelAttribute("currentPassword") String currentPassword) {
         userService.update(user, currentPassword);
-        RedirectView redirect = new RedirectView("/profile?success=true");
+        RedirectView redirect = new RedirectView("/index/profile?success=true");
         redirect.setExposeModelAttributes(false);
         return redirect;
     }

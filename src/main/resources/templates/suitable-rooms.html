@@ -23,9 +23,35 @@
             <div th:insert="~{fragments/common :: header}"></div>
             <div id="adminpanel-links" th:insert="~{fragments/admin :: adminpanel-links}"></div>
             <div class="card-body">
-                <p class="white" th:if="${roomsList.isEmpty()}"
+                <p th:text="#{message.request-page.current-request}">Current request</p>
+                <table class="table table-bordered white">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col" th:text="#{message.hotel.capacity}">Capacity</th>
+                        <th scope="col" th:text="#{message.hotel.class}">Class</th>
+                        <th scope="col" th:text="#{message.hotel.checkin}">Check in</th>
+                        <th scope="col" th:text="#{message.hotel.checkout}">Check out</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${request.id}"></td>
+                        <td th:text="#{'message.capacity.'+${request.capacity}}"></td>
+                        <td th:text="#{'message.class.'+${request.classID}}"></td>
+                        <td th:text="${#dates.format(request.checkIn,'MM/dd/yyyy')}"></td>
+                        <td th:text="${#dates.format(request.checkOut,'MM/dd/yyyy')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+                <p class="white" th:unless="${roomsList.hasContent()}"
                    th:text="#{message.fittingrooms-page.nofitting}">There are no fitting rooms</p>
-                <table th:unless="${roomsList.isEmpty()}" class="table table-bordered white">
+
+
+                <p th:if="${roomsList.hasContent()}" th:text="#{message.request-page.suitable-rooms}">Current request</p>
+                <table th:if="${roomsList.hasContent()}" class="table table-bordered white">
                     <thead>
                     <tr>
                         <th scope="col" th:text="#{message.fittingrooms-page.roomnumber}">Room number</th>
@@ -36,7 +62,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <th:block th:each="room : ${roomsList}">
+
+
+                    <th:block th:each="room : ${roomsList.content}">
                         <tr>
                             <th th:text="${room.number}" scope="row">1</th>
                             <td th:text="#{'message.capacity.'+${room.capacity}}"></td>
@@ -59,6 +87,29 @@
                     </th:block>
                     </tbody>
                 </table>
+                <nav id="nav-suitable-rooms" sec:authorize="hasRole('ADMIN')" th:if="${roomsList.totalPages > 0}">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${roomsList.isFirst()} ? disabled">
+                            <a class="page-link"
+                               tabindex="-1"
+                               th:href="@{/admin/sutable-rooms(request=${requestId}, page=${roomsList.number})}"><
+                            </a>
+                        </li>
+                        <li th:each="pageNumber : ${pageNumbers}" class="page-item"
+                            th:classappend="${pageNumber==roomsList.number + 1} ? disabled">
+                            <a class="page-link"
+                               th:href="@{/admin/suitable-rooms(request=${requestId}, page=${pageNumber})}"
+                               th:text="${pageNumber}">
+                            </a>
+                        </li>
+                        <li class="page-item" th:classappend="${roomsList.isLast()} ? disabled">
+                            <a class="page-link"
+                               th:href="@{/admin/suitable-rooms(request=${requestId}, page=${roomsList.number}+2)}"
+                            >>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
             <div class="footer" th:insert="~{fragments/common :: footer}"></div>
         </div>

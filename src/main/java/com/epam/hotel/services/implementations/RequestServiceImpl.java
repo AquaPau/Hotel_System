@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
 import java.util.Optional;
 
 @Service
@@ -21,11 +21,6 @@ public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
     private final DenyMessageService denyMessageService;
-
-    @Override
-    public List<Request> findAll() {
-        return requestRepository.findAll();
-    }
 
     @Override
     public Request findById(Long id) {
@@ -43,12 +38,6 @@ public class RequestServiceImpl implements RequestService {
         }
         return requestRepository.save(request);
     }
-
-    @Override
-    public void deleteById(Long id) {
-        requestRepository.deleteById(id);
-    }
-
 
     @Override
     public Page<Request> getPagedUnprocessedRequestsByUser(User user, int page, int size) {
@@ -69,11 +58,6 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public Page<Request> getAllPagedUnprocessedRequests(int page, int size) {
         return requestRepository.findAllUnprocessedRequests(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
-    }
-
-    @Override
-    public Page<Request> getAllPagedProcessedRequests(int page, int size) {
-        return requestRepository.findAllProcessedRequests(PageRequest.of(page - 1, size, Sort.Direction.ASC, "id"));
     }
 
     @Override

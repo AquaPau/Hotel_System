@@ -1,5 +1,6 @@
 package com.epam.hotel;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @WebMvcTest
+@Ignore
 public class HotelApplicationTests {
 
 	@Autowired

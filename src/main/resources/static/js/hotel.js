@@ -32,7 +32,7 @@ function validateSignInForm() {
 function validateEditProfileForm() {
     var validated;
 
-     var firstName = document.forms["sign-in-form"]["firstName"].value;
+    var firstName = document.forms["sign-in-form"]["firstName"].value;
     var lastName = document.forms["sign-in-form"]["lastName"].value;
     var password = document.forms["sign-in-form"]["password"].value;
     var confirm = document.forms["sign-in-form"]["confirm"].value;
@@ -44,7 +44,7 @@ function validateEditProfileForm() {
 
     validated = validate($('#fn-input'), firstNameMatcher, $('#fn-error'));
     validated = validate($('#ln-input'), lastNameMatcher, $('#ln-error')) && validated;
-    if( password == "") return validated;
+    if (password == "") return validated;
     validated = validate($('#pw-input'), passwordMatcher, $('#pw-error')) && validated;
 
     if (password !== confirm) {
@@ -73,6 +73,9 @@ function validate(elem, matcher, error) {
 }
 
 function setActive(id) {
+    if (document.contains(document.getElementById("adminpanel-links"))) {
+        document.getElementById("adminpanel-links").remove();
+    }
     $('.menu-btn').removeClass("menu-active");
     $('#' + id).addClass('menu-active');
 }
@@ -118,17 +121,17 @@ function userMenuNavigation(id) {
 
 function indexUrls() {
     var href = window.location.href.toString();
+    if (document.contains(document.getElementById("admin-mode-btn"))) {
+        var admin_button = $('#admin-mode-btn');
+        admin_button.removeClass('admin-menu-active');
+        admin_button.attr("href", "/admin");
+    }
     if (href.includes('index')) {
-        if (document.contains(document.getElementById("admin-mode-btn"))) {
-            var admin_button = $('#admin-mode-btn');
-            admin_button.removeClass('admin-menu-active');
-            admin_button.attr("href", "/admin");
-        }
         if (href.includes('ur_page')) {
             userMenuNavigation('menu-rending');
             return
         }
-        if (href.includes('pr_page')) {
+        if (href.includes('pr_page') || href.includes('request/view')) {
             userMenuNavigation('menu-approved');
             return
         }
@@ -142,6 +145,13 @@ function indexUrls() {
         }
         if (href.includes('request/new')) {
             userMenuNavigation('menu-newrequest');
+            return
+        }
+        if (href.includes('request/edit')) {
+            userMenuNavigation('menu-rending');
+            return
+        }
+        if (href.includes('profile')) {
             return
         }
         userMenuNavigation('menu-rending');
@@ -196,6 +206,8 @@ function switchPanels(role) {
 function adminUrls() {
     const href = window.location.href.toString();
     if (href.includes('admin')) {
+        showElement($('#currentUsers'), true);
+        showElement($('#userEditor'), true);
         var admin_button = $('#admin-mode-btn');
         admin_button.addClass('admin-menu-active');
         admin_button.attr("href", "/index");
@@ -215,14 +227,26 @@ function adminUrls() {
             adminMenuNavigation('menu-newroom');
             return
         }
+
+        if (href.includes('suitable-rooms')) {
+            return
+        }
         if (href.includes('rooms')) {
             adminMenuNavigation('menu-rooms');
             return
         }
-        adminMenuNavigation('menu-pending');
+        if (href.includes('today-users')) {
+            return
+        }
+        if (href.includes('users')) {
+            return
+        }
+
     }
-
-
+    if (href.includes("profile")) {
+        return
+    }
+    adminMenuNavigation('menu-pending');
 }
 
 function setFieldErrorColor(elem, flag) {

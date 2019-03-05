@@ -7,7 +7,6 @@ import com.epam.hotel.services.RequestService;
 import com.epam.hotel.services.ReservationService;
 import com.epam.hotel.services.RoomService;
 import com.epam.hotel.services.UserService;
-import com.epam.hotel.utils.PaginationHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,15 +29,14 @@ public class RoomController {
     private final RoomService roomService;
     private final ReservationService reservationService;
     private final UserService userService;
-    private static PaginationHelper paginationHelper;
 
     @GetMapping("/admin/rooms/new")
     public String createRoomForm(Model model, Principal principal) {
         int newNumber = roomService.findLastNumber() + 1;
-        User user = userService.findByLogin(principal.getName());;
+        User user = userService.findByLogin(principal.getName());
         Room room = new Room();
         addUserCommonElements(model, user, requestService);
-        addAdminCommonElements(model, requestService, reservationService);
+        addAdminCommonElements(model, requestService);
         model.addAttribute("room", room);
         model.addAttribute("number", newNumber);
         model.addAttribute("headerName", "create");
@@ -58,6 +56,7 @@ public class RoomController {
         model.addAttribute("room", room);
         model.addAttribute("headerName", "edit");
         model.addAttribute("buttonName", "save");
+        addAdminCommonElements(model,requestService);
         return "rooms";
     }
 
@@ -93,6 +92,7 @@ public class RoomController {
         }
 
 
+        //ToDo
         model.addAttribute("roomsList", roomList);
         addUserCommonElements(model, user, requestService);
         long denied = requestService.countAllDeniedRequestForAdmin();
@@ -109,16 +109,16 @@ public class RoomController {
         return "error";
     }
 
-    @GetMapping("/admin/suitable-rooms/{id}")
-    public String getSuitableRoomsForRequest(@PathVariable String id,
+    @GetMapping("/admin/suitable-rooms")
+    public String getSuitableRoomsForRequest(@RequestParam(value = "request") Long requestId,
                                              @RequestParam(value = "page", required = false) Integer page,
                                              @RequestParam(value = "limit", required = false) Integer limit,
                                              Principal principal,
                                              Model model) {
         page = getPage(page);
-        limit = getLimit(limit, 7);
+        limit = getLimit(limit, 5);
         User user = userService.findByLogin(principal.getName());
-        Request request = requestService.findById(new Long(id));
+        Request request = requestService.findById(requestId);
         Reservation reservation = new Reservation();
         request.addReservation(reservation);
 
@@ -127,12 +127,12 @@ public class RoomController {
             model.addAttribute("pageNumbers", getPageNumbers(roomList));
         }
         addUserCommonElements(model, user, requestService);
-        addAdminCommonElements(model, requestService, reservationService);
+        addAdminCommonElements(model, requestService);
 
-        model.addAttribute("requestId", request.getId());
+        model.addAttribute("request", request);
+        model.addAttribute("requestId", requestId);
         model.addAttribute("roomsList", roomList);
         model.addAttribute("reservation", new ReservationId());
-
 
         return "suitable-rooms";
     }
