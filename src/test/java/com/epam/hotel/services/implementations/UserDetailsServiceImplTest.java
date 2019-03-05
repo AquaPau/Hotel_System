@@ -1,19 +1,19 @@
 package com.epam.hotel.services.implementations;
 
+import com.epam.hotel.domains.User;
 import com.epam.hotel.repositories.UserRepository;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
 import org.mockito.MockitoAnnotations;
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 
 class UserDetailsServiceImplTest {
 
@@ -22,8 +22,16 @@ class UserDetailsServiceImplTest {
 
     UserDetailsServiceImpl userDetailsService;
 
-    @Test
-    void loadUserByUsername() {
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
+        userDetailsService = new UserDetailsServiceImpl(userRepository);
+    }
 
+    @Test
+    void loadUserByNotExistingUsername() {
+        Optional<User> optionalUser = Optional.of(new User());
+        when(userRepository.findByLogin(anyString())).thenReturn(optionalUser);
+        Assertions.assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername(anyString()));
     }
 }

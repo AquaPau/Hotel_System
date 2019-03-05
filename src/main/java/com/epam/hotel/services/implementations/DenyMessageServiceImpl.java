@@ -23,10 +23,7 @@ public class DenyMessageServiceImpl implements DenyMessageService {
     @Override
     public DeniedRequest findById(long id) {
         Optional<DeniedRequest> messageOptional = denyMessageRepository.findById(id);
-        if (!messageOptional.isPresent()) {
-            throw new RuntimeException("Deny reason not found");
-        }
-        return messageOptional.get();
+        return messageOptional.orElseThrow(() -> new RuntimeException("Deny reason not found"));
     }
 
 
