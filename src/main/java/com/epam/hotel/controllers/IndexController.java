@@ -26,7 +26,7 @@ public class IndexController {
     private final UserService userService;
     private final RequestService requestService;
 
-    @GetMapping({"/", "/index"})
+    @GetMapping({"", "/", "/index"})
     public String index(Model model, Principal principal,
                         @RequestParam(value = "ur_page", required = false) Integer ur_page,
                         @RequestParam(value = "pr_page", required = false) Integer pr_page,

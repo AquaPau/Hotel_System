@@ -3,7 +3,9 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
-<div th:fragment="adminpanel-index" class="user-menu">
+
+
+<div sec:authorize="hasRole('ADMIN')" th:fragment="adminpanel-index" class="user-menu">
     <a id="menu-pending" onclick="adminMenuNavigation(this.id)"
        class="btn admin-menu-btn btn-warning center-align">
         <span th:text="#{message.admin-page.pending}">Pending requests</span>

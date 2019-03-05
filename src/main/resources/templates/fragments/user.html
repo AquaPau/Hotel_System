@@ -5,7 +5,7 @@
 <body>
 
 
-<div th:fragment="userpanel-index" class="user-menu">
+<div sec:authorize="hasAnyRole('USER, ADMIN')" th:fragment="userpanel-index" class="user-menu">
     <a id="menu-rending" onclick="userMenuNavigation(this.id)"
        class="btn menu-btn btn-info center-align">
         <span th:text="#{message.index-page.your-requests}">Pending</span>
@@ -34,7 +34,7 @@
        th:text="#{message.hotel.new-request}">New request</a>
 </div>
 
-<div th:fragment="userpanel-links" class="user-menu">
+<div sec:authorize="hasAnyRole('USER, ADMIN')" th:fragment="userpanel-links" class="user-menu">
     <a id="menu-rending" onclick="userMenuNavigation(this.id)" th:href="@{/index}"
        class="btn menu-btn btn-info center-align">
         <span th:text="#{message.index-page.your-requests}">Pending</span>
