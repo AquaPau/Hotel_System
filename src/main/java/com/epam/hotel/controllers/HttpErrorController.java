@@ -31,7 +31,7 @@ public class HttpErrorController implements ErrorController {
         int errorCode = getErrorCode(httpRequest);
         User user = userService.findByLogin(principal.getName());
         model.addAttribute("errorCode", errorCode);
-        addUserCommonElements(model, user, requestService);
+        //addUserCommonElements(model, user, requestService);
         return "error";
     }
 
