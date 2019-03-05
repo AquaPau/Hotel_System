@@ -47,10 +47,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User updatedUser, String currentPassword){
-        Optional<User> user = userRepository.findByLogin(updatedUser.getLogin());
-        if(!user.isPresent())
-            throw new UsernameNotFoundException("UserNotFound");
-        User savedUser = user.get();
+        User savedUser = userRepository.findByLogin(updatedUser.getLogin())
+                .orElseThrow(() -> new UsernameNotFoundException("UserNotFound"));
         if (matches(currentPassword,savedUser.getPassword())){
             savedUser.setFirstName(updatedUser.getFirstName());
             savedUser.setLastName(updatedUser.getLastName());
@@ -67,7 +65,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new UsernameNotFoundException("Uesername not found"));
+                () -> new UsernameNotFoundException("Username not found"));
         if (user.getPermission() == Permission.USER){
             userRepository.deleteById(id);
         } else {
@@ -77,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByLogin(String login) {
-        return userRepository.findByLogin(login).orElseThrow(() -> new UsernameNotFoundException("Uesername not found"));
+        return userRepository.findByLogin(login).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 
     @Override

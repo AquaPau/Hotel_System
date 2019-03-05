@@ -37,10 +37,9 @@ class DenyMessageServiceImplTest {
     }
 
     @Test
-    void findByNotexistingId() {
+    void findByNotExistingId() {
         Optional<DeniedRequest> testRequest = Optional.empty();
         when(denyMessageRepository.findById(anyLong())).thenReturn(testRequest);
-        Assertions.assertThrows(RuntimeException.class, () -> denyMessageService.findById(1l));
+        Assertions.assertThrows(RuntimeException.class, () ->  denyMessageService.findById(anyLong()));
     }
-
 }

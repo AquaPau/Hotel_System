@@ -25,10 +25,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public Request findById(Long id) {
         Optional<Request> optionalRequest = requestRepository.findById(id);
-        if (!optionalRequest.isPresent()) {
-            throw new RuntimeException("User not found");
-        }
-        return optionalRequest.get();
+        return optionalRequest.orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
