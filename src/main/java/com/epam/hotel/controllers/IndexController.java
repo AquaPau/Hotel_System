@@ -85,7 +85,7 @@ public class IndexController {
 
     @ExceptionHandler(PasswordDoesNotMatchException.class)
     public String passwordDoesNotMatchException(Model model) {
-        model.addAttribute("errorCode", "passwordDoesNotMatch");
+        model.addAttribute("errorCode", "in password");
         return "error";
     }
     @ExceptionHandler(Exception.class)
