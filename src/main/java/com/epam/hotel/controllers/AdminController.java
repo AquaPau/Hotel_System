@@ -1,8 +1,9 @@
 package com.epam.hotel.controllers;
 
-import com.epam.hotel.domains.*;
+import com.epam.hotel.domains.DeniedRequest;
+import com.epam.hotel.domains.Request;
+import com.epam.hotel.domains.Reservation;
 import com.epam.hotel.services.*;
-import com.epam.hotel.utils.ControllerHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,9 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
-import static com.epam.hotel.utils.ControllerHelper.*;
+import static com.epam.hotel.utils.ControllerHelper.addAdminCommonElements;
 import static com.epam.hotel.utils.PaginationHelper.*;
 
 
@@ -23,7 +22,6 @@ public class AdminController {
     private final RequestService requestService;
     private final ReservationService reservationService;
     private final DenyMessageService denyMessageService;
-    private final RoomService roomService;
     private final UserService userService;
 
     @GetMapping({"/admin", "admin"})
@@ -59,7 +57,7 @@ public class AdminController {
         model.addAttribute("unapprovedRequestList", unapprovedRequests);
         model.addAttribute("approvedRequestList", approvedRequests);
         model.addAttribute("deniedRequestList", deniedRequests);
-        addAdminCommonElements(model, requestService, reservationService);
+        addAdminCommonElements(model, requestService);
         return "admin";
     }
 
@@ -79,7 +77,7 @@ public class AdminController {
         page = getPage(page);
         limit = getLimit(limit, 8);
         addPagedList(userService.getAllUsersPaged(page, limit), model);
-        addAdminCommonElements(model,requestService, reservationService);
+        addAdminCommonElements(model, requestService);
         return "users";
     }
 
@@ -101,21 +99,18 @@ public class AdminController {
     @GetMapping({"/admin/today-users"})
     public String usersToday(Model model,
                              @RequestParam(value = "page", required = false) Integer page,
-                             @RequestParam(value = "limit", required = false) Integer limit,
-                             HttpServletRequest httpRequest) {
+                             @RequestParam(value = "limit", required = false) Integer limit) {
 
         page = getPage(page);
         limit = getLimit(limit, 8);
         Page<Reservation> reservationList = reservationService.findAllReservationsForToday(page, limit);
         if (reservationList.getTotalPages() > 0) {
-            String requestURI = httpRequest.getRequestURI();
-            String role = requestURI.contains("admin") ? "admin" : "index";
-            if (isPageBeyondTotalPages(page, reservationList)) return "redirect:/admin/today-users?page=" + (page - 1);
+           if (isPageBeyondTotalPages(page, reservationList)) return "redirect:/admin/today-users?page=" + (page - 1);
             model.addAttribute("pageNumbers", getPageNumbers(reservationList));
         }
         model.addAttribute("pagedList", reservationList);
         addPagedList(reservationService.findAllReservationsForToday(page, limit), model);
-        addAdminCommonElements(model,requestService, reservationService);
+        addAdminCommonElements(model, requestService);
         return "today-users";
     }
 }

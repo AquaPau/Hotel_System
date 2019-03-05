@@ -32,7 +32,7 @@ function validateSignInForm() {
 function validateEditProfileForm() {
     var validated;
 
-     var firstName = document.forms["sign-in-form"]["firstName"].value;
+    var firstName = document.forms["sign-in-form"]["firstName"].value;
     var lastName = document.forms["sign-in-form"]["lastName"].value;
     var password = document.forms["sign-in-form"]["password"].value;
     var confirm = document.forms["sign-in-form"]["confirm"].value;
@@ -44,7 +44,7 @@ function validateEditProfileForm() {
 
     validated = validate($('#fn-input'), firstNameMatcher, $('#fn-error'));
     validated = validate($('#ln-input'), lastNameMatcher, $('#ln-error')) && validated;
-    if( password == "") return validated;
+    if (password == "") return validated;
     validated = validate($('#pw-input'), passwordMatcher, $('#pw-error')) && validated;
 
     if (password !== confirm) {
@@ -73,6 +73,9 @@ function validate(elem, matcher, error) {
 }
 
 function setActive(id) {
+    if (document.contains(document.getElementById("adminpanel-links"))) {
+        document.getElementById("adminpanel-links").remove();
+    }
     $('.menu-btn').removeClass("menu-active");
     $('#' + id).addClass('menu-active');
 }
@@ -118,12 +121,12 @@ function userMenuNavigation(id) {
 
 function indexUrls() {
     var href = window.location.href.toString();
+    if (document.contains(document.getElementById("admin-mode-btn"))) {
+        var admin_button = $('#admin-mode-btn');
+        admin_button.removeClass('admin-menu-active');
+        admin_button.attr("href", "/admin");
+    }
     if (href.includes('index')) {
-        if (document.contains(document.getElementById("admin-mode-btn"))) {
-            var admin_button = $('#admin-mode-btn');
-            admin_button.removeClass('admin-menu-active');
-            admin_button.attr("href", "/admin");
-        }
         if (href.includes('ur_page')) {
             userMenuNavigation('menu-rending');
             return
@@ -217,6 +220,12 @@ function adminUrls() {
         }
         if (href.includes('rooms')) {
             adminMenuNavigation('menu-rooms');
+            return
+        }
+        if (href.includes('today-users')){
+            return
+        }
+        if (href.includes('users')){
             return
         }
         adminMenuNavigation('menu-pending');

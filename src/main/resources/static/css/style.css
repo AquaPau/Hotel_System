@@ -61,6 +61,10 @@ html, body {
     padding-left: 22px;
 }
 
+.error-page{
+    width: 1070px !important;
+}
+
 .price-div {
     padding-bottom: 20px;
 }

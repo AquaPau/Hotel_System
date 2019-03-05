@@ -12,7 +12,7 @@ public class PaginationHelper {
     private PaginationHelper() {
     }
 
-    public static void addPagedList(Page<? extends Object> pagedList, Model model) {
+    public static void addPagedList(Page pagedList, Model model) {
         if (pagedList.getTotalPages() > 0) {
             model.addAttribute("pageNumbers", getPageNumbers(pagedList));
         }

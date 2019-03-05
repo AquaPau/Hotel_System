@@ -27,11 +27,6 @@ public class RoomServiceImpl implements RoomService {
     private final ReservationService reservationService;
 
     @Override
-    public List<Room> findAll() {
-        return roomRepository.findAll();
-    }
-
-    @Override
     public Room findById(Long id) {
         Optional<Room> optionalRoom = roomRepository.findById(id);
         if (!optionalRoom.isPresent()) {
@@ -68,11 +63,6 @@ public class RoomServiceImpl implements RoomService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(collect, PageRequest.of(page - 1, limit), collect.size());
-    }
-
-    @Override
-    public long countAllRooms() {
-        return roomRepository.countAllRooms();
     }
 
     private Comparator<Room> getComparator(Request request) {
