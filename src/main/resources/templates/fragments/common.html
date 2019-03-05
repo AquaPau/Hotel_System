@@ -22,19 +22,25 @@
                 <img width="35px" th:src="@{/images/ru.png}" th:alt="#{message.locale.ru}">
             </a>
         </div>
-        <a th:href="@{'/profile'}" th:text="#{message.profile}"
-           class="btn header-button btn-dark">Profile</a>
-        <form name="logoutForm" th:action="@{/logout}" method="post">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <input type="submit" class="btn header-button btn-dark" th:value="#{message.signout}"/>
-        </form>
+        <div sec:authorize="hasAnyRole('USER, ADMIN')" class="card-left-flex">
+            <a th:href="@{'/profile'}" th:text="#{message.profile}"
+               class="btn header-button btn-dark">Profile</a>
+            <form name="logoutForm" th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <input type="submit" class="btn header-button btn-dark" th:value="#{message.signout}"/>
+            </form>
+            <div>
+            </div>
+        </div>
     </div>
 </div>
 
 
 <div th:fragment="footer" class="card-footer">
     <div>
-        <a class="btn admin-mode-btn btn-warning center-align" sec:authorize="hasRole('ADMIN')" id="admin-mode-btn" th:text="#{message.button.admin-menu}"></a>
+        <a class="btn admin-mode-btn btn-warning center-align" sec:authorize="hasRole('ADMIN')"
+           id="admin-mode-btn"
+           th:text="#{message.button.admin-menu}"></a>
 
         <input onclick="back()" class="btn btn-dark" th:value="#{message.back}"/>
         <a id="toHomePage" th:if="${#httpServletRequest.requestURI == 'admin/rooms' ||
@@ -60,10 +66,12 @@
         $(document).ready(function () {
             indexUrls();
             adminUrls();
-            if (document.getElementById("price").value === '') {
-                $('#price').val(getPrice());
+            if (document.contains(document.getElementById("price"))) {
+                if (document.getElementById("price").value === '') {
+                    $('#price').val(getPrice());
+                }
             }
-        });</script>
+        })</script>
 </div>
 
 <div th:fragment="panel-links" class="user-menu">
