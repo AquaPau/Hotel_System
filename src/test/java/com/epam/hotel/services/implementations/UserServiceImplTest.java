@@ -84,7 +84,8 @@ class UserServiceImplTest {
         Optional<User> optionalSavedUser = Optional.empty();
 
         when(userRepository.findByLogin(anyString())).thenReturn(optionalSavedUser);
-        Assertions.assertThrows(UsernameNotFoundException.class,() -> userService.update(any(User.class),anyString()));
+        User user = new User(){{setLogin("asd");}};
+        Assertions.assertThrows(UsernameNotFoundException.class,() -> userService.update(user,anyString()));
     }
 
     @Test
