@@ -1,6 +1,8 @@
 package com.epam.hotel.services.implementations;
 
 import com.epam.hotel.domains.User;
+import com.epam.hotel.domains.enums.BlockStatus;
+import com.epam.hotel.domains.enums.Permission;
 import com.epam.hotel.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +32,7 @@ class UserDetailsServiceImplTest {
 
     @Test
     void loadUserByNotExistingUsername() {
-        Optional<User> optionalUser = Optional.of(new User());
+        Optional<User> optionalUser = Optional.empty();
         when(userRepository.findByLogin(anyString())).thenReturn(optionalUser);
         Assertions.assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername(anyString()));
     }
