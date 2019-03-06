@@ -43,10 +43,11 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Room save(Room room) {
-        if (roomRepository.getOne(room.getId()) != null) {
+        if (room.getId() != 0 || !roomRepository.findByNumber(room.getNumber()).isPresent()){
+            return roomRepository.save(room);
+        } else {
             throw new RoomNumberAlreadyExistsException("Room number already exists");
         }
-        return roomRepository.save(room);
     }
 
     @Override

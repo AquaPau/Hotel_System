@@ -90,9 +90,6 @@ public class RoomController {
             if (isPageBeyondTotalPages(page, roomList)) return "redirect:/" + role + "/rooms?page=" + (page - 1);
             model.addAttribute("unprocessedPageNumbers", getPageNumbers(roomList));
         }
-
-
-        //ToDo
         model.addAttribute("roomsList", roomList);
         addUserCommonElements(model, user, requestService);
         long denied = requestService.countAllDeniedRequestForAdmin();
@@ -105,7 +102,7 @@ public class RoomController {
 
     @ExceptionHandler(RoomNumberAlreadyExistsException.class)
     public String existingRoomException(Model model) {
-        model.addAttribute("errorCode", "roomexists");
+        model.addAttribute("errorCode", "423");
         return "error";
     }
 
