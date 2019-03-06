@@ -38,14 +38,24 @@ html, body {
 }
 
 .page-link {
-    background-color: #00000012 !important;
+    background-color: #a0a0a063 !important;
     border: 1px solid #dee2e694 !important;
     color: #FFF;
 }
 
+.page-link:hover {
+    background-color: #17a2b8 !important;
+    border: 1px solid #dee2e694 !important;
+    color: #FFF;
+}
+.disabled:hover {
+    background-color: #00000012 !important;
+        color: #FFF;
+}
 
 .disabled a {
-    color: #868a8e82 !important;
+    background-color: #00000012 !important;
+    color: white !important;
     border: 1px solid #dee2e694 !important;
 }
 
